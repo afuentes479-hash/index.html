@@ -36,20 +36,16 @@ html,body{
 height:100%;
 overflow:hidden;
 font-family:'Inter',sans-serif;
-background:
-radial-gradient(circle at top left,#1e3a8a 0%,transparent 30%),
-radial-gradient(circle at bottom right,#7c3aed 0%,transparent 30%),
-#050816;
+background:radial-gradient(circle at top left,#1e3a8a 0%,transparent 30%),radial-gradient(circle at bottom right,#7c3aed 0%,transparent 30%),#050816;
 color:white;
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
+-webkit-font-smoothing:antialiased;
+-moz-osx-font-smoothing:grayscale;
 }
 
 body{
 position:relative;
 }
 
-/* BACKGROUND GLOW */
 .bg-blur{
 position:absolute;
 width:500px;
@@ -90,7 +86,7 @@ inset:0;
 display:none;
 padding:50px;
 overflow-y:auto;
--webkit-overflow-scrolling: touch; /* Smooth scroll en iOS */
+-webkit-overflow-scrolling:touch;
 }
 
 .slide.active{
@@ -101,17 +97,9 @@ animation:fade .5s ease;
 }
 
 @keyframes fade{
-from{
-opacity:0;
-transform:translateY(20px);
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;transform:translateY(0);}
 }
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-/* HERO */
 
 .hero{
 text-align:center;
@@ -166,7 +154,7 @@ cursor:pointer;
 transition:all .3s ease;
 text-decoration:none;
 display:inline-block;
--webkit-tap-highlight-color: transparent; /* Quitar highlight en móvil */
+-webkit-tap-highlight-color:transparent;
 }
 
 .btn-primary{
@@ -175,8 +163,7 @@ color:white;
 box-shadow:0 10px 40px rgba(124,58,237,.4);
 }
 
-.btn-primary:hover,
-.btn-primary:active{
+.btn-primary:hover,.btn-primary:active{
 transform:translateY(-4px) scale(1.03);
 box-shadow:0 15px 50px rgba(124,58,237,.6);
 }
@@ -188,12 +175,9 @@ color:white;
 backdrop-filter:blur(10px);
 }
 
-.btn-secondary:hover,
-.btn-secondary:active{
+.btn-secondary:hover,.btn-secondary:active{
 background:rgba(255,255,255,.14);
 }
-
-/* TITLES */
 
 .section-title{
 font-size:58px;
@@ -208,8 +192,6 @@ color:var(--muted);
 margin-bottom:50px;
 text-align:center;
 }
-
-/* GRID */
 
 .grid{
 display:grid;
@@ -254,8 +236,6 @@ font-size:17px;
 color:var(--muted);
 line-height:1.6;
 }
-
-/* MARKET CARDS */
 
 .market-grid{
 display:grid;
@@ -307,15 +287,8 @@ font-weight:700;
 font-size:18px;
 }
 
-.positive{
-color:var(--green);
-}
-
-.negative{
-color:var(--red);
-}
-
-/* NEWS PANEL */
+.positive{color:var(--green);}
+.negative{color:var(--red);}
 
 .news-panel{
 margin-top:35px;
@@ -353,8 +326,6 @@ transition:all .3s ease;
 transform:translateX(8px);
 background:rgba(255,255,255,.08);
 }
-
-/* SIMULATOR */
 
 .simulator{
 display:grid;
@@ -405,7 +376,7 @@ font-size:22px;
 font-weight:800;
 cursor:pointer;
 transition:all .3s ease;
--webkit-tap-highlight-color: transparent;
+-webkit-tap-highlight-color:transparent;
 }
 
 .buy{
@@ -418,8 +389,7 @@ background:linear-gradient(135deg,#ef4444,#dc2626);
 color:white;
 }
 
-.trade-btn:hover,
-.trade-btn:active{
+.trade-btn:hover,.trade-btn:active{
 transform:translateY(-5px);
 box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
@@ -450,8 +420,6 @@ font-size:36px;
 font-weight:800;
 }
 
-/* NAVIGATION */
-
 .navigation{
 position:fixed;
 bottom:25px;
@@ -473,11 +441,10 @@ font-size:22px;
 cursor:pointer;
 backdrop-filter:blur(12px);
 transition:all .3s ease;
--webkit-tap-highlight-color: transparent;
+-webkit-tap-highlight-color:transparent;
 }
 
-.nav-btn:hover,
-.nav-btn:active{
+.nav-btn:hover,.nav-btn:active{
 background:rgba(255,255,255,.15);
 transform:translateY(-3px);
 }
@@ -495,13 +462,9 @@ font-weight:700;
 z-index:100;
 }
 
-/* MOBILE OPTIMIZATION */
-
 @media(max-width:950px){
 
-html,body{
-overflow-x:hidden;
-}
+html,body{overflow-x:hidden;}
 
 .slide{
 padding:25px 20px;
@@ -509,14 +472,8 @@ justify-content:flex-start;
 padding-top:100px;
 }
 
-.hero h1{
-font-size:48px;
-margin-top:40px;
-}
-
-.hero p{
-font-size:18px;
-}
+.hero h1{font-size:48px;margin-top:40px;}
+.hero p{font-size:18px;}
 
 .hero-buttons{
 flex-direction:column;
@@ -531,57 +488,29 @@ padding:16px 25px;
 font-size:16px;
 }
 
-.section-title{
-font-size:36px;
-margin-top:40px;
-}
+.section-title{font-size:36px;margin-top:40px;}
+.section-subtitle{font-size:18px;margin-bottom:30px;}
 
-.section-subtitle{
-font-size:18px;
-margin-bottom:30px;
-}
-
-.grid,
-.market-grid,
-.simulator{
+.grid,.market-grid,.simulator{
 grid-template-columns:1fr;
 gap:20px;
 }
 
-.big-price{
-font-size:52px;
-}
+.big-price{font-size:52px;}
 
 .trade-buttons{
 flex-direction:column;
 gap:15px;
 }
 
-.trade-btn{
-padding:20px;
-font-size:18px;
-}
+.trade-btn{padding:20px;font-size:18px;}
 
-.market-card,
-.card,
-.stat,
-.price-panel{
-padding:25px;
-}
+.market-card,.card,.stat,.price-panel{padding:25px;}
 
-.card h3{
-font-size:24px;
-}
+.card h3{font-size:24px;}
+.card p{font-size:16px;}
 
-.card p{
-font-size:16px;
-}
-
-.navigation{
-right:15px;
-bottom:15px;
-gap:10px;
-}
+.navigation{right:15px;bottom:15px;gap:10px;}
 
 .nav-btn{
 width:55px;
@@ -602,69 +531,31 @@ height:60px;
 font-size:26px;
 }
 
-.market-change{
-font-size:16px;
-}
+.market-change{font-size:16px;}
 
-.news-panel{
-padding:20px;
-margin-top:25px;
-}
+.news-panel{padding:20px;margin-top:25px;}
+.news-title{font-size:22px;}
 
-.news-title{
-font-size:22px;
-}
-
-.bg-blur,
-.bg-blur-2{
-filter:blur(80px); /* Menos blur en móvil para mejor performance */
-}
+.bg-blur,.bg-blur-2{filter:blur(80px);}
 
 }
-
-/* EXTRA SMALL DEVICES */
 
 @media(max-width:480px){
 
-.hero h1{
-font-size:36px;
-}
+.hero h1{font-size:36px;}
+.hero p{font-size:16px;}
 
-.hero p{
-font-size:16px;
-}
+.section-title{font-size:28px;}
+.section-subtitle{font-size:16px;}
 
-.section-title{
-font-size:28px;
-}
+.card{padding:20px;}
+.card i{font-size:36px;}
+.card h3{font-size:20px;}
 
-.section-subtitle{
-font-size:16px;
-}
-
-.card{
-padding:20px;
-}
-
-.card i{
-font-size:36px;
-}
-
-.card h3{
-font-size:20px;
-}
-
-.big-price{
-font-size:42px;
-}
-
-.stat-value{
-font-size:28px;
-}
+.big-price{font-size:42px;}
+.stat-value{font-size:28px;}
 
 }
-
-/* LANDSCAPE MOBILE */
 
 @media(max-height:500px) and (orientation:landscape){
 
@@ -674,20 +565,10 @@ justify-content:flex-start;
 padding-top:20px;
 }
 
-.hero h1{
-font-size:32px;
-margin-top:20px;
-}
+.hero h1{font-size:32px;margin-top:20px;}
+.hero p{font-size:14px;margin-bottom:20px;}
 
-.hero p{
-font-size:14px;
-margin-bottom:20px;
-}
-
-.section-title{
-font-size:28px;
-margin-top:20px;
-}
+.section-title{font-size:28px;margin-top:20px;}
 
 }
 
@@ -700,368 +581,180 @@ margin-top:20px;
 
 <div class="presentation">
 
-<!-- SLIDE 1 -->
 <section class="slide active">
-
 <div class="hero">
-
 <div class="hero-badge">
 <i class="fa-solid fa-chart-line"></i>
 <span>CFI BROKER EXPERIENCE</span>
 </div>
-
 <h1>Trading Inteligente</h1>
-
-<p>
-Aprende cómo funcionan los mercados globales con una experiencia visual moderna, interactiva y diseñada para nuevos traders.
-</p>
-
+<p>Aprende cómo funcionan los mercados globales con una experiencia visual moderna, interactiva y diseñada para nuevos traders.</p>
 <div class="hero-buttons">
-<button class="btn btn-primary" onclick="nextSlide()">
-Comenzar
-</button>
-
-<button class="btn btn-secondary" onclick="goToSlide(2)">
-Ver Mercados
-</button>
+<button class="btn btn-primary" onclick="nextSlide()">Comenzar</button>
+<button class="btn btn-secondary" onclick="goToSlide(2)">Ver Mercados</button>
 </div>
-
 </div>
-
 </section>
 
-<!-- SLIDE 2 -->
 <section class="slide">
-
 <h2 class="section-title">¿Qué es el Trading?</h2>
-<p class="section-subtitle">
-Comprar y vender activos financieros buscando oportunidades en el mercado.
-</p>
-
+<p class="section-subtitle">Comprar y vender activos financieros buscando oportunidades en el mercado.</p>
 <div class="grid">
-
 <div class="card">
 <i class="fa-solid fa-coins"></i>
 <h3>Comprar Bajo</h3>
-<p>
-Ingresas cuando detectas que un activo tiene potencial de subir de precio.
-</p>
+<p>Ingresas cuando detectas que un activo tiene potencial de subir de precio.</p>
 </div>
-
 <div class="card">
 <i class="fa-solid fa-arrow-trend-up"></i>
 <h3>Vender Alto</h3>
-<p>
-Aprovechas los movimientos del mercado para generar beneficios.
-</p>
+<p>Aprovechas los movimientos del mercado para generar beneficios.</p>
 </div>
-
 <div class="card">
 <i class="fa-solid fa-brain"></i>
 <h3>Análisis Inteligente</h3>
-<p>
-Utiliza gráficos, noticias y herramientas avanzadas para tomar decisiones.
-</p>
+<p>Utiliza gráficos, noticias y herramientas avanzadas para tomar decisiones.</p>
 </div>
-
 <div class="card">
 <i class="fa-solid fa-shield-halved"></i>
 <h3>Gestión de Riesgo</h3>
-<p>
-La protección del capital es una de las claves más importantes del trading.
-</p>
+<p>La protección del capital es una de las claves más importantes del trading.</p>
 </div>
-
 </div>
-
 </section>
 
-<!-- SLIDE 3 -->
 <section class="slide">
-
 <h2 class="section-title">Mercados Globales</h2>
-<p class="section-subtitle">
-Selecciona un activo para ver noticias relevantes que impactan el mercado.
-</p>
-
+<p class="section-subtitle">Selecciona un activo para ver noticias relevantes que impactan el mercado.</p>
 <div class="market-grid">
-
 <div class="card market-card" onclick="showNews('forex')">
-
 <div class="market-top">
-<div class="market-icon">
-<i class="fa-solid fa-dollar-sign"></i>
+<div class="market-icon"><i class="fa-solid fa-dollar-sign"></i></div>
+<div class="market-change positive">+1.25%</div>
 </div>
-
-<div class="market-change positive">
-+1.25%
-</div>
-</div>
-
 <h3>Forex</h3>
-<p>
-Mercado global de divisas con alta liquidez y operación 24/5.
-</p>
-
+<p>Mercado global de divisas con alta liquidez y operación 24/5.</p>
 </div>
-
 <div class="card market-card" onclick="showNews('gold')">
-
 <div class="market-top">
-<div class="market-icon">
-<i class="fa-solid fa-medal"></i>
+<div class="market-icon"><i class="fa-solid fa-medal"></i></div>
+<div class="market-change negative">-0.84%</div>
 </div>
-
-<div class="market-change negative">
--0.84%
-</div>
-</div>
-
 <h3>Metales</h3>
-<p>
-Oro y plata reaccionan ante inflación y política monetaria.
-</p>
-
+<p>Oro y plata reaccionan ante inflación y política monetaria.</p>
 </div>
-
 <div class="card market-card" onclick="showNews('indices')">
-
 <div class="market-top">
-<div class="market-icon">
-<i class="fa-solid fa-chart-column"></i>
+<div class="market-icon"><i class="fa-solid fa-chart-column"></i></div>
+<div class="market-change positive">+2.11%</div>
 </div>
-
-<div class="market-change positive">
-+2.11%
-</div>
-</div>
-
 <h3>Índices</h3>
-<p>
-Opera los mercados bursátiles más importantes del mundo.
-</p>
-
+<p>Opera los mercados bursátiles más importantes del mundo.</p>
 </div>
-
 <div class="card market-card" onclick="showNews('stocks')">
-
 <div class="market-top">
-<div class="market-icon">
-<i class="fa-solid fa-building"></i>
+<div class="market-icon"><i class="fa-solid fa-building"></i></div>
+<div class="market-change positive">+3.18%</div>
 </div>
-
-<div class="market-change positive">
-+3.18%
-</div>
-</div>
-
 <h3>Acciones</h3>
-<p>
-Invierte en compañías líderes como Apple, Tesla y Amazon.
-</p>
-
+<p>Invierte en compañías líderes como Apple, Tesla y Amazon.</p>
 </div>
-
 <div class="card market-card" onclick="showNews('oil')">
-
 <div class="market-top">
-<div class="market-icon">
-<i class="fa-solid fa-oil-can"></i>
+<div class="market-icon"><i class="fa-solid fa-oil-can"></i></div>
+<div class="market-change negative">-1.09%</div>
 </div>
-
-<div class="market-change negative">
--1.09%
-</div>
-</div>
-
 <h3>Commodities</h3>
-<p>
-Petróleo, gas y materias primas esenciales para la economía global.
-</p>
-
+<p>Petróleo, gas y materias primas esenciales para la economía global.</p>
 </div>
-
 <div class="card market-card" onclick="showNews('crypto')">
-
 <div class="market-top">
-<div class="market-icon">
-<i class="fa-brands fa-bitcoin"></i>
+<div class="market-icon"><i class="fa-brands fa-bitcoin"></i></div>
+<div class="market-change positive">+5.46%</div>
 </div>
-
-<div class="market-change positive">
-+5.46%
-</div>
-</div>
-
 <h3>Cripto</h3>
-<p>
-Mercado digital con alta volatilidad y oportunidades 24/7.
-</p>
-
+<p>Mercado digital con alta volatilidad y oportunidades 24/7.</p>
 </div>
-
 </div>
-
 <div class="news-panel" id="newsPanel"></div>
-
 </section>
 
-<!-- SLIDE 4 -->
 <section class="slide">
-
 <h2 class="section-title">Simulador de Trading</h2>
-<p class="section-subtitle">
-Experimenta cómo funciona una operación en tiempo real.
-</p>
-
+<p class="section-subtitle">Experimenta cómo funciona una operación en tiempo real.</p>
 <div class="simulator">
-
 <div class="price-panel">
-
 <div class="pair">EUR/USD</div>
-
-<div class="big-price" id="price">
-1.0850
-</div>
-
-<div class="price-change positive" id="priceChange">
-▲ +0.15%
-</div>
-
+<div class="big-price" id="price">1.0850</div>
+<div class="price-change positive" id="priceChange">▲ +0.15%</div>
 <div class="trade-buttons">
-
-<button class="trade-btn buy" onclick="trade('buy')">
-<i class="fa-solid fa-arrow-up"></i>
-COMPRAR
-</button>
-
-<button class="trade-btn sell" onclick="trade('sell')">
-<i class="fa-solid fa-arrow-down"></i>
-VENDER
-</button>
-
+<button class="trade-btn buy" onclick="trade('buy')"><i class="fa-solid fa-arrow-up"></i> COMPRAR</button>
+<button class="trade-btn sell" onclick="trade('sell')"><i class="fa-solid fa-arrow-down"></i> VENDER</button>
 </div>
-
 </div>
-
 <div class="stats">
-
 <div class="stat">
 <div class="stat-label">Balance</div>
-<div class="stat-value" id="balance">
-$10,000
+<div class="stat-value" id="balance">$10,000</div>
 </div>
-</div>
-
 <div class="stat">
 <div class="stat-label">Ganancia / Pérdida</div>
-<div class="stat-value" id="profit">
-$0
+<div class="stat-value" id="profit">$0</div>
 </div>
-</div>
-
 <div class="stat">
 <div class="stat-label">Operaciones</div>
-<div class="stat-value" id="trades">
-0
+<div class="stat-value" id="trades">0</div>
 </div>
 </div>
-
 </div>
-
-</div>
-
 </section>
 
-<!-- SLIDE 5 -->
 <section class="slide">
-
 <h2 class="section-title">Gestión de Riesgo</h2>
-
 <div class="grid">
-
 <div class="card">
 <i class="fa-solid fa-octagon-xmark"></i>
 <h3>Stop Loss</h3>
-<p>
-Protege tu capital cerrando automáticamente una operación cuando el mercado va en contra.
-</p>
+<p>Protege tu capital cerrando automáticamente una operación cuando el mercado va en contra.</p>
 </div>
-
 <div class="card">
 <i class="fa-solid fa-bullseye"></i>
 <h3>Take Profit</h3>
-<p>
-Asegura ganancias automáticamente cuando alcanzas tu objetivo.
-</p>
+<p>Asegura ganancias automáticamente cuando alcanzas tu objetivo.</p>
 </div>
-
 <div class="card">
 <i class="fa-solid fa-ruler"></i>
 <h3>Tamaño de Posición</h3>
-<p>
-Nunca arriesgues demasiado capital en una sola operación.
-</p>
+<p>Nunca arriesgues demasiado capital en una sola operación.</p>
 </div>
-
 <div class="card">
 <i class="fa-solid fa-robot"></i>
 <h3>IA & Análisis</h3>
-<p>
-Obtén soporte mediante análisis técnico y noticias económicas relevantes.
-</p>
+<p>Obtén soporte mediante análisis técnico y noticias económicas relevantes.</p>
 </div>
-
 </div>
-
 </section>
 
-<!-- SLIDE 6 -->
 <section class="slide">
-
 <div class="hero">
-
 <div class="hero-badge">
 <i class="fa-solid fa-rocket"></i>
 <span>CFI BROKER</span>
 </div>
-
 <h1>Comienza Hoy</h1>
-
-<p>
-Accede a mercados globales y aprende trading con tecnología moderna y soporte personalizado.
-</p>
-
+<p>Accede a mercados globales y aprende trading con tecnología moderna y soporte personalizado.</p>
 <div class="hero-buttons">
-
-<a href="https://registration.cfifinancial.com/mu/en/registration?promo=3569" target="_blank" class="btn btn-primary">
-Abrir Cuenta
-</a>
-
-<a href="https://registration.cfifinancial.com/mu/en/registration?promo=3569" target="_blank" class="btn btn-secondary">
-Hablar con un Asesor
-</a>
-
+<a href="https://registration.cfifinancial.com/mu/en/registration?promo=3569" target="_blank" class="btn btn-primary">Abrir Cuenta</a>
+<a href="https://registration.cfifinancial.com/mu/en/registration?promo=3569" target="_blank" class="btn btn-secondary">Hablar con un Asesor</a>
 </div>
-
 </div>
-
 </section>
 
 </div>
 
-<!-- NAVIGATION -->
-
 <div class="navigation">
-
-<button class="nav-btn" onclick="prevSlide()" aria-label="Slide anterior">
-<i class="fa-solid fa-chevron-left"></i>
-</button>
-
-<button class="nav-btn" onclick="nextSlide()" aria-label="Slide siguiente">
-<i class="fa-solid fa-chevron-right"></i>
-</button>
-
+<button class="nav-btn" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i></button>
+<button class="nav-btn" onclick="nextSlide()"><i class="fa-solid fa-chevron-right"></i></button>
 </div>
 
 <div class="slide-counter">
@@ -1069,64 +762,42 @@ Hablar con un Asesor
 </div>
 
 <script>
-
-let currentSlide = 0;
-const slides = document.querySelectorAll('.slide');
-const totalSlides = slides.length;
+let currentSlide=0;
+const slides=document.querySelectorAll('.slide');
+const totalSlides=slides.length;
 
 function updateSlides(){
 slides.forEach(slide=>slide.classList.remove('active'));
 slides[currentSlide].classList.add('active');
 document.getElementById('slideNumber').innerText=currentSlide+1;
-
-// Scroll al inicio del slide en móvil
-slides[currentSlide].scrollTop = 0;
+slides[currentSlide].scrollTop=0;
 }
 
 function nextSlide(){
 currentSlide++;
-if(currentSlide>=totalSlides){
-currentSlide=0;
-}
+if(currentSlide>=totalSlides)currentSlide=0;
 updateSlides();
 }
 
 function prevSlide(){
 currentSlide--;
-if(currentSlide<0){
-currentSlide=totalSlides-1;
-}
+if(currentSlide<0)currentSlide=totalSlides-1;
 updateSlides();
 }
 
 function goToSlide(index){
-currentSlide = index;
-if(currentSlide>=totalSlides){
-currentSlide=totalSlides-1;
-}
-if(currentSlide<0){
-currentSlide=0;
-}
+currentSlide=index;
+if(currentSlide>=totalSlides)currentSlide=totalSlides-1;
+if(currentSlide<0)currentSlide=0;
 updateSlides();
 }
 
-/* KEYBOARD NAVIGATION */
-
 document.addEventListener('keydown',(e)=>{
-if(e.key==="ArrowRight" || e.key==="Right"){
-nextSlide();
-}
-if(e.key==="ArrowLeft" || e.key==="Left"){
-prevSlide();
-}
+if(e.key==="ArrowRight"||e.key==="Right")nextSlide();
+if(e.key==="ArrowLeft"||e.key==="Left")prevSlide();
 });
 
-/* TOUCH SWIPE MOBILE */
-
-let touchStartX=0;
-let touchEndX=0;
-let touchStartY=0;
-let touchEndY=0;
+let touchStartX=0,touchEndX=0,touchStartY=0,touchEndY=0;
 
 document.addEventListener('touchstart',(e)=>{
 touchStartX=e.changedTouches[0].screenX;
@@ -1136,140 +807,74 @@ touchStartY=e.changedTouches[0].screenY;
 document.addEventListener('touchend',(e)=>{
 touchEndX=e.changedTouches[0].screenX;
 touchEndY=e.changedTouches[0].screenY;
-
-let diffX = touchEndX - touchStartX;
-let diffY = touchEndY - touchStartY;
-
-// Solo hacer swipe si el movimiento horizontal es mayor que el vertical
-if(Math.abs(diffX) > Math.abs(diffY)){
-if(diffX < -50){ // Swipe left
-nextSlide();
-}
-if(diffX > 50){ // Swipe right
-prevSlide();
-}
+let diffX=touchEndX-touchStartX;
+let diffY=touchEndY-touchStartY;
+if(Math.abs(diffX)>Math.abs(diffY)){
+if(diffX<-50)nextSlide();
+if(diffX>50)prevSlide();
 }
 },false);
 
-/* NEWS FUNCTIONALITY */
-
-const newsData = {
-forex:[
-"📉 La FED podría recortar tasas este trimestre",
-"💵 El dólar gana fuerza frente al euro",
-"📊 Datos de empleo generan volatilidad"
-],
-gold:[
-"🥇 Tensiones geopolíticas impulsan el oro",
-"🏦 Bancos centrales aumentan reservas",
-"📉 Dólar fuerte presiona el XAU/USD"
-],
-indices:[
-"📈 Nasdaq sube impulsado por inteligencia artificial",
-"🏛️ Inflación impacta el S&P500",
-"💻 Resultados tecnológicos superan expectativas"
-],
-stocks:[
-"🚗 Tesla aumenta volatilidad tras earnings",
-"🍎 Apple presenta nuevos productos",
-"📦 Amazon supera expectativas de ingresos"
-],
-oil:[
-"🛢️ OPEP evalúa reducción de producción",
-"🌍 Tensiones globales afectan el petróleo",
-"📉 Inventarios de crudo aumentan"
-],
-crypto:[
-"₿ Bitcoin rompe resistencia clave",
-"⚡ ETF de Bitcoin impulsa demanda",
-"🚀 Ethereum incrementa actividad de red"
-]
+const newsData={
+forex:["📉 La FED podría recortar tasas este trimestre","💵 El dólar gana fuerza frente al euro","📊 Datos de empleo generan volatilidad"],
+gold:["🥇 Tensiones geopolíticas impulsan el oro","🏦 Bancos centrales aumentan reservas","📉 Dólar fuerte presiona el XAU/USD"],
+indices:["📈 Nasdaq sube impulsado por inteligencia artificial","🏛️ Inflación impacta el S&P500","💻 Resultados tecnológicos superan expectativas"],
+stocks:["🚗 Tesla aumenta volatilidad tras earnings","🍎 Apple presenta nuevos productos","📦 Amazon supera expectativas de ingresos"],
+oil:["🛢️ OPEP evalúa reducción de producción","🌍 Tensiones globales afectan el petróleo","📉 Inventarios de crudo aumentan"],
+crypto:["₿ Bitcoin rompe resistencia clave","⚡ ETF de Bitcoin impulsa demanda","🚀 Ethereum incrementa actividad de red"]
 };
 
 function showNews(asset){
-const panel = document.getElementById('newsPanel');
-
-panel.innerHTML = `
-<h3 class="news-title">
-📰 Noticias relevantes
-</h3>
-${newsData[asset].map(item => `
-<div class="news-card">
-${item}
-</div>
-`).join('')}
-`;
-
+const panel=document.getElementById('newsPanel');
+panel.innerHTML=`<h3 class="news-title">📰 Noticias relevantes</h3>${newsData[asset].map(item=>`<div class="news-card">${item}</div>`).join('')}`;
 panel.classList.add('active');
 }
 
-/* TRADING SIMULATOR */
-
-let balance = 10000;
-let profit = 0;
-let trades = 0;
-let priceInterval;
+let balance=10000,profit=0,trades=0;
 
 function updatePrice(){
-const priceElement = document.getElementById('price');
-const changeElement = document.getElementById('priceChange');
-
-let currentPrice = parseFloat(priceElement.innerText);
-let movement = (Math.random() - 0.5) * 0.003;
-let newPrice = (currentPrice + movement).toFixed(4);
-
-priceElement.innerText = newPrice;
-
-let percent = ((movement/currentPrice)*100).toFixed(2);
-
-if(movement >= 0){
-changeElement.innerHTML = `▲ +${percent}%`;
-changeElement.className = 'price-change positive';
+const priceElement=document.getElementById('price');
+const changeElement=document.getElementById('priceChange');
+let currentPrice=parseFloat(priceElement.innerText);
+let movement=(Math.random()-.5)*.003;
+let newPrice=(currentPrice+movement).toFixed(4);
+priceElement.innerText=newPrice;
+let percent=((movement/currentPrice)*100).toFixed(2);
+if(movement>=0){
+changeElement.innerHTML=`▲ +${percent}%`;
+changeElement.className='price-change positive';
 }else{
-changeElement.innerHTML = `▼ ${percent}%`;
-changeElement.className = 'price-change negative';
+changeElement.innerHTML=`▼ ${percent}%`;
+changeElement.className='price-change negative';
 }
 }
 
-// Iniciar actualización de precio
-priceInterval = setInterval(updatePrice,2000);
+setInterval(updatePrice,2000);
 
 function trade(type){
-// Validar balance mínimo
-if(balance < 100){
+if(balance<100){
 alert('⚠️ Balance insuficiente para operar');
 return;
 }
-
 trades++;
-let pnl = (Math.random() * 400 - 200);
-profit += pnl;
-balance += pnl;
-
-document.getElementById('trades').innerText = trades;
-document.getElementById('profit').innerText = `$${profit.toFixed(2)}`;
-document.getElementById('balance').innerText = `$${balance.toFixed(2)}`;
-
-document.getElementById('profit').style.color =
-profit >= 0 ? '#10b981' : '#ef4444';
-
-// Mensaje de operación
-const operationType = type === 'buy' ? '📈 Compra' : '📉 Venta';
-const profitMsg = pnl >= 0 ? `Ganancia: +$${pnl.toFixed(2)}` : `Pérdida: $${pnl.toFixed(2)}`;
-
+let pnl=(Math.random()*400-200);
+profit+=pnl;
+balance+=pnl;
+document.getElementById('trades').innerText=trades;
+document.getElementById('profit').innerText=`$${profit.toFixed(2)}`;
+document.getElementById('balance').innerText=`$${balance.toFixed(2)}`;
+document.getElementById('profit').style.color=profit>=0?'#10b981':'#ef4444';
+const operationType=type==='buy'?'📈 Compra':'📉 Venta';
+const profitMsg=pnl>=0?`Ganancia: +$${pnl.toFixed(2)}`:`Pérdida: $${pnl.toFixed(2)}`;
 alert(`${operationType} ejecutada\n${profitMsg}`);
 }
 
-// Prevenir zoom en doble tap en iOS
-let lastTouchEnd = 0;
-document.addEventListener('touchend', function (event) {
-const now = (new Date()).getTime();
-if (now - lastTouchEnd <= 300) {
-event.preventDefault();
-}
-lastTouchEnd = now;
-}, false);
-
+let lastTouchEnd=0;
+document.addEventListener('touchend',function(event){
+const now=(new Date()).getTime();
+if(now-lastTouchEnd<=300)event.preventDefault();
+lastTouchEnd=now;
+},false);
 </script>
 
 </body>
