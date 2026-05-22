@@ -11,6 +11,12 @@
 <!-- GOOGLE FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial@0.2.0/dist/chartjs-chart-financial.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
+
 <style>
 
 :root{
@@ -115,19 +121,29 @@ body{position:relative;}
 
 .news-card:hover{transform:translateX(8px);background:rgba(255,255,255,.08);}
 
-.simulator{display:grid;grid-template-columns:1.2fr .8fr;gap:25px;max-width:1200px;margin:0 auto;}
+.simulator{display:grid;grid-template-columns:1fr;gap:25px;max-width:1200px;margin:0 auto;}
 
-.price-panel{background:var(--card);border:1px solid var(--border);padding:40px;border-radius:30px;backdrop-filter:blur(14px);}
+.chart-section{background:var(--card);border:1px solid var(--border);padding:25px;border-radius:30px;backdrop-filter:blur(14px);margin-bottom:25px;}
 
-.pair{font-size:24px;color:var(--muted);margin-bottom:10px;}
+.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
 
-.big-price{font-size:90px;font-weight:900;margin:25px 0;line-height:1;}
+.pair{font-size:24px;color:var(--muted);margin:0;}
 
-.price-change{font-size:28px;font-weight:700;}
+.chart-price{display:flex;align-items:baseline;gap:15px;}
 
-.trade-buttons{display:flex;gap:20px;margin-top:40px;}
+.big-price{font-size:48px;font-weight:900;line-height:1;}
 
-.trade-btn{flex:1;padding:25px;border:none;border-radius:20px;font-size:22px;font-weight:800;cursor:pointer;transition:all .3s ease;-webkit-tap-highlight-color:transparent;}
+.price-change{font-size:20px;font-weight:700;}
+
+.chart-container{position:relative;height:350px;width:100%;}
+
+.trading-panel{display:grid;grid-template-columns:1fr 1fr;gap:25px;}
+
+.price-panel{background:var(--card);border:1px solid var(--border);padding:30px;border-radius:30px;backdrop-filter:blur(14px);}
+
+.trade-buttons{display:flex;gap:15px;margin-top:25px;}
+
+.trade-btn{flex:1;padding:20px;border:none;border-radius:20px;font-size:18px;font-weight:800;cursor:pointer;transition:all .3s ease;-webkit-tap-highlight-color:transparent;}
 
 .buy{background:linear-gradient(135deg,#10b981,#059669);color:white;}
 
@@ -139,19 +155,19 @@ body{position:relative;}
 
 .stats{display:grid;gap:20px;}
 
-.stat{background:var(--card);border:1px solid var(--border);padding:30px;border-radius:25px;backdrop-filter:blur(14px);}
+.stat{background:var(--card);border:1px solid var(--border);padding:25px;border-radius:25px;backdrop-filter:blur(14px);}
 
-.stat-label{font-size:15px;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
+.stat-label{font-size:13px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;}
 
-.stat-value{font-size:36px;font-weight:800;}
+.stat-value{font-size:28px;font-weight:800;}
 
-.active-position{background:rgba(124,58,237,.15);border:2px solid var(--primary);padding:20px;border-radius:20px;margin-top:30px;display:none;}
+.active-position{background:rgba(124,58,237,.15);border:2px solid var(--primary);padding:20px;border-radius:20px;margin-top:25px;display:none;}
 
 .active-position.show{display:block;animation:fade .3s ease;}
 
 .position-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
 
-.position-type{font-size:18px;font-weight:700;padding:8px 16px;border-radius:12px;}
+.position-type{font-size:16px;font-weight:700;padding:8px 16px;border-radius:12px;}
 
 .position-type.buy{background:var(--green);color:white;}
 
@@ -165,9 +181,9 @@ body{position:relative;}
 
 .position-detail{background:rgba(255,255,255,.05);padding:12px;border-radius:12px;}
 
-.position-detail-label{font-size:12px;color:var(--muted);margin-bottom:5px;}
+.position-detail-label{font-size:11px;color:var(--muted);margin-bottom:5px;}
 
-.position-detail-value{font-size:20px;font-weight:800;}
+.position-detail-value{font-size:18px;font-weight:800;}
 
 .navigation{position:fixed;bottom:25px;right:25px;display:flex;gap:15px;z-index:100;}
 
@@ -186,11 +202,13 @@ html,body{overflow-x:hidden;}
 .btn{width:100%;padding:16px 25px;font-size:16px;}
 .section-title{font-size:36px;margin-top:40px;}
 .section-subtitle{font-size:18px;margin-bottom:30px;}
-.grid,.market-grid,.simulator{grid-template-columns:1fr;gap:20px;}
-.big-price{font-size:52px;}
-.trade-buttons{flex-direction:column;gap:15px;}
-.trade-btn{padding:20px;font-size:18px;}
-.market-card,.card,.stat,.price-panel{padding:25px;}
+.grid,.market-grid{grid-template-columns:1fr;gap:20px;}
+.trading-panel{grid-template-columns:1fr;}
+.chart-container{height:250px;}
+.big-price{font-size:36px;}
+.price-change{font-size:16px;}
+.trade-btn{padding:18px;font-size:16px;}
+.market-card,.card,.stat,.price-panel,.chart-section{padding:20px;}
 .card h3{font-size:24px;}
 .card p{font-size:16px;}
 .navigation{right:15px;bottom:15px;gap:10px;}
@@ -202,6 +220,7 @@ html,body{overflow-x:hidden;}
 .news-title{font-size:22px;}
 .bg-blur,.bg-blur-2{filter:blur(80px);}
 .position-info{grid-template-columns:1fr;}
+.stat-value{font-size:24px;}
 }
 
 @media(max-width:480px){
@@ -212,8 +231,8 @@ html,body{overflow-x:hidden;}
 .card{padding:20px;}
 .card i{font-size:36px;}
 .card h3{font-size:20px;}
-.big-price{font-size:42px;}
-.stat-value{font-size:28px;}
+.big-price{font-size:32px;}
+.chart-container{height:220px;}
 }
 
 @media(max-height:500px) and (orientation:landscape){
@@ -332,13 +351,26 @@ html,body{overflow-x:hidden;}
 
 <section class="slide">
 <h2 class="section-title">Simulador de Trading Demo</h2>
-<p class="section-subtitle">Experimenta cómo funciona una operación real en tiempo real.</p>
+<p class="section-subtitle">Experimenta cómo funciona una operación real con gráfico de velas en tiempo real.</p>
 <div class="simulator">
-<div class="price-panel">
+
+<!-- GRÁFICO DE VELAS -->
+<div class="chart-section">
+<div class="chart-header">
 <div class="pair">EUR/USD</div>
+<div class="chart-price">
 <div class="big-price" id="price">1.0850</div>
 <div class="price-change positive" id="priceChange">▲ +0.15%</div>
+</div>
+</div>
+<div class="chart-container">
+<canvas id="candlestickChart"></canvas>
+</div>
+</div>
 
+<!-- PANEL DE TRADING -->
+<div class="trading-panel">
+<div class="price-panel">
 <div class="trade-buttons">
 <button class="trade-btn buy" id="buyBtn" onclick="openPosition('buy')">
 <i class="fa-solid fa-arrow-up"></i> COMPRAR
@@ -351,11 +383,11 @@ html,body{overflow-x:hidden;}
 <div class="active-position" id="activePosition">
 <div class="position-header">
 <span class="position-type" id="positionType">COMPRA</span>
-<button class="close-btn" onclick="closePosition()">CERRAR POSICIÓN</button>
+<button class="close-btn" onclick="closePosition()">CERRAR</button>
 </div>
 <div class="position-info">
 <div class="position-detail">
-<div class="position-detail-label">Precio de Entrada</div>
+<div class="position-detail-label">Precio Entrada</div>
 <div class="position-detail-value" id="entryPrice">1.0850</div>
 </div>
 <div class="position-detail">
@@ -363,7 +395,7 @@ html,body{overflow-x:hidden;}
 <div class="position-detail-value" id="currentPrice">1.0850</div>
 </div>
 <div class="position-detail">
-<div class="position-detail-label">P&L (Ganancia/Pérdida)</div>
+<div class="position-detail-label">P&L</div>
 <div class="position-detail-value" id="pnlValue">$0.00</div>
 </div>
 <div class="position-detail">
@@ -372,7 +404,6 @@ html,body{overflow-x:hidden;}
 </div>
 </div>
 </div>
-
 </div>
 
 <div class="stats">
@@ -389,6 +420,8 @@ html,body{overflow-x:hidden;}
 <div class="stat-value" id="trades">0</div>
 </div>
 </div>
+</div>
+
 </div>
 </section>
 
@@ -513,6 +546,8 @@ panel.innerHTML=`<h3 class="news-title">📰 Noticias relevantes</h3>${newsData[
 panel.classList.add('active');
 }
 
+// ============== SIMULADOR DE TRADING CON GRÁFICO DE VELAS ==============
+
 let balance=10000;
 let totalProfit=0;
 let totalTrades=0;
@@ -522,16 +557,100 @@ let positionDurationInterval=null;
 let basePrice=1.0850;
 let currentPrice=basePrice;
 
+// Datos del gráfico
+let candlestickData=[];
+let chart=null;
+
+// Generar datos históricos iniciales
+function generateInitialData(){
+const now=Date.now();
+let price=1.0850;
+for(let i=30;i>=0;i--){
+const timestamp=now-(i*3000);
+const open=price;
+const movement=(Math.random()-0.5)*0.0015;
+price+=movement;
+const high=Math.max(open,price)+(Math.random()*0.0005);
+const low=Math.min(open,price)-(Math.random()*0.0005);
+const close=price;
+candlestickData.push({
+x:timestamp,
+o:open,
+h:high,
+l:low,
+c:close
+});
+}
+}
+
+// Crear gráfico de velas
+function createChart(){
+const ctx=document.getElementById('candlestickChart').getContext('2d');
+chart=new Chart(ctx,{
+type:'candlestick',
+data:{
+datasets:[{
+label:'EUR/USD',
+data:candlestickData,
+borderColor:'rgba(124,58,237,1)',
+color:{
+up:'#10b981',
+down:'#ef4444',
+unchanged:'#9ca3af'
+}
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+plugins:{
+legend:{display:false},
+tooltip:{
+enabled:true,
+mode:'index',
+intersect:false,
+backgroundColor:'rgba(0,0,0,0.8)',
+titleColor:'#fff',
+bodyColor:'#fff',
+borderColor:'rgba(124,58,237,0.5)',
+borderWidth:1
+}
+},
+scales:{
+x:{
+type:'time',
+time:{
+unit:'minute',
+displayFormats:{minute:'HH:mm'}
+},
+grid:{color:'rgba(255,255,255,0.05)'},
+ticks:{color:'#9ca3af',maxTicksLimit:8}
+},
+y:{
+position:'right',
+grid:{color:'rgba(255,255,255,0.05)'},
+ticks:{color:'#9ca3af',precision:4}
+}
+}
+}
+});
+}
+
+// Actualizar precio y gráfico
 function updatePrice(){
 const priceElement=document.getElementById('price');
 const changeElement=document.getElementById('priceChange');
+
 let movement=(Math.random()-0.5)*0.0006;
 basePrice+=movement;
 if(basePrice<1.08)basePrice=1.08;
 if(basePrice>1.10)basePrice=1.10;
+
 currentPrice=basePrice;
 priceElement.innerText=currentPrice.toFixed(4);
+
 let percent=((currentPrice-1.0850)/1.0850*100).toFixed(2);
+
 if(percent>=0){
 changeElement.innerHTML=`▲ +${percent}%`;
 changeElement.className='price-change positive';
@@ -539,8 +658,53 @@ changeElement.className='price-change positive';
 changeElement.innerHTML=`▼ ${percent}%`;
 changeElement.className='price-change negative';
 }
+
+// Actualizar gráfico cada 3 segundos
+updateCandlestick();
+
 if(activePosition){
 updateActivePnL();
+}
+}
+
+// Actualizar vela actual
+let currentCandle=null;
+let candleStartTime=Date.now();
+
+function updateCandlestick(){
+const now=Date.now();
+
+if(!currentCandle||now-candleStartTime>3000){
+// Nueva vela cada 3 segundos
+if(currentCandle){
+candlestickData.push(currentCandle);
+if(candlestickData.length>40){
+candlestickData.shift();
+}
+}
+currentCandle={
+x:now,
+o:currentPrice,
+h:currentPrice,
+l:currentPrice,
+c:currentPrice
+};
+candleStartTime=now;
+}else{
+// Actualizar vela actual
+currentCandle.c=currentPrice;
+currentCandle.h=Math.max(currentCandle.h,currentPrice);
+currentCandle.l=Math.min(currentCandle.l,currentPrice);
+}
+
+// Actualizar datos del gráfico
+if(chart){
+const tempData=[...candlestickData];
+if(currentCandle){
+tempData.push(currentCandle);
+}
+chart.data.datasets[0].data=tempData;
+chart.update('none');
 }
 }
 
@@ -586,7 +750,6 @@ entryPriceLabel.innerText=currentPrice.toFixed(4);
 document.getElementById('buyBtn').disabled=true;
 document.getElementById('sellBtn').disabled=true;
 positionDurationInterval=setInterval(updateDuration,1000);
-alert(`✅ Posición ${type==='buy'?'de COMPRA':'de VENTA'} abierta a ${currentPrice.toFixed(4)}`);
 }
 
 function closePosition(){
@@ -629,6 +792,9 @@ durationDisplay.innerText=`${secs}s`;
 }
 }
 
+// Inicializar
+generateInitialData();
+createChart();
 setInterval(updatePrice,1500);
 
 let lastTouchEnd=0;
