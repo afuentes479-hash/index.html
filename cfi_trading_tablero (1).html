@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFI Trading - Tablero Educativo Interactivo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0D1F3C 0%, #1A3A6B 100%);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* SLIDE 1: PORTADA */
+        .slide-1 {
+            background: linear-gradient(135deg, #C0272D 0%, #E05A5F 100%);
+        }
+
+        .logo-container {
+            text-align: center;
+            color: white;
+        }
+
+        .logo-container h1 {
+            font-size: 72px;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .logo-container .platform-subtitle {
+            font-size: 28px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .logo-container p {
+            font-size: 32px;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+
+        .logo-container .subtitle {
+            font-size: 24px;
+            opacity: 0.8;
+        }
+
+        /* Trading Chart */
+        .trading-chart {
+            margin-top: 50px;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 15px;
+            height: 150px;
+            margin-top: 20px;
+        }
+
+        .chart-bar {
+            width: 40px;
+            background: linear-gradient(to top, #10b981, #34d399);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .chart-bar.down {
+            background: linear-gradient(to top, #ef4444, #f87171);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .chart-bar:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4);
+        }
+
+        .chart-label {
+            color: white;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        /* SLIDE 2: ¿QUÉ ES EL TRADING? */
+        .slide-2 {
+            background: white;
+        }
+
+        .content-box {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .slide-title {
+            font-size: 56px;
+            color: #C0272D;
+            margin-bottom: 40px;
+            text-align: center;
+            border-bottom: 5px solid #0D1F3C;
+            padding-bottom: 20px;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 40px;
+            border-radius: 20px;
+            border-left: 8px solid #C0272D;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(192, 39, 45, 0.2);
+        }
+
+        .concept-card .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .concept-card h3 {
+            font-size: 32px;
+            color: #0D1F3C;
+            margin-bottom: 15px;
+        }
+
+        .concept-card p {
+            font-size: 20px;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        /* SLIDE 3: SIMULADOR */
+        .slide-3 {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        }
+
+        .simulator-container {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .price-board {
+            background: white;
+            border-radius: 30px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .price-board h2 {
+            font-size: 36px;
+            color: #0D1F3C;
+            margin-bottom: 20px;
+        }
+
+        .price-display {
+            font-size: 96px;
+            font-weight: bold;
+            color: #C0272D;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .price-change {
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .price-change.up {
+            color: #10b981;
+        }
+
+        .price-change.down {
+            color: #ef4444;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .action-btn {
+            padding: 30px 80px;
+            font-size: 32px;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-transform: uppercase;
+        }
+
+        .buy-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+        }
+
+        .sell-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .sell-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .portfolio-display {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .portfolio-stat {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .portfolio-stat .label {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .portfolio-stat .value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #0D1F3C;
+        }
+
+        /* SLIDE 4: INSTRUMENTOS */
+        .slide-4 {
+            background: linear-gradient(135deg, #0D1F3C 0%, #1A3A6B 100%);
+        }
+
+        .slide-title-white {
+            font-size: 56px;
+            color: white;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .instruments-showcase {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+        }
+
+        .instrument-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.4s;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .instrument-box:hover {
+            transform: scale(1.1) translateY(-10px);
+            border-color: #C0272D;
+            box-shadow: 0 20px 60px rgba(192, 39, 45, 0.3);
+        }
+
+        .instrument-box .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .instrument-box h3 {
+            font-size: 28px;
+            color: #0D1F3C;
+            margin-bottom: 15px;
+        }
+
+        .instrument-box p {
+            font-size: 18px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        /* SLIDE 5: GESTIÓN DE RIESGO */
+        .slide-5 {
+            background: white;
+        }
+
+        .risk-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1300px;
+        }
+
+        .risk-card {
+            background: linear-gradient(135deg, #C0272D 0%, #E05A5F 100%);
+            color: white;
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(192, 39, 45, 0.3);
+            transition: all 0.3s;
+        }
+
+        .risk-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .risk-card .icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+        }
+
+        .risk-card h3 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .risk-card p {
+            font-size: 22px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        /* SLIDE 6: CTA FINAL */
+        .slide-6 {
+            background: linear-gradient(135deg, #C0272D 0%, #E05A5F 100%);
+        }
+
+        .cta-content {
+            text-align: center;
+            color: white;
+            max-width: 1000px;
+        }
+
+        .cta-content h1 {
+            font-size: 72px;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .cta-content p {
+            font-size: 32px;
+            margin-bottom: 50px;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: white;
+            color: #C0272D;
+            padding: 30px 80px;
+            font-size: 36px;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .cta-button:hover {
+            transform: scale(1.15);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        /* NAVEGACIÓN */
+        .navigation {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            border: 3px solid #C0272D;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            background: #C0272D;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #0D1F3C;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @media (max-width: 1200px) {
+            .concept-grid,
+            .instruments-showcase,
+            .risk-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- SLIDE 1: PORTADA -->
+        <div class="slide slide-1 active">
+            <div class="logo-container">
+                <h1 class="pulse">💼 CFI BROKER</h1>
+                <p class="platform-subtitle">Plataforma de trading e inversiones</p>
+                <p>¿Cómo Funciona el Trading?</p>
+                <p class="subtitle">Tablero Educativo Interactivo</p>
+                
+                <div class="trading-chart">
+                    <div class="chart-container">
+                        <div>
+                            <div class="chart-bar" style="height: 80px;"></div>
+                            <div class="chart-label">L</div>
+                        </div>
+                        <div>
+                            <div class="chart-bar down" style="height: 60px;"></div>
+                            <div class="chart-label">M</div>
+                        </div>
+                        <div>
+                            <div class="chart-bar" style="height: 100px;"></div>
+                            <div class="chart-label">M</div>
+                        </div>
+                        <div>
+                            <div class="chart-bar" style="height: 120px;"></div>
+                            <div class="chart-label">J</div>
+                        </div>
+                        <div>
+                            <div class="chart-bar down" style="height: 70px;"></div>
+                            <div class="chart-label">V</div>
+                        </div>
+                        <div>
+                            <div class="chart-bar" style="height: 140px;"></div>
+                            <div class="chart-label">S</div>
+                        </div>
+                        <div>
+                            <div class="chart-bar" style="height: 110px;"></div>
+                            <div class="chart-label">D</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: ¿QUÉ ES EL TRADING? -->
+        <div class="slide slide-2">
+            <div class="content-box">
+                <h2 class="slide-title">¿Qué es el Trading?</h2>
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <div class="icon">💰</div>
+                        <h3>Comprar Barato</h3>
+                        <p>Adquieres un activo cuando consideras que está por debajo de su valor real</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon">📈</div>
+                        <h3>Vender Caro</h3>
+                        <p>Cuando el precio sube, vendes y obtienes la ganancia por la diferencia</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon">📊</div>
+                        <h3>Análisis Inteligente</h3>
+                        <p>Usas gráficos, indicadores y la IA Kaina para tomar decisiones informadas</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="icon">⏰</div>
+                        <h3>Tu Estrategia</h3>
+                        <p>Opera en minutos, horas o días según tu estilo y objetivos personales</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: SIMULADOR INTERACTIVO -->
+        <div class="slide slide-3">
+            <div class="simulator-container">
+                <h2 class="slide-title">Simulador de Trading</h2>
+                <div class="price-board">
+                    <h2>EUR/USD</h2>
+                    <div class="price-display" id="sim-price">1.0850</div>
+                    <div class="price-change up" id="sim-change">▲ +0.0012 (+0.11%)</div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn buy-btn" onclick="simulateTrade('buy')">
+                        📈 COMPRAR
+                    </button>
+                    <button class="action-btn sell-btn" onclick="simulateTrade('sell')">
+                        📉 VENDER
+                    </button>
+                </div>
+
+                <div class="portfolio-display">
+                    <div class="portfolio-stat">
+                        <div class="label">Balance</div>
+                        <div class="value" id="balance">$10,000</div>
+                    </div>
+                    <div class="portfolio-stat">
+                        <div class="label">Ganancia/Pérdida</div>
+                        <div class="value" id="profit" style="color: #10b981;">$0</div>
+                    </div>
+                    <div class="portfolio-stat">
+                        <div class="label">Operaciones</div>
+                        <div class="value" id="trades">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: INSTRUMENTOS FINANCIEROS -->
+        <div class="slide slide-4">
+            <div class="content-box">
+                <h2 class="slide-title-white">Instrumentos Disponibles en CFI</h2>
+                <div class="instruments-showcase">
+                    <div class="instrument-box">
+                        <div class="icon">💱</div>
+                        <h3>Forex</h3>
+                        <p>Divisas globales. Mercado más líquido. Trading 24/5</p>
+                    </div>
+                    <div class="instrument-box">
+                        <div class="icon">🥇</div>
+                        <h3>Metales</h3>
+                        <p>Oro y plata. Refugio seguro contra inflación</p>
+                    </div>
+                    <div class="instrument-box">
+                        <div class="icon">📊</div>
+                        <h3>Índices</h3>
+                        <p>S&P 500, Nasdaq, DAX. Diversificación instantánea</p>
+                    </div>
+                    <div class="instrument-box">
+                        <div class="icon">🏢</div>
+                        <h3>Acciones</h3>
+                        <p>Apple, Tesla, Amazon. Las mejores empresas del mundo</p>
+                    </div>
+                    <div class="instrument-box">
+                        <div class="icon">🛢️</div>
+                        <h3>Commodities</h3>
+                        <p>Petróleo, gas, trigo. Los recursos que mueven el mundo</p>
+                    </div>
+                    <div class="instrument-box">
+                        <div class="icon">₿</div>
+                        <h3>Cripto</h3>
+                        <p>Bitcoin, Ethereum. El futuro digital. Opera 24/7</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: GESTIÓN DE RIESGO -->
+        <div class="slide slide-5">
+            <div class="content-box">
+                <h2 class="slide-title">Gestión de Riesgo: La Clave del Éxito</h2>
+                <div class="risk-cards">
+                    <div class="risk-card">
+                        <div class="icon">🛑</div>
+                        <h3>Stop Loss</h3>
+                        <p>Cierra automáticamente tu operación para limitar pérdidas. Protege tu capital antes de que sea tarde</p>
+                    </div>
+                    <div class="risk-card">
+                        <div class="icon">🎯</div>
+                        <h3>Take Profit</h3>
+                        <p>Asegura tus ganancias cuando alcanzas tu objetivo. No dejes que la codicia arruine una buena operación</p>
+                    </div>
+                    <div class="risk-card">
+                        <div class="icon">📏</div>
+                        <h3>Tamaño de Posición</h3>
+                        <p>Nunca arriesgues más del 1-2% de tu capital por operación. Sobrevive a las rachas negativas</p>
+                    </div>
+                    <div class="risk-card">
+                        <div class="icon">🤖</div>
+                        <h3>IA Kaina</h3>
+                        <p>Nuestra inteligencia artificial te ayuda con análisis en tiempo real y señales basadas en datos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: LLAMADA A LA ACCIÓN -->
+        <div class="slide slide-6">
+            <div class="cta-content">
+                <h1 class="pulse">¡Comienza Hoy! 🚀</h1>
+                <p>Abre tu cuenta en CFI y accede a los mercados globales con tecnología de vanguardia</p>
+                <button class="cta-button" onclick="window.open('https://registration.cfifinancial.com/mu/en/registration?promo=3569', '_blank')">
+                    ABRIR CUENTA AHORA
+                </button>
+            </div>
+        </div>
+
+        <!-- NAVEGACIÓN -->
+        <div class="navigation">
+            <button class="nav-btn" onclick="previousSlide()">◀</button>
+            <button class="nav-btn" onclick="nextSlide()">▶</button>
+        </div>
+
+        <div class="slide-counter">
+            <span id="current-slide">1</span> / 6
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 6;
+
+        // Simulador variables
+        let balance = 10000;
+        let entryPrice = null;
+        let currentPosition = null;
+        let totalTrades = 0;
+        let profit = 0;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            slides[currentSlide - 1].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide;
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        // Teclado navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        // Simulador de trading
+        function updatePrice() {
+            const priceEl = document.getElementById('sim-price');
+            const changeEl = document.getElementById('sim-change');
+            
+            let currentPrice = parseFloat(priceEl.textContent);
+            const change = (Math.random() - 0.5) * 0.0020; // Cambio aleatorio
+            const newPrice = (currentPrice + change).toFixed(4);
+            
+            priceEl.textContent = newPrice;
+            
+            const changePercent = ((change / currentPrice) * 100).toFixed(2);
+            const arrow = change >= 0 ? '▲' : '▼';
+            const sign = change >= 0 ? '+' : '';
+            
+            changeEl.textContent = `${arrow} ${sign}${change.toFixed(4)} (${sign}${changePercent}%)`;
+            changeEl.className = change >= 0 ? 'price-change up' : 'price-change down';
+            
+            // Actualizar P&L si hay posición abierta
+            if (currentPosition && entryPrice) {
+                const priceDiff = currentPosition === 'buy' 
+                    ? (newPrice - entryPrice) 
+                    : (entryPrice - newPrice);
+                profit = priceDiff * 10000; // Lote estándar simplificado
+                balance = 10000 + profit;
+                
+                document.getElementById('balance').textContent = `$${balance.toFixed(2)}`;
+                document.getElementById('profit').textContent = `$${profit.toFixed(2)}`;
+                document.getElementById('profit').style.color = profit >= 0 ? '#10b981' : '#ef4444';
+            }
+        }
+
+        function simulateTrade(type) {
+            const currentPrice = parseFloat(document.getElementById('sim-price').textContent);
+            
+            if (currentPosition === null) {
+                // Abrir posición
+                currentPosition = type;
+                entryPrice = currentPrice;
+                alert(`✅ Posición ${type === 'buy' ? 'LONG' : 'SHORT'} abierta en ${currentPrice}`);
+            } else {
+                // Cerrar posición
+                totalTrades++;
+                const finalProfit = profit;
+                
+                alert(`📊 Posición cerrada\nGanancia/Pérdida: $${finalProfit.toFixed(2)}`);
+                
+                currentPosition = null;
+                entryPrice = null;
+                document.getElementById('trades').textContent = totalTrades;
+            }
+        }
+
+        // Actualizar precio cada 2 segundos
+        setInterval(updatePrice, 2000);
+    </script>
+</body>
+</html>
