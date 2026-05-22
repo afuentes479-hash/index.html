@@ -394,6 +394,12 @@ transform:translateY(-5px);
 box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
 
+.trade-btn:disabled{
+opacity:0.5;
+cursor:not-allowed;
+transform:none;
+}
+
 .stats{
 display:grid;
 gap:20px;
@@ -417,6 +423,84 @@ letter-spacing:1px;
 
 .stat-value{
 font-size:36px;
+font-weight:800;
+}
+
+/* POSICIÓN ACTIVA */
+.active-position{
+background:rgba(124,58,237,.15);
+border:2px solid var(--primary);
+padding:20px;
+border-radius:20px;
+margin-top:30px;
+display:none;
+}
+
+.active-position.show{
+display:block;
+animation:fade .3s ease;
+}
+
+.position-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.position-type{
+font-size:18px;
+font-weight:700;
+padding:8px 16px;
+border-radius:12px;
+}
+
+.position-type.buy{
+background:var(--green);
+color:white;
+}
+
+.position-type.sell{
+background:var(--red);
+color:white;
+}
+
+.close-btn{
+padding:10px 20px;
+background:rgba(255,255,255,.1);
+border:1px solid rgba(255,255,255,.2);
+color:white;
+border-radius:12px;
+font-size:14px;
+font-weight:700;
+cursor:pointer;
+transition:.3s;
+}
+
+.close-btn:hover{
+background:rgba(255,255,255,.2);
+}
+
+.position-info{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+
+.position-detail{
+background:rgba(255,255,255,.05);
+padding:12px;
+border-radius:12px;
+}
+
+.position-detail-label{
+font-size:12px;
+color:var(--muted);
+margin-bottom:5px;
+}
+
+.position-detail-value{
+font-size:20px;
 font-weight:800;
 }
 
@@ -538,6 +622,8 @@ font-size:26px;
 
 .bg-blur,.bg-blur-2{filter:blur(80px);}
 
+.position-info{grid-template-columns:1fr;}
+
 }
 
 @media(max-width:480px){
@@ -601,24 +687,24 @@ padding-top:20px;
 <p class="section-subtitle">Comprar y vender activos financieros buscando oportunidades en el mercado.</p>
 <div class="grid">
 <div class="card">
-<i class="fa-solid fa-coins"></i>
-<h3>Comprar Bajo</h3>
-<p>Ingresas cuando detectas que un activo tiene potencial de subir de precio.</p>
+<i class="fa-solid fa-arrow-trend-up"></i>
+<h3>Comprar (Buy/Long)</h3>
+<p>Abres una posición esperando que el precio <strong>suba</strong>. Si sube, ganas dinero. Si baja, pierdes.</p>
 </div>
 <div class="card">
-<i class="fa-solid fa-arrow-trend-up"></i>
-<h3>Vender Alto</h3>
-<p>Aprovechas los movimientos del mercado para generar beneficios.</p>
+<i class="fa-solid fa-arrow-trend-down"></i>
+<h3>Vender (Sell/Short)</h3>
+<p>Abres una posición esperando que el precio <strong>baje</strong>. Si baja, ganas dinero. Si sube, pierdes.</p>
 </div>
 <div class="card">
 <i class="fa-solid fa-brain"></i>
 <h3>Análisis Inteligente</h3>
-<p>Utiliza gráficos, noticias y herramientas avanzadas para tomar decisiones.</p>
+<p>Utiliza gráficos, noticias y herramientas avanzadas para tomar decisiones informadas.</p>
 </div>
 <div class="card">
 <i class="fa-solid fa-shield-halved"></i>
 <h3>Gestión de Riesgo</h3>
-<p>La protección del capital es una de las claves más importantes del trading.</p>
+<p>La protección del capital es una de las claves más importantes del trading exitoso.</p>
 </div>
 </div>
 </section>
@@ -680,29 +766,62 @@ padding-top:20px;
 </section>
 
 <section class="slide">
-<h2 class="section-title">Simulador de Trading</h2>
-<p class="section-subtitle">Experimenta cómo funciona una operación en tiempo real.</p>
+<h2 class="section-title">Simulador de Trading Demo</h2>
+<p class="section-subtitle">Experimenta cómo funciona una operación real en tiempo real.</p>
 <div class="simulator">
 <div class="price-panel">
 <div class="pair">EUR/USD</div>
 <div class="big-price" id="price">1.0850</div>
 <div class="price-change positive" id="priceChange">▲ +0.15%</div>
+
 <div class="trade-buttons">
-<button class="trade-btn buy" onclick="trade('buy')"><i class="fa-solid fa-arrow-up"></i> COMPRAR</button>
-<button class="trade-btn sell" onclick="trade('sell')"><i class="fa-solid fa-arrow-down"></i> VENDER</button>
+<button class="trade-btn buy" id="buyBtn" onclick="openPosition('buy')">
+<i class="fa-solid fa-arrow-up"></i> COMPRAR
+</button>
+<button class="trade-btn sell" id="sellBtn" onclick="openPosition('sell')">
+<i class="fa-solid fa-arrow-down"></i> VENDER
+</button>
+</div>
+
+<!-- POSICIÓN ACTIVA -->
+<div class="active-position" id="activePosition">
+<div class="position-header">
+<span class="position-type" id="positionType">COMPRA</span>
+<button class="close-btn" onclick="closePosition()">CERRAR POSICIÓN</button>
+</div>
+<div class="position-info">
+<div class="position-detail">
+<div class="position-detail-label">Precio de Entrada</div>
+<div class="position-detail-value" id="entryPrice">1.0850</div>
+</div>
+<div class="position-detail">
+<div class="position-detail-label">Precio Actual</div>
+<div class="position-detail-value" id="currentPrice">1.0850</div>
+</div>
+<div class="position-detail">
+<div class="position-detail-label">P&L (Ganancia/Pérdida)</div>
+<div class="position-detail-value" id="pnlValue">$0.00</div>
+</div>
+<div class="position-detail">
+<div class="position-detail-label">Duración</div>
+<div class="position-detail-value" id="duration">0s</div>
 </div>
 </div>
+</div>
+
+</div>
+
 <div class="stats">
 <div class="stat">
 <div class="stat-label">Balance</div>
 <div class="stat-value" id="balance">$10,000</div>
 </div>
 <div class="stat">
-<div class="stat-label">Ganancia / Pérdida</div>
+<div class="stat-label">Ganancia / Pérdida Total</div>
 <div class="stat-value" id="profit">$0</div>
 </div>
 <div class="stat">
-<div class="stat-label">Operaciones</div>
+<div class="stat-label">Operaciones Cerradas</div>
 <div class="stat-value" id="trades">0</div>
 </div>
 </div>
@@ -819,63 +938,4 @@ const newsData={
 forex:["📉 La FED podría recortar tasas este trimestre","💵 El dólar gana fuerza frente al euro","📊 Datos de empleo generan volatilidad"],
 gold:["🥇 Tensiones geopolíticas impulsan el oro","🏦 Bancos centrales aumentan reservas","📉 Dólar fuerte presiona el XAU/USD"],
 indices:["📈 Nasdaq sube impulsado por inteligencia artificial","🏛️ Inflación impacta el S&P500","💻 Resultados tecnológicos superan expectativas"],
-stocks:["🚗 Tesla aumenta volatilidad tras earnings","🍎 Apple presenta nuevos productos","📦 Amazon supera expectativas de ingresos"],
-oil:["🛢️ OPEP evalúa reducción de producción","🌍 Tensiones globales afectan el petróleo","📉 Inventarios de crudo aumentan"],
-crypto:["₿ Bitcoin rompe resistencia clave","⚡ ETF de Bitcoin impulsa demanda","🚀 Ethereum incrementa actividad de red"]
-};
-
-function showNews(asset){
-const panel=document.getElementById('newsPanel');
-panel.innerHTML=`<h3 class="news-title">📰 Noticias relevantes</h3>${newsData[asset].map(item=>`<div class="news-card">${item}</div>`).join('')}`;
-panel.classList.add('active');
-}
-
-let balance=10000,profit=0,trades=0;
-
-function updatePrice(){
-const priceElement=document.getElementById('price');
-const changeElement=document.getElementById('priceChange');
-let currentPrice=parseFloat(priceElement.innerText);
-let movement=(Math.random()-.5)*.003;
-let newPrice=(currentPrice+movement).toFixed(4);
-priceElement.innerText=newPrice;
-let percent=((movement/currentPrice)*100).toFixed(2);
-if(movement>=0){
-changeElement.innerHTML=`▲ +${percent}%`;
-changeElement.className='price-change positive';
-}else{
-changeElement.innerHTML=`▼ ${percent}%`;
-changeElement.className='price-change negative';
-}
-}
-
-setInterval(updatePrice,2000);
-
-function trade(type){
-if(balance<100){
-alert('⚠️ Balance insuficiente para operar');
-return;
-}
-trades++;
-let pnl=(Math.random()*400-200);
-profit+=pnl;
-balance+=pnl;
-document.getElementById('trades').innerText=trades;
-document.getElementById('profit').innerText=`$${profit.toFixed(2)}`;
-document.getElementById('balance').innerText=`$${balance.toFixed(2)}`;
-document.getElementById('profit').style.color=profit>=0?'#10b981':'#ef4444';
-const operationType=type==='buy'?'📈 Compra':'📉 Venta';
-const profitMsg=pnl>=0?`Ganancia: +$${pnl.toFixed(2)}`:`Pérdida: $${pnl.toFixed(2)}`;
-alert(`${operationType} ejecutada\n${profitMsg}`);
-}
-
-let lastTouchEnd=0;
-document.addEventListener('touchend',function(event){
-const now=(new Date()).getTime();
-if(now-lastTouchEnd<=300)event.preventDefault();
-lastTouchEnd=now;
-},false);
-</script>
-
-</body>
-</html>
+stocks:["🚗 Tesla aumenta volatil
