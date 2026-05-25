@@ -545,6 +545,9 @@ line-height:1.5;
 .simulator-wrapper{
 max-width:1400px;
 margin:0 auto;
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:2rem;
 }
 
 .chart-panel{
@@ -554,11 +557,240 @@ border-radius:24px;
 padding:clamp(1.5rem,3vw,2.5rem);
 }
 
-.tradingview-widget-container{
-height:500px;
+.chart-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:2rem;
+flex-wrap:wrap;
+gap:1rem;
+}
+
+.pair-info{
+display:flex;
+align-items:center;
+gap:1rem;
+}
+
+.pair-name{
+font-size:clamp(1.3rem,3vw,1.8rem);
+font-weight:800;
+}
+
+.live-indicator{
+display:flex;
+align-items:center;
+gap:0.5rem;
+padding:0.5rem 1rem;
+background:rgba(0,255,136,.1);
+border-radius:999px;
+font-size:0.85rem;
+font-weight:700;
+color:var(--green);
+}
+
+.live-dot{
+width:8px;
+height:8px;
+border-radius:50%;
+background:var(--green);
+animation:blink 1.5s ease infinite;
+}
+
+.price-display{
+display:flex;
+align-items:baseline;
+gap:1.5rem;
+flex-wrap:wrap;
+}
+
+.current-price{
+font-size:clamp(2rem,5vw,3rem);
+font-weight:900;
+}
+
+.price-change{
+font-size:clamp(1rem,2vw,1.3rem);
+font-weight:700;
+padding:0.5rem 1rem;
+border-radius:12px;
+}
+
+.price-change.up{
+color:var(--green);
+background:rgba(0,255,136,.1);
+}
+
+.price-change.down{
+color:var(--red);
+background:rgba(255,51,102,.1);
+}
+
+.chart-canvas{
+position:relative;
+height:clamp(250px,40vw,400px);
 margin:2rem 0;
+}
+
+.trade-panel{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:24px;
+padding:clamp(1.5rem,3vw,2.5rem);
+display:flex;
+flex-direction:column;
+gap:2rem;
+}
+
+.trade-controls{
+display:grid;
+gap:1rem;
+}
+
+.trade-btn{
+padding:1.5rem;
+border:none;
 border-radius:16px;
-overflow:hidden;
+font-size:1.1rem;
+font-weight:800;
+cursor:pointer;
+transition:all .3s;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:0.75rem;
+min-height:70px;
+}
+
+.trade-btn.buy{
+background:linear-gradient(135deg,var(--green),#00cc70);
+color:var(--black);
+box-shadow:0 10px 30px rgba(0,255,136,.3);
+}
+
+.trade-btn.buy:hover:not(:disabled){
+transform:translateY(-4px);
+box-shadow:0 15px 40px rgba(0,255,136,.5);
+}
+
+.trade-btn.sell{
+background:linear-gradient(135deg,var(--red),#ff1a47);
+color:var(--white);
+box-shadow:0 10px 30px rgba(255,51,102,.3);
+}
+
+.trade-btn.sell:hover:not(:disabled){
+transform:translateY(-4px);
+box-shadow:0 15px 40px rgba(255,51,102,.5);
+}
+
+.trade-btn:disabled{
+opacity:0.5;
+cursor:not-allowed;
+}
+
+.sim-stats{
+display:grid;
+gap:1rem;
+}
+
+.sim-stat{
+background:var(--dark);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.25rem;
+}
+
+.sim-stat-label{
+font-size:0.85rem;
+color:var(--gray);
+margin-bottom:0.5rem;
+text-transform:uppercase;
+letter-spacing:0.5px;
+font-weight:600;
+}
+
+.sim-stat-value{
+font-size:clamp(1.5rem,3vw,2rem);
+font-weight:900;
+}
+
+.position-panel{
+background:rgba(0,212,255,.05);
+border:2px solid var(--electric);
+border-radius:20px;
+padding:1.5rem;
+display:none;
+}
+
+.position-panel.active{
+display:block;
+animation:slideUp 0.4s ease;
+}
+
+.position-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:1.5rem;
+flex-wrap:wrap;
+gap:1rem;
+}
+
+.position-type{
+padding:0.6rem 1.2rem;
+border-radius:12px;
+font-weight:800;
+font-size:1rem;
+}
+
+.position-type.buy{
+background:var(--green);
+color:var(--black);
+}
+
+.position-type.sell{
+background:var(--red);
+color:var(--white);
+}
+
+.close-position-btn{
+padding:0.6rem 1.2rem;
+background:rgba(255,255,255,.1);
+border:1px solid var(--border);
+border-radius:12px;
+color:var(--white);
+font-weight:700;
+cursor:pointer;
+transition:all .3s;
+font-size:0.9rem;
+}
+
+.close-position-btn:hover{
+background:rgba(255,255,255,.2);
+}
+
+.position-details{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:1rem;
+}
+
+.position-detail{
+background:var(--dark);
+padding:1rem;
+border-radius:12px;
+}
+
+.position-detail-label{
+font-size:0.75rem;
+color:var(--gray);
+margin-bottom:0.5rem;
+}
+
+.position-detail-value{
+font-size:1.1rem;
+font-weight:800;
 }
 
 .cta-section{
@@ -642,8 +874,12 @@ grid-template-columns:1fr;
 padding:2rem 1.5rem;
 }
 
-.tradingview-widget-container{
-height:400px;
+.simulator-wrapper{
+grid-template-columns:1fr;
+}
+
+.position-details{
+grid-template-columns:1fr;
 }
 
 .cta-buttons{
@@ -867,19 +1103,85 @@ Forex, Oro, Petróleo y Plata con datos actualizados cada 5 segundos
 <section class="simulator" id="simulator">
 <div class="section-header">
 <div class="section-badge pulse-badge">
-<i class="fa-solid fa-chart-candlestick"></i> GRÁFICO PROFESIONAL
+<i class="fa-solid fa-gamepad"></i> SIMULADOR INTERACTIVO
 </div>
-<h2 class="section-title">TradingView Chart en Tiempo Real</h2>
+<h2 class="section-title">Prueba Tu Primera Operación</h2>
 <p class="section-subtitle">
-Gráfico profesional con datos reales del mercado EUR/USD
+Abre y cierra posiciones. Sin riesgo, sin dinero real. Aprende haciendo.
 </p>
 </div>
 
 <div class="simulator-wrapper">
 <div class="chart-panel">
-<!-- TradingView Widget -->
-<div class="tradingview-widget-container" id="tradingview_chart">
-<div id="tradingview_widget"></div>
+<div class="chart-header">
+<div class="pair-info">
+<div class="pair-name">EUR/USD</div>
+<div class="live-indicator">
+<div class="live-dot"></div>
+<span>EN VIVO</span>
+</div>
+</div>
+<div class="price-display">
+<div class="current-price" id="simPrice">1.0850</div>
+<div class="price-change up" id="simChange">▲ +0.15%</div>
+</div>
+</div>
+
+<div class="chart-canvas">
+<canvas id="simChart"></canvas>
+</div>
+</div>
+
+<div class="trade-panel">
+<div class="trade-controls">
+<button class="trade-btn buy" id="buyBtn" onclick="openTrade('buy')">
+<i class="fa-solid fa-arrow-up"></i>
+<span>COMPRAR</span>
+</button>
+<button class="trade-btn sell" id="sellBtn" onclick="openTrade('sell')">
+<i class="fa-solid fa-arrow-down"></i>
+<span>VENDER</span>
+</button>
+</div>
+
+<div class="sim-stats">
+<div class="sim-stat">
+<div class="sim-stat-label">Balance</div>
+<div class="sim-stat-value" id="balance">$10,000</div>
+</div>
+<div class="sim-stat">
+<div class="sim-stat-label">P&L Total</div>
+<div class="sim-stat-value" id="totalPnl">$0</div>
+</div>
+<div class="sim-stat">
+<div class="sim-stat-label">Operaciones</div>
+<div class="sim-stat-value" id="tradeCount">0</div>
+</div>
+</div>
+
+<div class="position-panel" id="positionPanel">
+<div class="position-header">
+<div class="position-type buy" id="posType">COMPRA</div>
+<button class="close-position-btn" onclick="closeTrade()">Cerrar</button>
+</div>
+<div class="position-details">
+<div class="position-detail">
+<div class="position-detail-label">Entrada</div>
+<div class="position-detail-value" id="entryPrice">1.0850</div>
+</div>
+<div class="position-detail">
+<div class="position-detail-label">Actual</div>
+<div class="position-detail-value" id="currentPricePos">1.0850</div>
+</div>
+<div class="position-detail">
+<div class="position-detail-label">P&L</div>
+<div class="position-detail-value" id="pnl">$0.00</div>
+</div>
+<div class="position-detail">
+<div class="position-detail-label">Duración</div>
+<div class="position-detail-value" id="duration">0s</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -995,7 +1297,6 @@ autosize:false,
 largeChartUrl:''
 });
 
-// Update signals
 updateSignalData(index,pair);
 setInterval(()=>updateSignalData(index,pair),5000);
 });
@@ -1044,27 +1345,203 @@ return{type:'neutral',label:'ESPERAR',reason:'Mercado lateral sin tendencia clar
 
 initTradingViewSignals();
 
-// ============ TRADINGVIEW ADVANCED CHART ============
+// ============ TRADING SIMULATOR ============
 
-new TradingView.widget({
-container_id:'tradingview_widget',
-width:'100%',
-height:'500',
-symbol:'FX:EURUSD',
-interval:'5',
-timezone:'America/Bogota',
-theme:'dark',
-style:'1',
-locale:'es',
-toolbar_bg:'#1a1a24',
-enable_publishing:false,
-hide_side_toolbar:false,
-allow_symbol_change:true,
-studies:['STD;SMA','STD;RSI'],
-show_popup_button:true,
-popup_width:'1000',
-popup_height:'650'
+let simBalance=10000;
+let simTotalPnl=0;
+let simTradeCount=0;
+let activePos=null;
+let posStartTime=null;
+let posDurationInterval=null;
+let simBasePrice=1.0850;
+let simCurrentPrice=simBasePrice;
+let candleData=[];
+let simChart=null;
+
+function generateInitialCandles(){
+const now=Date.now();
+let price=1.0850;
+for(let i=30;i>=0;i--){
+const timestamp=now-(i*3000);
+const open=price;
+const movement=(Math.random()-0.5)*0.0015;
+price+=movement;
+const high=Math.max(open,price)+(Math.random()*0.0005);
+const low=Math.min(open,price)-(Math.random()*0.0005);
+const close=price;
+candleData.push({x:timestamp,o:open,h:high,l:low,c:close});
+}
+}
+
+function createSimChart(){
+const ctx=document.getElementById('simChart').getContext('2d');
+simChart=new Chart(ctx,{
+type:'candlestick',
+data:{
+datasets:[{
+label:'EUR/USD',
+data:candleData,
+color:{up:'#00ff88',down:'#ff3366',unchanged:'#8b8b9e'}
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+plugins:{legend:{display:false}},
+scales:{
+x:{
+type:'time',
+time:{unit:'minute',displayFormats:{minute:'HH:mm'}},
+grid:{color:'rgba(255,255,255,0.05)'},
+ticks:{color:'#8b8b9e'}
+},
+y:{
+position:'right',
+grid:{color:'rgba(255,255,255,0.05)'},
+ticks:{color:'#8b8b9e',precision:4}
+}
+}
+}
 });
+}
+
+let currentCandle=null;
+let candleStartTime=Date.now();
+
+function updateSimPrice(){
+const priceEl=document.getElementById('simPrice');
+const changeEl=document.getElementById('simChange');
+
+let movement=(Math.random()-0.5)*0.0008;
+simBasePrice+=movement;
+if(simBasePrice<1.08)simBasePrice=1.08;
+if(simBasePrice>1.10)simBasePrice=1.10;
+
+simCurrentPrice=simBasePrice;
+priceEl.innerText=simCurrentPrice.toFixed(4);
+
+let percent=((simCurrentPrice-1.0850)/1.0850*100).toFixed(2);
+if(percent>=0){
+changeEl.innerHTML=`▲ +${percent}%`;
+changeEl.className='price-change up';
+}else{
+changeEl.innerHTML=`▼ ${percent}%`;
+changeEl.className='price-change down';
+}
+
+updateCandle();
+if(activePos)updatePositionPnl();
+}
+
+function updateCandle(){
+const now=Date.now();
+if(!currentCandle||now-candleStartTime>3000){
+if(currentCandle){
+candleData.push(currentCandle);
+if(candleData.length>40)candleData.shift();
+}
+currentCandle={x:now,o:simCurrentPrice,h:simCurrentPrice,l:simCurrentPrice,c:simCurrentPrice};
+candleStartTime=now;
+}else{
+currentCandle.c=simCurrentPrice;
+currentCandle.h=Math.max(currentCandle.h,simCurrentPrice);
+currentCandle.l=Math.min(currentCandle.l,simCurrentPrice);
+}
+if(simChart){
+const tempData=[...candleData];
+if(currentCandle)tempData.push(currentCandle);
+simChart.data.datasets[0].data=tempData;
+simChart.update('none');
+}
+}
+
+function openTrade(type){
+if(activePos){
+alert('⚠️ Ya tienes una operación abierta');
+return;
+}
+activePos={type:type,entryPrice:simCurrentPrice,entryTime:Date.now()};
+posStartTime=Date.now();
+
+const panel=document.getElementById('positionPanel');
+const typeLabel=document.getElementById('posType');
+const entryPriceLabel=document.getElementById('entryPrice');
+
+panel.classList.add('active');
+typeLabel.innerText=type==='buy'?'COMPRA':'VENTA';
+typeLabel.className=`position-type ${type}`;
+entryPriceLabel.innerText=simCurrentPrice.toFixed(4);
+
+document.getElementById('buyBtn').disabled=true;
+document.getElementById('sellBtn').disabled=true;
+
+posDurationInterval=setInterval(updateDuration,1000);
+}
+
+function closeTrade(){
+if(!activePos)return;
+
+let priceDiff=0;
+let pnl=0;
+if(activePos.type==='buy'){
+priceDiff=simCurrentPrice-activePos.entryPrice;
+}else{
+priceDiff=activePos.entryPrice-simCurrentPrice;
+}
+pnl=priceDiff*10000*10;
+
+simBalance+=pnl;
+simTotalPnl+=pnl;
+simTradeCount++;
+
+document.getElementById('balance').innerText=`$${simBalance.toFixed(2)}`;
+document.getElementById('totalPnl').innerText=`$${simTotalPnl.toFixed(2)}`;
+document.getElementById('tradeCount').innerText=simTradeCount;
+
+const resultMsg=pnl>=0?`✅ ¡Ganancia! +$${pnl.toFixed(2)}`:`❌ Pérdida: $${pnl.toFixed(2)}`;
+const durationSec=Math.floor((Date.now()-activePos.entryTime)/1000);
+alert(`Operación cerrada\n${resultMsg}\nDuración: ${durationSec}s\nBalance: $${simBalance.toFixed(2)}`);
+
+activePos=null;
+clearInterval(posDurationInterval);
+document.getElementById('positionPanel').classList.remove('active');
+document.getElementById('buyBtn').disabled=false;
+document.getElementById('sellBtn').disabled=false;
+}
+
+function updatePositionPnl(){
+if(!activePos)return;
+
+const currentPriceEl=document.getElementById('currentPricePos');
+const pnlEl=document.getElementById('pnl');
+
+currentPriceEl.innerText=simCurrentPrice.toFixed(4);
+
+let priceDiff=0;
+let pnl=0;
+if(activePos.type==='buy'){
+priceDiff=simCurrentPrice-activePos.entryPrice;
+}else{
+priceDiff=activePos.entryPrice-simCurrentPrice;
+}
+pnl=priceDiff*10000*10;
+
+pnlEl.innerText=`$${pnl.toFixed(2)}`;
+pnlEl.style.color=pnl>=0?'#00ff88':'#ff3366';
+}
+
+function updateDuration(){
+if(!posStartTime)return;
+const elapsed=Math.floor((Date.now()-posStartTime)/1000);
+const mins=Math.floor(elapsed/60);
+const secs=elapsed%60;
+document.getElementById('duration').innerText=mins>0?`${mins}m ${secs}s`:`${secs}s`;
+}
+
+// Initialize simulator
+generateInitialCandles();
+createSimChart();
+setInterval(updateSimPrice,1500);
 
 </script>
 
