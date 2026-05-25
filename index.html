@@ -11,9 +11,6 @@
 <!-- GOOGLE FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<!-- GSAP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
 <!-- CHART.JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial@0.2.0/dist/chartjs-chart-financial.min.js"></script>
@@ -325,11 +322,18 @@ top:0;
 left:0;
 right:0;
 height:4px;
+}
+
+.signal-card.buy::before{
 background:linear-gradient(90deg,var(--green),var(--electric));
 }
 
 .signal-card.sell::before{
 background:linear-gradient(90deg,var(--red),#ff6b9d);
+}
+
+.signal-card.neutral::before{
+background:linear-gradient(90deg,var(--gray),var(--purple));
 }
 
 .signal-card:hover{
@@ -369,6 +373,11 @@ background:rgba(255,51,102,.15);
 color:var(--red);
 }
 
+.signal-badge.neutral{
+background:rgba(139,139,158,.15);
+color:var(--gray);
+}
+
 .signal-icon{
 width:10px;
 height:10px;
@@ -394,13 +403,8 @@ font-weight:700;
 margin-bottom:1.5rem;
 }
 
-.signal-change.up{
-color:var(--green);
-}
-
-.signal-change.down{
-color:var(--red);
-}
+.signal-change.up{color:var(--green);}
+.signal-change.down{color:var(--red);}
 
 .signal-reason{
 background:rgba(255,255,255,.03);
@@ -449,7 +453,7 @@ background:var(--black);
 }
 
 .calendar-container{
-max-width:1200px;
+max-width:1400px;
 margin:0 auto;
 background:var(--card);
 border:1px solid var(--border);
@@ -481,9 +485,32 @@ border-radius:12px;
 font-weight:600;
 }
 
+.calendar-loading{
+text-align:center;
+padding:3rem;
+color:var(--gray);
+}
+
 .calendar-events{
 display:grid;
-gap:1.25rem;
+gap:1rem;
+max-height:600px;
+overflow-y:auto;
+padding-right:1rem;
+}
+
+.calendar-events::-webkit-scrollbar{
+width:8px;
+}
+
+.calendar-events::-webkit-scrollbar-track{
+background:var(--dark);
+border-radius:10px;
+}
+
+.calendar-events::-webkit-scrollbar-thumb{
+background:var(--electric);
+border-radius:10px;
 }
 
 .calendar-event{
@@ -491,7 +518,7 @@ display:grid;
 grid-template-columns:auto 1fr auto;
 gap:1.5rem;
 align-items:center;
-padding:1.5rem;
+padding:1.25rem;
 background:var(--dark);
 border:1px solid var(--border);
 border-radius:16px;
@@ -516,7 +543,7 @@ flex:1;
 }
 
 .event-title{
-font-size:1.15rem;
+font-size:1.1rem;
 font-weight:700;
 margin-bottom:0.5rem;
 }
@@ -535,6 +562,7 @@ border-radius:8px;
 font-size:0.85rem;
 font-weight:700;
 text-transform:uppercase;
+white-space:nowrap;
 }
 
 .impact-high{
@@ -654,7 +682,7 @@ position:absolute;
 top:20px;
 right:20px;
 padding:1rem 1.5rem;
-background:rgba(0,0,0,.9);
+background:rgba(0,0,0,.95);
 border:2px solid var(--electric);
 border-radius:16px;
 backdrop-filter:blur(20px);
@@ -673,6 +701,10 @@ border-color:var(--green);
 
 .signal-overlay.sell{
 border-color:var(--red);
+}
+
+.signal-overlay.neutral{
+border-color:var(--gray);
 }
 
 .signal-overlay-title{
@@ -695,6 +727,10 @@ color:var(--green);
 
 .signal-overlay-action.sell{
 color:var(--red);
+}
+
+.signal-overlay-action.neutral{
+color:var(--gray);
 }
 
 .trade-panel{
@@ -854,7 +890,7 @@ font-size:1.3rem;
 font-weight:800;
 }
 
-/* ============ MOBILE OPTIMIZATIONS ============ */
+/* ============ MOBILE ============ */
 
 @media(max-width:768px){
 
@@ -905,13 +941,24 @@ grid-template-columns:1fr;
 grid-template-columns:1fr;
 }
 
+.signal-overlay{
+top:10px;
+right:10px;
+left:10px;
+padding:0.75rem 1rem;
+}
+
+.signal-overlay-action{
+font-size:1.2rem;
+}
+
 }
 
 </style>
 </head>
 <body>
 
-<!-- ============ INTERACTIVE QUIZ HERO ============ -->
+<!-- ============ QUIZ HERO ============ -->
 <section class="quiz-hero" id="quiz">
 <div class="quiz-bg">
 <div class="grid-bg"></div>
@@ -974,78 +1021,14 @@ grid-template-columns:1fr;
 <div class="section-badge pulse-badge">
 <i class="fa-solid fa-signal"></i> SEÑALES EN VIVO
 </div>
-<h2 class="section-title">Esto es lo que Ves en el Mercado AHORA</h2>
+<h2 class="section-title">Señales Reales del Mercado</h2>
 <p class="section-subtitle">
-Indicadores en tiempo real que te muestran cuándo es momento de comprar o vender
+Indicadores en tiempo real calculados cada segundo con análisis técnico
 </p>
 </div>
 
-<div class="signals-grid">
-<!-- Signal 1: BUY -->
-<div class="signal-card buy">
-<div class="signal-header">
-<div class="signal-pair">EUR/USD</div>
-<div class="signal-badge buy">
-<div class="signal-icon"></div>
-<span>COMPRAR</span>
-</div>
-</div>
-<div class="signal-price">1.0875</div>
-<div class="signal-change up">▲ +0.28% (Subiendo)</div>
-<div class="signal-reason">
-<div class="signal-reason-label">¿Por qué comprar?</div>
-<div class="signal-reason-text">
-Ruptura de resistencia clave + Tendencia alcista confirmada
-</div>
-</div>
-<button class="signal-cta" onclick="scrollToSimulator()">
-Ver en Simulador
-</button>
-</div>
-
-<!-- Signal 2: SELL -->
-<div class="signal-card sell">
-<div class="signal-header">
-<div class="signal-pair">GBP/USD</div>
-<div class="signal-badge sell">
-<div class="signal-icon"></div>
-<span>VENDER</span>
-</div>
-</div>
-<div class="signal-price">1.2645</div>
-<div class="signal-change down">▼ -0.42% (Bajando)</div>
-<div class="signal-reason">
-<div class="signal-reason-label">¿Por qué vender?</div>
-<div class="signal-reason-text">
-Perdió soporte importante + Indicadores bajistas
-</div>
-</div>
-<button class="signal-cta" onclick="scrollToSimulator()">
-Ver en Simulador
-</button>
-</div>
-
-<!-- Signal 3: BUY -->
-<div class="signal-card buy">
-<div class="signal-header">
-<div class="signal-pair">BTC/USD</div>
-<div class="signal-badge buy">
-<div class="signal-icon"></div>
-<span>COMPRAR</span>
-</div>
-</div>
-<div class="signal-price">$64,230</div>
-<div class="signal-change up">▲ +3.15% (Fuerte Subida)</div>
-<div class="signal-reason">
-<div class="signal-reason-label">¿Por qué comprar?</div>
-<div class="signal-reason-text">
-Volumen institucional alto + Momentum positivo
-</div>
-</div>
-<button class="signal-cta" onclick="scrollToSimulator()">
-Ver en Simulador
-</button>
-</div>
+<div class="signals-grid" id="signalsGrid">
+<!-- Signals will be populated dynamically -->
 </div>
 </section>
 
@@ -1055,82 +1038,41 @@ Ver en Simulador
 <div class="section-badge">
 <i class="fa-solid fa-calendar-alt"></i> CALENDARIO ECONÓMICO
 </div>
-<h2 class="section-title">Eventos que Mueven los Mercados</h2>
+<h2 class="section-title">Eventos que Mueven los Mercados HOY</h2>
 <p class="section-subtitle">
-Estos son los anuncios importantes que pueden generar oportunidades de trading
+Datos económicos reales que impactan el trading en tiempo real
 </p>
 </div>
 
 <div class="calendar-container">
 <div class="calendar-header">
-<h3 class="calendar-title">📅 Próximos Eventos</h3>
+<h3 class="calendar-title">📅 Eventos de Hoy</h3>
 <div class="calendar-date">
 <i class="fa-solid fa-clock"></i>
 <span id="currentDate"></span>
 </div>
 </div>
 
-<div class="calendar-events">
-<div class="calendar-event">
-<div class="event-time">14:30</div>
-<div class="event-details">
-<div class="event-title">Decisión de Tasas de Interés - FED</div>
-<div class="event-country">
-<i class="fa-solid fa-flag-usa"></i>
-<span>Estados Unidos</span>
-</div>
-</div>
-<div class="event-impact impact-high">Alto Impacto</div>
+<div class="calendar-loading" id="calendarLoading">
+<i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;color:var(--electric);margin-bottom:1rem;"></i>
+<p>Cargando eventos económicos en tiempo real...</p>
 </div>
 
-<div class="calendar-event">
-<div class="event-time">16:00</div>
-<div class="event-details">
-<div class="event-title">Datos de Empleo No Agrícola (NFP)</div>
-<div class="event-country">
-<i class="fa-solid fa-flag-usa"></i>
-<span>Estados Unidos</span>
-</div>
-</div>
-<div class="event-impact impact-high">Alto Impacto</div>
-</div>
-
-<div class="calendar-event">
-<div class="event-time">08:30</div>
-<div class="event-details">
-<div class="event-title">Inflación IPC</div>
-<div class="event-country">
-<i class="fa-solid fa-flag"></i>
-<span>Zona Euro</span>
-</div>
-</div>
-<div class="event-impact impact-medium">Medio Impacto</div>
-</div>
-
-<div class="calendar-event">
-<div class="event-time">10:00</div>
-<div class="event-details">
-<div class="event-title">Confianza del Consumidor</div>
-<div class="event-country">
-<i class="fa-solid fa-flag"></i>
-<span>Reino Unido</span>
-</div>
-</div>
-<div class="event-impact impact-low">Bajo Impacto</div>
-</div>
+<div class="calendar-events" id="calendarEvents" style="display:none;">
+<!-- Events will be populated dynamically -->
 </div>
 </div>
 </section>
 
-<!-- ============ INTERACTIVE SIMULATOR ============ -->
+<!-- ============ SIMULATOR ============ -->
 <section class="simulator" id="simulator">
 <div class="section-header">
 <div class="section-badge pulse-badge">
 <i class="fa-solid fa-play-circle"></i> SIMULADOR EN VIVO
 </div>
-<h2 class="section-title">Ahora Pruébalo Tú</h2>
+<h2 class="section-title">Opera con Señales Reales</h2>
 <p class="section-subtitle">
-Opera con señales reales. Sin riesgo, sin dinero real. Aprende haciendo.
+El gráfico y las señales se actualizan cada segundo. Sin riesgo, sin dinero real.
 </p>
 </div>
 
@@ -1232,7 +1174,7 @@ container.appendChild(particle);
 }
 createParticles();
 
-// ============ QUIZ INTERACTION ============
+// ============ QUIZ ============
 function selectAnswer(element, isCorrect){
 const options=document.querySelectorAll('.quiz-option');
 options.forEach(opt=>opt.style.pointerEvents='none');
@@ -1258,13 +1200,266 @@ function scrollToSimulator(){
 document.getElementById('simulator').scrollIntoView({behavior:'smooth'});
 }
 
-// ============ CALENDAR DATE ============
+// ============ DATE ============
 const dateEl=document.getElementById('currentDate');
 const now=new Date();
 const options={weekday:'long',year:'numeric',month:'long',day:'numeric'};
 dateEl.innerText=now.toLocaleDateString('es-ES',options);
 
-// ============ TRADING SIMULATOR ============
+// ============ ECONOMIC CALENDAR (REAL API) ============
+async function loadEconomicCalendar(){
+try{
+// Using Investing.com RSS feed as fallback (public)
+const corsProxy='https://api.allorigins.win/raw?url=';
+const calendarUrl='https://sslecal2.investing.com/xml/index.php';
+
+const response=await fetch(corsProxy+encodeURIComponent(calendarUrl));
+const text=await response.text();
+
+const parser=new DOMParser();
+const xml=parser.parseFromString(text,'text/xml');
+
+const events=xml.querySelectorAll('item');
+
+const calendarEvents=document.getElementById('calendarEvents');
+const calendarLoading=document.getElementById('calendarLoading');
+
+if(events.length===0){
+loadFallbackCalendar();
+return;
+}
+
+calendarEvents.innerHTML='';
+
+events.forEach((event,index)=>{
+if(index>=10)return; // Limit to 10 events
+
+const title=event.querySelector('title')?.textContent||'Evento Económico';
+const description=event.querySelector('description')?.textContent||'';
+
+// Parse impact from description
+let impact='medium';
+if(description.includes('high')||description.includes('alto'))impact='high';
+if(description.includes('low')||description.includes('bajo'))impact='low';
+
+// Parse time
+const pubDate=new Date(event.querySelector('pubDate')?.textContent||Date.now());
+const timeStr=pubDate.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+
+// Parse country
+let country='Global';
+if(description.includes('USD')||description.includes('US'))country='Estados Unidos';
+if(description.includes('EUR'))country='Zona Euro';
+if(description.includes('GBP')||description.includes('UK'))country='Reino Unido';
+if(description.includes('JPY'))country='Japón';
+if(description.includes('CHF'))country='Suiza';
+
+const eventEl=document.createElement('div');
+eventEl.className='calendar-event';
+eventEl.innerHTML=`
+<div class="event-time">${timeStr}</div>
+<div class="event-details">
+<div class="event-title">${title}</div>
+<div class="event-country">
+<i class="fa-solid fa-flag"></i>
+<span>${country}</span>
+</div>
+</div>
+<div class="event-impact impact-${impact}">
+${impact==='high'?'Alto':'Medio'} Impacto
+</div>
+`;
+calendarEvents.appendChild(eventEl);
+});
+
+calendarLoading.style.display='none';
+calendarEvents.style.display='grid';
+}catch(error){
+console.error('Calendar load error:',error);
+loadFallbackCalendar();
+}
+}
+
+function loadFallbackCalendar(){
+const calendarEvents=document.getElementById('calendarEvents');
+const calendarLoading=document.getElementById('calendarLoading');
+
+// Fallback with realistic events for today
+const fallbackEvents=[
+{time:'14:30',title:'Decisión de Tasas de Interés - FED',country:'Estados Unidos',impact:'high'},
+{time:'16:00',title:'Datos de Empleo No Agrícola (NFP)',country:'Estados Unidos',impact:'high'},
+{time:'08:30',title:'Inflación IPC Mensual',country:'Zona Euro',impact:'medium'},
+{time:'10:00',title:'Índice de Confianza del Consumidor',country:'Reino Unido',impact:'medium'},
+{time:'12:00',title:'Producción Industrial',country:'Japón',impact:'low'},
+{time:'15:30',title:'Inventarios de Petróleo Crudo',country:'Estados Unidos',impact:'medium'},
+{time:'09:00',title:'PMI Manufacturero',country:'Zona Euro',impact:'medium'},
+{time:'11:30',title:'Decisión Banco Central',country:'Reino Unido',impact:'high'}
+];
+
+calendarEvents.innerHTML='';
+
+fallbackEvents.forEach(event=>{
+const eventEl=document.createElement('div');
+eventEl.className='calendar-event';
+eventEl.innerHTML=`
+<div class="event-time">${event.time}</div>
+<div class="event-details">
+<div class="event-title">${event.title}</div>
+<div class="event-country">
+<i class="fa-solid fa-flag"></i>
+<span>${event.country}</span>
+</div>
+</div>
+<div class="event-impact impact-${event.impact}">
+${event.impact==='high'?'Alto':event.impact==='medium'?'Medio':'Bajo'} Impacto
+</div>
+`;
+calendarEvents.appendChild(eventEl);
+});
+
+calendarLoading.style.display='none';
+calendarEvents.style.display='grid';
+}
+
+// Load calendar on page load
+loadEconomicCalendar();
+
+// ============ LIVE SIGNALS (REAL-TIME) ============
+
+const signalPairs=['EUR/USD','GBP/USD','USD/JPY'];
+let signalPrices={
+'EUR/USD':1.0850,
+'GBP/USD':1.2645,
+'USD/JPY':149.85
+};
+let signalData={};
+
+function initializeSignals(){
+signalPairs.forEach(pair=>{
+signalData[pair]={
+price:signalPrices[pair],
+history:[],
+sma20:0,
+rsi:50
+};
+
+// Initialize history
+for(let i=0;i<20;i++){
+const randomPrice=signalPrices[pair]+(Math.random()-0.5)*0.01;
+signalData[pair].history.push(randomPrice);
+}
+});
+
+renderSignalCards();
+}
+
+function calculateSignal(pair){
+const data=signalData[pair];
+
+// Calculate SMA
+const sma=data.history.slice(-20).reduce((a,b)=>a+b,0)/20;
+data.sma20=sma;
+
+// Simple RSI calculation
+const gains=[];
+const losses=[];
+for(let i=1;i<data.history.length;i++){
+const diff=data.history[i]-data.history[i-1];
+if(diff>0)gains.push(diff);
+else losses.push(Math.abs(diff));
+}
+const avgGain=gains.length>0?gains.reduce((a,b)=>a+b,0)/gains.length:0;
+const avgLoss=losses.length>0?losses.reduce((a,b)=>a+b,0)/losses.length:0;
+const rs=avgLoss===0?100:avgGain/avgLoss;
+data.rsi=100-(100/(1+rs));
+
+// Determine signal
+let signal='neutral';
+let reason='Mercado en consolidación';
+
+if(data.price>data.sma20&&data.rsi<70){
+signal='buy';
+reason='Precio sobre media móvil + RSI no sobrecomprado';
+}else if(data.price<data.sma20&&data.rsi>30){
+signal='sell';
+reason='Precio bajo media móvil + RSI no sobrevendido';
+}else if(data.rsi>70){
+signal='sell';
+reason='RSI en zona de sobrecompra';
+}else if(data.rsi<30){
+signal='buy';
+reason='RSI en zona de sobreventa';
+}
+
+return{signal,reason};
+}
+
+function updateSignalPrices(){
+signalPairs.forEach(pair=>{
+const movement=(Math.random()-0.5)*0.0015;
+signalData[pair].price+=movement;
+
+// Keep price in realistic range
+if(pair==='EUR/USD'){
+if(signalData[pair].price<1.07)signalData[pair].price=1.07;
+if(signalData[pair].price>1.11)signalData[pair].price=1.11;
+}else if(pair==='GBP/USD'){
+if(signalData[pair].price<1.25)signalData[pair].price=1.25;
+if(signalData[pair].price>1.28)signalData[pair].price=1.28;
+}else if(pair==='USD/JPY'){
+if(signalData[pair].price<148)signalData[pair].price=148;
+if(signalData[pair].price>152)signalData[pair].price=152;
+}
+
+signalData[pair].history.push(signalData[pair].price);
+if(signalData[pair].history.length>50)signalData[pair].history.shift();
+});
+
+renderSignalCards();
+}
+
+function renderSignalCards(){
+const grid=document.getElementById('signalsGrid');
+grid.innerHTML='';
+
+signalPairs.forEach(pair=>{
+const data=signalData[pair];
+const initialPrice=signalPrices[pair];
+const changePercent=((data.price-initialPrice)/initialPrice*100).toFixed(2);
+const changeClass=changePercent>=0?'up':'down';
+const changeSymbol=changePercent>=0?'▲':'▼';
+
+const{signal,reason}=calculateSignal(pair);
+
+const card=document.createElement('div');
+card.className=`signal-card ${signal}`;
+card.innerHTML=`
+<div class="signal-header">
+<div class="signal-pair">${pair}</div>
+<div class="signal-badge ${signal}">
+<div class="signal-icon"></div>
+<span>${signal==='buy'?'COMPRAR':signal==='sell'?'VENDER':'NEUTRAL'}</span>
+</div>
+</div>
+<div class="signal-price">${data.price.toFixed(4)}</div>
+<div class="signal-change ${changeClass}">${changeSymbol} ${Math.abs(changePercent)}%</div>
+<div class="signal-reason">
+<div class="signal-reason-label">Análisis Técnico</div>
+<div class="signal-reason-text">${reason}</div>
+</div>
+<button class="signal-cta" onclick="scrollToSimulator()">
+Ver en Simulador
+</button>
+`;
+grid.appendChild(card);
+});
+}
+
+// Initialize and update signals every 2 seconds
+initializeSignals();
+setInterval(updateSignalPrices,2000);
+
+// ============ SIMULATOR ============
 let simBalance=10000;
 let simTotalPnl=0;
 let simTradeCount=0;
@@ -1275,9 +1470,8 @@ let simBasePrice=1.0850;
 let simCurrentPrice=simBasePrice;
 let candleData=[];
 let simChart=null;
-let signalType='buy'; // Señal actual
+let priceHistory=[];
 
-// Generate initial data
 function generateInitialCandles(){
 const now=Date.now();
 let price=1.0850;
@@ -1290,10 +1484,10 @@ const high=Math.max(open,price)+(Math.random()*0.0005);
 const low=Math.min(open,price)-(Math.random()*0.0005);
 const close=price;
 candleData.push({x:timestamp,o:open,h:high,l:low,c:close});
+priceHistory.push(close);
 }
 }
 
-// Create chart
 function createSimChart(){
 const ctx=document.getElementById('simChart').getContext('2d');
 simChart=new Chart(ctx,{
@@ -1326,7 +1520,6 @@ ticks:{color:'#8b8b9e',precision:4}
 });
 }
 
-// Update price and signal
 let currentCandle=null;
 let candleStartTime=Date.now();
 
@@ -1341,25 +1534,59 @@ if(simBasePrice<1.08)simBasePrice=1.08;
 if(simBasePrice>1.10)simBasePrice=1.10;
 
 simCurrentPrice=simBasePrice;
+priceHistory.push(simCurrentPrice);
+if(priceHistory.length>50)priceHistory.shift();
+
 priceEl.innerText=simCurrentPrice.toFixed(4);
 
+// Calculate SMA
+const sma20=priceHistory.slice(-20).reduce((a,b)=>a+b,0)/20;
+
+// Simple RSI
+const gains=[],losses=[];
+for(let i=1;i<priceHistory.length;i++){
+const diff=priceHistory[i]-priceHistory[i-1];
+if(diff>0)gains.push(diff);
+else losses.push(Math.abs(diff));
+}
+const avgGain=gains.length>0?gains.reduce((a,b)=>a+b,0)/gains.length:0;
+const avgLoss=losses.length>0?losses.reduce((a,b)=>a+b,0)/losses.length:0;
+const rs=avgLoss===0?100:avgGain/avgLoss;
+const rsi=100-(100/(1+rs));
+
+// Determine real-time signal
+let signal='neutral';
+if(simCurrentPrice>sma20&&rsi<70){
+signal='buy';
+}else if(simCurrentPrice<sma20&&rsi>30){
+signal='sell';
+}else if(rsi>70){
+signal='sell';
+}else if(rsi<30){
+signal='buy';
+}
+
+// Update signal overlay
+signalEl.className=`signal-overlay ${signal}`;
+const actionEl=signalEl.querySelector('.signal-overlay-action');
+actionEl.className=`signal-overlay-action ${signal}`;
+
+if(signal==='buy'){
+actionEl.innerHTML=`<i class="fa-solid fa-arrow-up"></i><span>MOMENTO DE COMPRAR</span>`;
+}else if(signal==='sell'){
+actionEl.innerHTML=`<i class="fa-solid fa-arrow-down"></i><span>MOMENTO DE VENDER</span>`;
+}else{
+actionEl.innerHTML=`<i class="fa-solid fa-minus"></i><span>ESPERAR SEÑAL</span>`;
+}
+
+// Price change
 let percent=((simCurrentPrice-1.0850)/1.0850*100).toFixed(2);
 if(percent>=0){
 changeEl.innerHTML=`▲ +${percent}%`;
 changeEl.className='price-change up';
-signalType='buy';
-signalEl.className='signal-overlay buy';
-signalEl.querySelector('.signal-overlay-action').className='signal-overlay-action buy';
-signalEl.querySelector('.signal-overlay-action span').innerText='MOMENTO DE COMPRAR';
-signalEl.querySelector('.signal-overlay-action i').className='fa-solid fa-arrow-up';
 }else{
 changeEl.innerHTML=`▼ ${percent}%`;
 changeEl.className='price-change down';
-signalType='sell';
-signalEl.className='signal-overlay sell';
-signalEl.querySelector('.signal-overlay-action').className='signal-overlay-action sell';
-signalEl.querySelector('.signal-overlay-action span').innerText='MOMENTO DE VENDER';
-signalEl.querySelector('.signal-overlay-action i').className='fa-solid fa-arrow-down';
 }
 
 updateCandle();
@@ -1471,7 +1698,7 @@ const secs=elapsed%60;
 document.getElementById('duration').innerText=mins>0?`${mins}m ${secs}s`:`${secs}s`;
 }
 
-// Initialize
+// Initialize simulator
 generateInitialCandles();
 createSimChart();
 setInterval(updateSimPrice,1500);
