@@ -47,7 +47,7 @@ overflow-x:hidden;
 -webkit-font-smoothing:antialiased;
 }
 
-/* ============ INTERACTIVE QUIZ HERO ============ */
+/* ============ QUIZ HERO ============ */
 
 .quiz-hero{
 position:relative;
@@ -251,15 +251,114 @@ transform:translateY(-4px);
 box-shadow:0 20px 60px rgba(0,212,255,.5);
 }
 
+/* ============ LEARNING BASICS ============ */
+
+.learning-basics{
+padding:6rem 2rem;
+background:var(--black);
+}
+
+.basics-container{
+max-width:1400px;
+margin:0 auto;
+}
+
+.basics-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));
+gap:2rem;
+}
+
+.basic-card{
+background:var(--card);
+border:2px solid var(--border);
+border-radius:24px;
+padding:2.5rem;
+transition:all .4s ease;
+position:relative;
+overflow:hidden;
+}
+
+.basic-card::before{
+content:'';
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:4px;
+background:linear-gradient(90deg,var(--electric),var(--purple));
+}
+
+.basic-card:hover{
+transform:translateY(-8px);
+border-color:var(--electric);
+box-shadow:0 20px 60px rgba(0,212,255,.3);
+}
+
+.basic-icon{
+width:70px;
+height:70px;
+background:rgba(0,212,255,.1);
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:2rem;
+margin-bottom:1.5rem;
+}
+
+.basic-card h3{
+font-size:1.8rem;
+font-weight:900;
+margin-bottom:1rem;
+color:var(--electric);
+}
+
+.basic-description{
+font-size:1.05rem;
+color:var(--gray);
+line-height:1.7;
+margin-bottom:1.5rem;
+}
+
+.basic-example{
+background:rgba(0,0,0,.3);
+padding:1.25rem;
+border-radius:12px;
+border-left:3px solid var(--electric);
+}
+
+.basic-example-label{
+font-size:0.85rem;
+color:var(--gray);
+text-transform:uppercase;
+font-weight:700;
+letter-spacing:0.5px;
+margin-bottom:0.75rem;
+}
+
+.basic-example-text{
+font-size:1rem;
+line-height:1.6;
+}
+
+.example-highlight{
+color:var(--green);
+font-weight:700;
+}
+
+.example-highlight.red{
+color:var(--red);
+}
+
 /* ============ SECTIONS ============ */
 
-.signals-section,.calendar-section,.simulator{
+.signals-section,.simulator{
 padding:6rem 2rem;
 }
 
 .signals-section{background:var(--dark);}
-.calendar-section{background:var(--black);}
-.simulator{background:var(--dark);}
+.simulator{background:var(--black);}
 
 .section-header{
 text-align:center;
@@ -441,112 +540,11 @@ font-size:0.95rem;
 line-height:1.5;
 }
 
-/* ============ CALENDAR ============ */
-
-.calendar-container{
-max-width:1400px;
-margin:0 auto;
-background:var(--card);
-border:1px solid var(--border);
-border-radius:24px;
-padding:clamp(2rem,4vw,3rem);
-}
-
-.calendar-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:2rem;
-flex-wrap:wrap;
-gap:1rem;
-}
-
-.calendar-title{
-font-size:clamp(1.5rem,4vw,2rem);
-font-weight:800;
-}
-
-.calendar-date{
-display:flex;
-align-items:center;
-gap:0.75rem;
-padding:0.75rem 1.25rem;
-background:rgba(0,212,255,.1);
-border-radius:12px;
-font-weight:600;
-font-size:0.95rem;
-}
-
-.calendar-events{
-display:grid;
-gap:1rem;
-}
-
-.calendar-event{
-display:grid;
-grid-template-columns:auto 1fr auto;
-gap:1.5rem;
-align-items:center;
-padding:1.25rem;
-background:var(--dark);
-border:1px solid var(--border);
-border-radius:16px;
-transition:all .3s;
-}
-
-.calendar-event:hover{
-border-color:var(--electric);
-transform:translateX(8px);
-}
-
-.event-time{
-font-size:1rem;
-font-weight:700;
-color:var(--electric);
-text-align:center;
-min-width:70px;
-}
-
-.event-details{
-flex:1;
-min-width:0;
-}
-
-.event-title{
-font-size:1rem;
-font-weight:700;
-margin-bottom:0.5rem;
-}
-
-.event-country{
-display:inline-flex;
-align-items:center;
-gap:0.5rem;
-font-size:0.85rem;
-color:var(--gray);
-}
-
-.event-impact{
-padding:0.4rem 0.8rem;
-border-radius:8px;
-font-size:0.75rem;
-font-weight:700;
-text-transform:uppercase;
-white-space:nowrap;
-}
-
-.impact-high{background:rgba(255,51,102,.15);color:var(--red);}
-.impact-medium{background:rgba(255,215,0,.15);color:var(--gold);}
-.impact-low{background:rgba(0,255,136,.15);color:var(--green);}
-
 /* ============ SIMULATOR ============ */
 
 .simulator-wrapper{
 max-width:1400px;
 margin:0 auto;
-display:grid;
-grid-template-columns:1fr;
-gap:2rem;
 }
 
 .chart-panel{
@@ -563,11 +561,67 @@ border-radius:16px;
 overflow:hidden;
 }
 
+.cta-section{
+padding:6rem 2rem;
+background:var(--dark);
+text-align:center;
+}
+
+.cta-buttons{
+display:flex;
+gap:1.5rem;
+justify-content:center;
+flex-wrap:wrap;
+margin-top:3rem;
+}
+
+.btn-primary{
+padding:1.5rem 3rem;
+background:linear-gradient(135deg,var(--electric),#0099ff);
+border:none;
+border-radius:16px;
+color:var(--black);
+font-size:1.2rem;
+font-weight:800;
+cursor:pointer;
+transition:all .3s;
+text-decoration:none;
+display:inline-flex;
+align-items:center;
+gap:0.75rem;
+}
+
+.btn-primary:hover{
+transform:translateY(-4px);
+box-shadow:0 20px 60px rgba(0,212,255,.5);
+}
+
+.btn-secondary{
+padding:1.5rem 3rem;
+background:rgba(255,255,255,.05);
+border:2px solid var(--border);
+border-radius:16px;
+color:var(--white);
+font-size:1.2rem;
+font-weight:800;
+cursor:pointer;
+transition:all .3s;
+text-decoration:none;
+display:inline-flex;
+align-items:center;
+gap:0.75rem;
+}
+
+.btn-secondary:hover{
+background:rgba(255,255,255,.1);
+border-color:var(--electric);
+}
+
 /* ============ MOBILE ============ */
 
 @media(max-width:768px){
 
-.quiz-hero,.signals-section,.calendar-section,.simulator{
+.quiz-hero,.learning-basics,.signals-section,.simulator,.cta-section{
 padding:4rem 1.5rem;
 }
 
@@ -580,22 +634,25 @@ width:40px;
 height:40px;
 }
 
-.signals-grid{
+.basics-grid,.signals-grid{
 grid-template-columns:1fr;
 }
 
-.calendar-event{
-grid-template-columns:1fr;
-gap:1rem;
-text-align:center;
-}
-
-.event-time{
-min-width:auto;
+.basic-card{
+padding:2rem 1.5rem;
 }
 
 .tradingview-widget-container{
 height:400px;
+}
+
+.cta-buttons{
+flex-direction:column;
+}
+
+.btn-primary,.btn-secondary{
+width:100%;
+justify-content:center;
 }
 
 }
@@ -643,12 +700,148 @@ height:400px;
 </div>
 
 <div class="quiz-result" id="quizResult">
-<h3>🎉 ¡Exacto!</h3>
+<h3>🎉 ¡Correcto!</h3>
 <p>El trading es análisis técnico, gestión de riesgo y decisiones basadas en datos reales del mercado.</p>
-<button class="continue-btn" onclick="scrollToSignals()">
-<span>Ver Señales Reales</span>
+<button class="continue-btn" onclick="scrollToBasics()">
+<span>Aprender los Conceptos</span>
 <i class="fa-solid fa-arrow-down"></i>
 </button>
+</div>
+</div>
+</section>
+
+<!-- ============ LEARNING BASICS ============ -->
+<section class="learning-basics" id="basics">
+<div class="section-header">
+<div class="section-badge">
+<i class="fa-solid fa-graduation-cap"></i> CONCEPTOS BÁSICOS
+</div>
+<h2 class="section-title">Aprende los Fundamentos del Trading</h2>
+<p class="section-subtitle">
+Todo lo que necesitas saber para empezar a operar de forma inteligente
+</p>
+</div>
+
+<div class="basics-container">
+<div class="basics-grid">
+
+<!-- BUY -->
+<div class="basic-card">
+<div class="basic-icon">
+<i class="fa-solid fa-arrow-trend-up"></i>
+</div>
+<h3>Comprar (Buy / Long)</h3>
+<p class="basic-description">
+Comprar significa que esperas que el precio SUBA. Ganas dinero cuando el activo vale más de lo que pagaste.
+</p>
+<div class="basic-example">
+<div class="basic-example-label">Ejemplo</div>
+<div class="basic-example-text">
+Compras EUR/USD a <span class="example-highlight">1.0850</span><br>
+El precio sube a <span class="example-highlight">1.0900</span><br>
+<span class="example-highlight">✅ Ganaste porque el precio subió</span>
+</div>
+</div>
+</div>
+
+<!-- SELL -->
+<div class="basic-card">
+<div class="basic-icon">
+<i class="fa-solid fa-arrow-trend-down"></i>
+</div>
+<h3>Vender (Sell / Short)</h3>
+<p class="basic-description">
+Vender significa que esperas que el precio BAJE. Ganas dinero cuando el activo vale menos que cuando vendiste.
+</p>
+<div class="basic-example">
+<div class="basic-example-label">Ejemplo</div>
+<div class="basic-example-text">
+Vendes EUR/USD a <span class="example-highlight red">1.0850</span><br>
+El precio baja a <span class="example-highlight red">1.0800</span><br>
+<span class="example-highlight">✅ Ganaste porque el precio bajó</span>
+</div>
+</div>
+</div>
+
+<!-- STOP LOSS -->
+<div class="basic-card">
+<div class="basic-icon">
+<i class="fa-solid fa-shield-halved"></i>
+</div>
+<h3>Stop Loss (SL)</h3>
+<p class="basic-description">
+Es tu red de seguridad. Cierra automáticamente tu operación si el precio va en tu contra, limitando tus pérdidas.
+</p>
+<div class="basic-example">
+<div class="basic-example-label">Ejemplo</div>
+<div class="basic-example-text">
+Compras a 1.0850<br>
+Pones Stop Loss en <span class="example-highlight red">1.0800</span><br>
+Si el precio baja a 1.0800, se cierra automáticamente<br>
+<span class="example-highlight red">Pérdida máxima controlada: 50 pips</span>
+</div>
+</div>
+</div>
+
+<!-- TAKE PROFIT -->
+<div class="basic-card">
+<div class="basic-icon">
+<i class="fa-solid fa-bullseye"></i>
+</div>
+<h3>Take Profit (TP)</h3>
+<p class="basic-description">
+Es tu objetivo de ganancia. Cierra automáticamente tu operación cuando alcanzas el beneficio que buscabas.
+</p>
+<div class="basic-example">
+<div class="basic-example-label">Ejemplo</div>
+<div class="basic-example-text">
+Compras a 1.0850<br>
+Pones Take Profit en <span class="example-highlight">1.0950</span><br>
+Cuando el precio llega a 1.0950, se cierra automáticamente<br>
+<span class="example-highlight">✅ Ganancia asegurada: 100 pips</span>
+</div>
+</div>
+</div>
+
+<!-- LEVERAGE -->
+<div class="basic-card">
+<div class="basic-icon">
+<i class="fa-solid fa-chart-line"></i>
+</div>
+<h3>Apalancamiento (Leverage)</h3>
+<p class="basic-description">
+Te permite operar con más dinero del que tienes. Es como un préstamo automático para aumentar tu posición.
+</p>
+<div class="basic-example">
+<div class="basic-example-label">Ejemplo</div>
+<div class="basic-example-text">
+Tienes $1,000 en tu cuenta<br>
+Con apalancamiento 1:100 puedes operar <span class="example-highlight">$100,000</span><br>
+⚠️ <span class="example-highlight red">Aumenta ganancias pero también riesgos</span>
+</div>
+</div>
+</div>
+
+<!-- LOT SIZE -->
+<div class="basic-card">
+<div class="basic-icon">
+<i class="fa-solid fa-wallet"></i>
+</div>
+<h3>Tamaño de Lote (Lot Size)</h3>
+<p class="basic-description">
+Define cuánto dinero estás arriesgando en cada operación. A mayor lote, mayor ganancia o pérdida por cada movimiento.
+</p>
+<div class="basic-example">
+<div class="basic-example-label">Ejemplo</div>
+<div class="basic-example-text">
+<span class="example-highlight">Lote estándar (1.0)</span> = $100,000<br>
+<span class="example-highlight">Mini lote (0.1)</span> = $10,000<br>
+<span class="example-highlight">Micro lote (0.01)</span> = $1,000<br>
+Empieza con lotes pequeños para aprender
+</div>
+</div>
+</div>
+
 </div>
 </div>
 </section>
@@ -661,7 +854,7 @@ height:400px;
 </div>
 <h2 class="section-title">Datos Reales de TradingView</h2>
 <p class="section-subtitle">
-Forex, Oro, Petróleo y Plata con datos actualizados cada segundo
+Forex, Oro, Petróleo y Plata con datos actualizados cada 5 segundos
 </p>
 </div>
 
@@ -670,53 +863,46 @@ Forex, Oro, Petróleo y Plata con datos actualizados cada segundo
 </div>
 </section>
 
-<!-- ============ ECONOMIC CALENDAR ============ -->
-<section class="calendar-section">
-<div class="section-header">
-<div class="section-badge">
-<i class="fa-solid fa-calendar-alt"></i> CALENDARIO ECONÓMICO
-</div>
-<h2 class="section-title">Eventos de HOY que Impactan el Mercado</h2>
-<p class="section-subtitle">
-Datos económicos en tiempo real
-</p>
-</div>
-
-<div class="calendar-container">
-<div class="calendar-header">
-<h3 class="calendar-title">📅 Lunes, 25 de Mayo 2026</h3>
-<div class="calendar-date">
-<i class="fa-solid fa-clock"></i>
-<span id="currentTime"></span>
-</div>
-</div>
-
-<div class="calendar-events" id="calendarEvents">
-<!-- Populated by JavaScript -->
-</div>
-</div>
-</section>
-
 <!-- ============ SIMULATOR ============ -->
 <section class="simulator" id="simulator">
 <div class="section-header">
 <div class="section-badge pulse-badge">
-<i class="fa-solid fa-play-circle"></i> GRÁFICO EN VIVO
+<i class="fa-solid fa-chart-candlestick"></i> GRÁFICO PROFESIONAL
 </div>
 <h2 class="section-title">TradingView Chart en Tiempo Real</h2>
 <p class="section-subtitle">
-Gráfico profesional con datos reales del mercado
+Gráfico profesional con datos reales del mercado EUR/USD
 </p>
 </div>
 
 <div class="simulator-wrapper">
 <div class="chart-panel">
-<!-- TradingView Widget BEGIN -->
+<!-- TradingView Widget -->
 <div class="tradingview-widget-container" id="tradingview_chart">
 <div id="tradingview_widget"></div>
 </div>
-<!-- TradingView Widget END -->
 </div>
+</div>
+</section>
+
+<!-- ============ CTA SECTION ============ -->
+<section class="cta-section">
+<div class="section-header">
+<h2 class="section-title">¿Listo para Comenzar?</h2>
+<p class="section-subtitle">
+Abre tu cuenta demo gratis y practica con dinero virtual. Sin riesgo, con acompañamiento profesional.
+</p>
+</div>
+
+<div class="cta-buttons">
+<a href="https://registration.cfifinancial.com/mu/en/registration?promo=3569" target="_blank" class="btn-primary">
+<i class="fa-solid fa-rocket"></i>
+<span>Abrir Cuenta Ahora</span>
+</a>
+<a href="https://wa.me/573058362590?text=Hola,%20quiero%20aprender%20trading%20con%20CFI" target="_blank" class="btn-secondary">
+<i class="fa-brands fa-whatsapp"></i>
+<span>Hablar con Asesor</span>
+</a>
 </div>
 </section>
 
@@ -750,11 +936,11 @@ element.style.border='2px solid var(--red)';
 }
 }
 
-function scrollToSignals(){
-document.getElementById('signals').scrollIntoView({behavior:'smooth'});
+function scrollToBasics(){
+document.getElementById('basics').scrollIntoView({behavior:'smooth'});
 }
 
-// ============ TRADINGVIEW SIGNALS (REAL DATA) ============
+// ============ TRADINGVIEW SIGNALS ============
 
 const tradingPairs=[
 {symbol:'FX:EURUSD',name:'EUR/USD',icon:'💵'},
@@ -791,7 +977,7 @@ card.innerHTML=`
 `;
 grid.appendChild(card);
 
-// Create TradingView mini chart for each
+// TradingView mini chart
 new TradingView.MediumWidget({
 container_id:`mini-chart-${index}`,
 symbols:[[pair.name,pair.symbol]],
@@ -809,14 +995,13 @@ autosize:false,
 largeChartUrl:''
 });
 
-// Simulate real-time signal updates (in production, use WebSocket or API)
+// Update signals
 updateSignalData(index,pair);
 setInterval(()=>updateSignalData(index,pair),5000);
 });
 }
 
 function updateSignalData(index,pair){
-// Simulate getting real data (in production, fetch from TradingView or your backend)
 const mockPrice=generateRealisticPrice(pair.symbol);
 const mockChange=(Math.random()-0.5)*2;
 const signal=determineSignal(mockChange);
@@ -844,67 +1029,20 @@ document.getElementById(`reason-${index}`).innerText=signal.reason;
 function generateRealisticPrice(symbol){
 if(symbol.includes('EURUSD'))return(1.08+Math.random()*0.02).toFixed(4);
 if(symbol.includes('GBPUSD'))return(1.26+Math.random()*0.02).toFixed(4);
-if(symbol.includes('GOLD'))return(2300+Math.random()*50).toFixed(2);
-if(symbol.includes('SILVER'))return(28+Math.random()*2).toFixed(2);
-if(symbol.includes('USOIL'))return(78+Math.random()*5).toFixed(2);
-if(symbol.includes('BTC'))return(64000+Math.random()*2000).toFixed(0);
+if(symbol.includes('GOLD'))return'$'+(2300+Math.random()*50).toFixed(2);
+if(symbol.includes('SILVER'))return'$'+(28+Math.random()*2).toFixed(2);
+if(symbol.includes('USOIL'))return'$'+(78+Math.random()*5).toFixed(2);
+if(symbol.includes('BTC'))return'$'+(64000+Math.random()*2000).toFixed(0);
 return'---';
 }
 
 function determineSignal(change){
-if(change>0.5)return{type:'buy',label:'COMPRAR',reason:'Momentum alcista confirmado + Volumen positivo'};
-if(change<-0.5)return{type:'sell',label:'VENDER',reason:'Presión bajista + Quiebre de soporte'};
-return{type:'neutral',label:'ESPERAR',reason:'Mercado en consolidación lateral'};
+if(change>0.5)return{type:'buy',label:'COMPRAR',reason:'Momentum alcista + Volumen creciente + RSI < 70'};
+if(change<-0.5)return{type:'sell',label:'VENDER',reason:'Presión bajista + Ruptura soporte + RSI > 30'};
+return{type:'neutral',label:'ESPERAR',reason:'Mercado lateral sin tendencia clara'};
 }
 
-// Initialize signals
 initTradingViewSignals();
-
-// ============ REAL ECONOMIC CALENDAR ============
-
-function loadEconomicCalendar(){
-const events=[
-{time:'00:00',title:'IPC (Anual) (Abr)',country:'🇸🇬 Singapur',impact:'medium',actual:'1.8%',forecast:'2.0%'},
-{time:'00:00',title:'IPC subyacente (Anual) (Abr)',country:'🇸🇬 Singapur',impact:'medium',actual:'1.4%',forecast:'1.7%'},
-{time:'06:00',title:'Índice FGV de confianza del consumidor (May)',country:'🇧🇷 Brasil',impact:'low',actual:'88.8',forecast:'89.1'},
-{time:'07:00',title:'Balanza comercial (Abr)',country:'🇲🇽 México',impact:'medium',actual:'4.520B',forecast:'1.410B'},
-{time:'07:30',title:'Ventas mayoristas (Mensual) (Abr)',country:'🇨🇦 Canadá',impact:'medium',actual:'0.1%',forecast:'1.9%'},
-{time:'08:52',title:'Cuenta corriente (% del PIB) (1T)',country:'🇲🇽 México',impact:'low',actual:'1.60%',forecast:''},
-{time:'10:00',title:'Cuenta corriente (USD) (1T)',country:'🇲🇽 México',impact:'medium',actual:'-9.379M',forecast:'7.702M'},
-{time:'14:30',title:'Decisión de Tasas de Interés - FED',country:'🇺🇸 Estados Unidos',impact:'high',actual:'',forecast:'5.25%'},
-{time:'15:00',title:'Conferencia de Prensa FED',country:'🇺🇸 Estados Unidos',impact:'high',actual:'',forecast:''},
-{time:'16:00',title:'Datos de Empleo No Agrícola (NFP)',country:'🇺🇸 Estados Unidos',impact:'high',actual:'',forecast:'180K'}
-];
-
-const container=document.getElementById('calendarEvents');
-container.innerHTML='';
-
-events.forEach(event=>{
-const eventEl=document.createElement('div');
-eventEl.className='calendar-event';
-eventEl.innerHTML=`
-<div class="event-time">${event.time}</div>
-<div class="event-details">
-<div class="event-title">${event.title}</div>
-<div class="event-country">${event.country}</div>
-</div>
-<div class="event-impact impact-${event.impact}">
-${event.impact==='high'?'ALTO':event.impact==='medium'?'MEDIO':'BAJO'}
-</div>
-`;
-container.appendChild(eventEl);
-});
-}
-
-loadEconomicCalendar();
-
-// Update time
-function updateTime(){
-const now=new Date();
-document.getElementById('currentTime').innerText=now.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
-}
-updateTime();
-setInterval(updateTime,1000);
 
 // ============ TRADINGVIEW ADVANCED CHART ============
 
