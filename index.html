@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CFI Trading - Experiencia Interactiva</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Trading Room Pro - Plataforma Educativa de Trading</title>
 
 <!-- FONT AWESOME -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
 <!-- GOOGLE FONTS -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-<!-- TRADINGVIEW WIDGETS -->
-<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <!-- CHART.JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -22,176 +19,56 @@
 
 <style>
 :root{
---black:#0a0a0f;
---dark:#131318;
---card:#1a1a24;
---border:rgba(255,255,255,.08);
---electric:#00d4ff;
---gold:#ffd700;
+--bg-primary:#0b0f1a;
+--bg-secondary:#141926;
+--bg-card:#1a1f2e;
+--border:#2a3142;
+--text-primary:#ffffff;
+--text-secondary:#8b92a8;
+--accent:#00d4ff;
+--accent-hover:#00b8e6;
 --green:#00ff88;
 --red:#ff3366;
---white:#ffffff;
---gray:#8b8b9e;
+--gold:#ffd700;
 --purple:#a78bfa;
+--blue:#3b82f6;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
 
-html{scroll-behavior:smooth;font-size:16px;}
-
 body{
 font-family:'Inter',sans-serif;
-background:var(--black);
-color:var(--white);
+background:var(--bg-primary);
+color:var(--text-primary);
 overflow-x:hidden;
--webkit-font-smoothing:antialiased;
 }
 
-/* ============ QUIZ HERO ============ */
-
-.quiz-hero{
-position:relative;
-min-height:100vh;
+/* ============ LOADER ============ */
+.loader-screen{
+position:fixed;
+inset:0;
+background:var(--bg-primary);
 display:flex;
+flex-direction:column;
 align-items:center;
 justify-content:center;
-overflow:hidden;
-padding:2rem;
+z-index:10000;
+transition:opacity 0.5s;
 }
 
-.quiz-bg{
-position:absolute;
-inset:0;
-background:
-radial-gradient(circle at 20% 30%,rgba(0,212,255,.15),transparent 50%),
-radial-gradient(circle at 80% 70%,rgba(167,139,250,.12),transparent 50%);
+.loader-screen.hidden{
+opacity:0;
+pointer-events:none;
 }
 
-.particles{
-position:absolute;
-width:100%;
-height:100%;
-}
-
-.particle{
-position:absolute;
-width:3px;
-height:3px;
-background:var(--electric);
-border-radius:50%;
-opacity:0.6;
-animation:float linear infinite;
-}
-
-@keyframes float{
-0%{transform:translateY(100vh) translateX(0);}
-100%{transform:translateY(-100px) translateX(50px);}
-}
-
-.grid-bg{
-position:absolute;
-inset:0;
-background-image:
-linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
-linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
-background-size:50px 50px;
-opacity:0.3;
-}
-
-.quiz-container{
-position:relative;
-z-index:10;
-max-width:900px;
-width:100%;
-text-align:center;
-}
-
-.quiz-badge{
-display:inline-flex;
-align-items:center;
-gap:0.75rem;
-padding:0.75rem 1.5rem;
-background:rgba(255,255,255,.05);
-border:1px solid var(--border);
-border-radius:999px;
-backdrop-filter:blur(20px);
-margin-bottom:2rem;
-font-size:0.95rem;
-font-weight:600;
-animation:fadeIn 0.8s ease;
-}
-
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(20px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-.quiz-question{
-font-size:clamp(2rem,6vw,3.5rem);
+.loader-logo{
+font-size:3rem;
 font-weight:900;
-line-height:1.2;
-margin-bottom:1.5rem;
-background:linear-gradient(135deg,var(--white),var(--electric));
+background:linear-gradient(135deg,var(--accent),var(--purple));
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-animation:fadeIn 0.8s ease 0.2s both;
-}
-
-.quiz-subtitle{
-font-size:clamp(1rem,3vw,1.3rem);
-color:var(--gray);
-margin-bottom:3rem;
-animation:fadeIn 0.8s ease 0.4s both;
-}
-
-.quiz-options{
-display:grid;
-gap:1.25rem;
-animation:fadeIn 0.8s ease 0.6s both;
-}
-
-.quiz-option{
-padding:1.75rem 2rem;
-background:var(--card);
-border:2px solid var(--border);
-border-radius:20px;
-cursor:pointer;
-transition:all .3s cubic-bezier(.4,0,.2,1);
-text-align:left;
-display:flex;
-align-items:center;
-gap:1.25rem;
-min-height:80px;
-}
-
-.quiz-option:hover{
-border-color:var(--electric);
-transform:translateX(10px);
-box-shadow:0 10px 40px rgba(0,212,255,.3);
-background:rgba(0,212,255,.05);
-}
-
-.option-icon{
-width:50px;
-height:50px;
-border-radius:12px;
-background:rgba(0,212,255,.1);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:1.5rem;
-flex-shrink:0;
-}
-
-.option-text{
-font-size:1.15rem;
-font-weight:600;
-}
-
-.quiz-option.correct{
-border-color:var(--green);
-background:rgba(0,255,136,.1);
-animation:pulse 0.6s ease;
+margin-bottom:2rem;
+animation:pulse 2s ease infinite;
 }
 
 @keyframes pulse{
@@ -199,226 +76,278 @@ animation:pulse 0.6s ease;
 50%{transform:scale(1.05);}
 }
 
-.quiz-result{
-display:none;
-margin-top:2rem;
-padding:2rem;
-background:rgba(0,255,136,.1);
-border:2px solid var(--green);
-border-radius:20px;
-animation:slideUp 0.6s ease;
-}
-
-@keyframes slideUp{
-from{opacity:0;transform:translateY(30px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-.quiz-result.show{
-display:block;
-}
-
-.quiz-result h3{
-font-size:1.8rem;
-margin-bottom:1rem;
-color:var(--green);
-}
-
-.quiz-result p{
-font-size:1.1rem;
-color:var(--gray);
-margin-bottom:1.5rem;
-line-height:1.6;
-}
-
-.continue-btn{
-padding:1.2rem 2.5rem;
-background:linear-gradient(135deg,var(--electric),#0099ff);
-border:none;
-border-radius:16px;
-color:var(--black);
-font-size:1.1rem;
-font-weight:800;
-cursor:pointer;
-transition:all .3s;
-display:inline-flex;
-align-items:center;
-gap:0.75rem;
-}
-
-.continue-btn:hover{
-transform:translateY(-4px);
-box-shadow:0 20px 60px rgba(0,212,255,.5);
-}
-
-/* ============ LEARNING BASICS ============ */
-
-.learning-basics{
-padding:6rem 2rem;
-background:var(--black);
-}
-
-.basics-container{
-max-width:1400px;
-margin:0 auto;
-}
-
-.basics-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));
-gap:2rem;
-}
-
-.basic-card{
-background:var(--card);
-border:2px solid var(--border);
-border-radius:24px;
-padding:2.5rem;
-transition:all .4s ease;
-position:relative;
+.loader-bar{
+width:300px;
+height:4px;
+background:rgba(255,255,255,0.1);
+border-radius:10px;
 overflow:hidden;
 }
 
-.basic-card::before{
-content:'';
-position:absolute;
+.loader-progress{
+height:100%;
+background:linear-gradient(90deg,var(--accent),var(--purple));
+width:0%;
+animation:loading 2s ease-in-out forwards;
+}
+
+@keyframes loading{
+0%{width:0%;}
+100%{width:100%;}
+}
+
+.loader-text{
+margin-top:1rem;
+color:var(--text-secondary);
+font-size:0.9rem;
+}
+
+/* ============ NAVBAR ============ */
+.navbar{
+position:fixed;
 top:0;
 left:0;
 right:0;
-height:4px;
-background:linear-gradient(90deg,var(--electric),var(--purple));
-}
-
-.basic-card:hover{
-transform:translateY(-8px);
-border-color:var(--electric);
-box-shadow:0 20px 60px rgba(0,212,255,.3);
-}
-
-.basic-icon{
-width:70px;
 height:70px;
-background:rgba(0,212,255,.1);
-border-radius:20px;
+background:rgba(26,31,46,0.8);
+backdrop-filter:blur(20px);
+border-bottom:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 2rem;
+z-index:1000;
+}
+
+.nav-brand{
+display:flex;
+align-items:center;
+gap:1rem;
+font-size:1.5rem;
+font-weight:900;
+background:linear-gradient(135deg,var(--accent),var(--purple));
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.nav-actions{
+display:flex;
+align-items:center;
+gap:1.5rem;
+}
+
+.nav-user{
+display:flex;
+align-items:center;
+gap:1rem;
+padding:0.5rem 1rem;
+background:var(--bg-card);
+border-radius:12px;
+cursor:pointer;
+transition:all 0.3s;
+}
+
+.nav-user:hover{
+background:var(--bg-secondary);
+}
+
+.user-avatar{
+width:40px;
+height:40px;
+border-radius:50%;
+background:linear-gradient(135deg,var(--accent),var(--purple));
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:2rem;
-margin-bottom:1.5rem;
-}
-
-.basic-card h3{
-font-size:1.8rem;
-font-weight:900;
-margin-bottom:1rem;
-color:var(--electric);
-}
-
-.basic-description{
-font-size:1.05rem;
-color:var(--gray);
-line-height:1.7;
-margin-bottom:1.5rem;
-}
-
-.basic-example{
-background:rgba(0,0,0,.3);
-padding:1.25rem;
-border-radius:12px;
-border-left:3px solid var(--electric);
-}
-
-.basic-example-label{
-font-size:0.85rem;
-color:var(--gray);
-text-transform:uppercase;
-font-weight:700;
-letter-spacing:0.5px;
-margin-bottom:0.75rem;
-}
-
-.basic-example-text{
-font-size:1rem;
-line-height:1.6;
-}
-
-.example-highlight{
-color:var(--green);
 font-weight:700;
 }
 
-.example-highlight.red{
-color:var(--red);
+.user-level{
+display:flex;
+flex-direction:column;
 }
 
-/* ============ SECTIONS ============ */
-
-.signals-section,.simulator{
-padding:6rem 2rem;
-}
-
-.signals-section{background:var(--dark);}
-.simulator{background:var(--black);}
-
-.section-header{
-text-align:center;
-max-width:800px;
-margin:0 auto 4rem;
-}
-
-.section-badge{
-display:inline-block;
-padding:0.6rem 1.25rem;
-background:rgba(0,212,255,.1);
-border:1px solid rgba(0,212,255,.3);
-border-radius:999px;
-color:var(--electric);
+.user-name{
+font-weight:700;
 font-size:0.9rem;
+}
+
+.user-rank{
+font-size:0.75rem;
+color:var(--text-secondary);
+}
+
+/* ============ SIDEBAR ============ */
+.sidebar{
+position:fixed;
+left:0;
+top:70px;
+bottom:0;
+width:280px;
+background:var(--bg-secondary);
+border-right:1px solid var(--border);
+overflow-y:auto;
+z-index:999;
+transition:transform 0.3s;
+}
+
+.sidebar-section{
+padding:1.5rem 1rem;
+border-bottom:1px solid var(--border);
+}
+
+.sidebar-title{
+font-size:0.75rem;
 font-weight:700;
-letter-spacing:0.5px;
-margin-bottom:1.5rem;
+color:var(--text-secondary);
+text-transform:uppercase;
+letter-spacing:1px;
+margin-bottom:1rem;
 }
 
-.pulse-badge{
-animation:pulse-glow 2s ease infinite;
+.sidebar-menu{
+display:flex;
+flex-direction:column;
+gap:0.5rem;
 }
 
-@keyframes pulse-glow{
-0%,100%{box-shadow:0 0 20px rgba(0,212,255,.3);}
-50%{box-shadow:0 0 40px rgba(0,212,255,.6);}
+.menu-item{
+display:flex;
+align-items:center;
+gap:1rem;
+padding:0.75rem 1rem;
+border-radius:12px;
+cursor:pointer;
+transition:all 0.3s;
+color:var(--text-secondary);
 }
 
-.section-title{
-font-size:clamp(2rem,6vw,3.5rem);
+.menu-item:hover{
+background:var(--bg-card);
+color:var(--text-primary);
+}
+
+.menu-item.active{
+background:var(--bg-card);
+color:var(--accent);
+border-left:3px solid var(--accent);
+}
+
+.menu-icon{
+font-size:1.2rem;
+width:24px;
+text-align:center;
+}
+
+/* ============ MAIN CONTENT ============ */
+.main-content{
+margin-left:280px;
+margin-top:70px;
+padding:2rem;
+min-height:calc(100vh - 70px);
+}
+
+.page-section{
+display:none;
+animation:fadeIn 0.5s ease;
+}
+
+.page-section.active{
+display:block;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+.page-header{
+margin-bottom:2rem;
+}
+
+.page-title{
+font-size:2rem;
 font-weight:900;
-line-height:1.2;
-margin-bottom:1.25rem;
+margin-bottom:0.5rem;
 }
 
-.section-subtitle{
-font-size:clamp(1rem,3vw,1.3rem);
-color:var(--gray);
-line-height:1.6;
+.page-subtitle{
+color:var(--text-secondary);
+font-size:1rem;
 }
 
-/* ============ SIGNALS GRID ============ */
+/* ============ CARDS ============ */
+.card{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+}
 
-.signals-grid{
-max-width:1400px;
-margin:0 auto;
+.card-glass{
+background:rgba(26,31,46,0.6);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.1);
+}
+
+/* ============ DASHBOARD GRID ============ */
+.dashboard-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));
-gap:2rem;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:1.5rem;
+margin-bottom:2rem;
+}
+
+.stat-card{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+display:flex;
+justify-content:space-between;
+align-items:center;
+transition:all 0.3s;
+}
+
+.stat-card:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 30px rgba(0,212,255,0.2);
+}
+
+.stat-info h3{
+font-size:0.85rem;
+color:var(--text-secondary);
+margin-bottom:0.5rem;
+}
+
+.stat-value{
+font-size:2rem;
+font-weight:900;
+}
+
+.stat-icon{
+font-size:2.5rem;
+opacity:0.3;
+}
+
+/* ============ SIGNALS ============ */
+.signals-container{
+display:grid;
+gap:1rem;
 }
 
 .signal-card{
-background:var(--card);
-border:2px solid var(--border);
-border-radius:24px;
-padding:2rem;
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+display:grid;
+grid-template-columns:auto 1fr auto;
+gap:1.5rem;
+align-items:center;
+transition:all 0.3s;
 position:relative;
 overflow:hidden;
-transition:all .4s ease;
 }
 
 .signal-card::before{
@@ -426,68 +355,541 @@ content:'';
 position:absolute;
 top:0;
 left:0;
-right:0;
-height:4px;
+width:4px;
+height:100%;
 }
 
-.signal-card.buy::before{background:linear-gradient(90deg,var(--green),var(--electric));}
-.signal-card.sell::before{background:linear-gradient(90deg,var(--red),#ff6b9d);}
-.signal-card.neutral::before{background:linear-gradient(90deg,var(--gray),var(--purple));}
+.signal-card.buy::before{
+background:var(--green);
+}
 
-.signal-card:hover{
-transform:translateY(-8px);
-box-shadow:0 20px 60px rgba(0,0,0,.4);
+.signal-card.sell::before{
+background:var(--red);
+}
+
+.signal-icon-box{
+width:60px;
+height:60px;
+border-radius:12px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:1.5rem;
+font-weight:700;
+}
+
+.signal-card.buy .signal-icon-box{
+background:rgba(0,255,136,0.1);
+color:var(--green);
+}
+
+.signal-card.sell .signal-icon-box{
+background:rgba(255,51,102,0.1);
+color:var(--red);
+}
+
+.signal-info{
+flex:1;
 }
 
 .signal-header{
 display:flex;
-justify-content:space-between;
 align-items:center;
-margin-bottom:1.5rem;
-flex-wrap:wrap;
 gap:1rem;
+margin-bottom:0.75rem;
 }
 
-.signal-pair{
-font-size:1.4rem;
+.signal-asset{
+font-size:1.2rem;
 font-weight:800;
+}
+
+.signal-direction{
+padding:0.25rem 0.75rem;
+border-radius:6px;
+font-size:0.75rem;
+font-weight:700;
+text-transform:uppercase;
+}
+
+.signal-direction.buy{
+background:rgba(0,255,136,0.2);
+color:var(--green);
+}
+
+.signal-direction.sell{
+background:rgba(255,51,102,0.2);
+color:var(--red);
+}
+
+.signal-confidence{
+padding:0.25rem 0.75rem;
+border-radius:6px;
+font-size:0.75rem;
+background:rgba(0,212,255,0.1);
+color:var(--accent);
+font-weight:700;
+}
+
+.signal-details{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:1rem;
+font-size:0.85rem;
+}
+
+.signal-detail{
 display:flex;
-align-items:center;
+flex-direction:column;
+gap:0.25rem;
+}
+
+.signal-label{
+color:var(--text-secondary);
+font-size:0.75rem;
+}
+
+.signal-value{
+font-weight:700;
+font-family:'JetBrains Mono',monospace;
+}
+
+.signal-actions{
+display:flex;
+flex-direction:column;
 gap:0.5rem;
 }
 
-.signal-badge{
-padding:0.5rem 1rem;
+.btn{
+padding:0.75rem 1.5rem;
+border:none;
 border-radius:12px;
-font-size:0.85rem;
-font-weight:800;
-display:flex;
+font-weight:700;
+cursor:pointer;
+transition:all 0.3s;
+display:inline-flex;
 align-items:center;
+justify-content:center;
 gap:0.5rem;
 white-space:nowrap;
 }
 
-.signal-badge.buy{
-background:rgba(0,255,136,.15);
+.btn-primary{
+background:var(--accent);
+color:var(--bg-primary);
+}
+
+.btn-primary:hover{
+background:var(--accent-hover);
+transform:translateY(-2px);
+box-shadow:0 5px 20px rgba(0,212,255,0.4);
+}
+
+.btn-secondary{
+background:rgba(255,255,255,0.05);
+color:var(--text-primary);
+border:1px solid var(--border);
+}
+
+.btn-secondary:hover{
+background:rgba(255,255,255,0.1);
+}
+
+.btn-sm{
+padding:0.5rem 1rem;
+font-size:0.85rem;
+}
+
+/* ============ TRADING CHART ============ */
+.trading-panel{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:2rem;
+margin-bottom:2rem;
+}
+
+.chart-container{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+}
+
+.chart-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:1.5rem;
+}
+
+.chart-title{
+font-size:1.5rem;
+font-weight:800;
+}
+
+.chart-price{
+font-size:2rem;
+font-weight:900;
+font-family:'JetBrains Mono',monospace;
+}
+
+.price-change{
+font-size:1rem;
+font-weight:700;
+margin-left:1rem;
+}
+
+.price-change.up{
 color:var(--green);
 }
 
-.signal-badge.sell{
-background:rgba(255,51,102,.15);
+.price-change.down{
 color:var(--red);
 }
 
-.signal-badge.neutral{
-background:rgba(139,139,158,.15);
-color:var(--gray);
+.chart-canvas{
+height:400px;
 }
 
-.signal-icon{
+.trade-sidebar{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+display:flex;
+flex-direction:column;
+gap:1.5rem;
+}
+
+.trade-buttons{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:1rem;
+}
+
+.btn-buy{
+background:var(--green);
+color:var(--bg-primary);
+}
+
+.btn-buy:hover{
+background:#00e67a;
+box-shadow:0 5px 20px rgba(0,255,136,0.4);
+}
+
+.btn-sell{
+background:var(--red);
+color:var(--text-primary);
+}
+
+.btn-sell:hover{
+background:#ff1a52;
+box-shadow:0 5px 20px rgba(255,51,102,0.4);
+}
+
+.trade-stats{
+display:flex;
+flex-direction:column;
+gap:1rem;
+}
+
+.trade-stat{
+display:flex;
+justify-content:space-between;
+padding:0.75rem;
+background:var(--bg-secondary);
+border-radius:8px;
+}
+
+.trade-stat-label{
+color:var(--text-secondary);
+font-size:0.85rem;
+}
+
+.trade-stat-value{
+font-weight:700;
+font-family:'JetBrains Mono',monospace;
+}
+
+/* ============ GAMIFICATION ============ */
+.gamification-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:2rem;
+margin-bottom:2rem;
+}
+
+.profile-card{
+background:linear-gradient(135deg,rgba(0,212,255,0.1),rgba(167,139,250,0.1));
+border:1px solid var(--border);
+border-radius:16px;
+padding:2rem;
+text-align:center;
+}
+
+.profile-avatar{
+width:100px;
+height:100px;
+margin:0 auto 1rem;
+border-radius:50%;
+background:linear-gradient(135deg,var(--accent),var(--purple));
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:3rem;
+font-weight:900;
+}
+
+.profile-name{
+font-size:1.5rem;
+font-weight:800;
+margin-bottom:0.5rem;
+}
+
+.profile-level{
+font-size:1rem;
+color:var(--accent);
+font-weight:700;
+margin-bottom:1.5rem;
+}
+
+.xp-bar{
+width:100%;
+height:10px;
+background:rgba(255,255,255,0.1);
+border-radius:10px;
+overflow:hidden;
+margin-bottom:0.5rem;
+}
+
+.xp-progress{
+height:100%;
+background:linear-gradient(90deg,var(--accent),var(--purple));
+border-radius:10px;
+transition:width 0.5s;
+}
+
+.xp-text{
+font-size:0.85rem;
+color:var(--text-secondary);
+}
+
+.missions-card{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+}
+
+.missions-title{
+font-size:1.2rem;
+font-weight:800;
+margin-bottom:1.5rem;
+}
+
+.mission-item{
+padding:1rem;
+background:var(--bg-secondary);
+border-radius:12px;
+margin-bottom:1rem;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.mission-info h4{
+font-size:1rem;
+margin-bottom:0.5rem;
+}
+
+.mission-reward{
+font-size:0.85rem;
+color:var(--gold);
+font-weight:700;
+}
+
+.mission-progress{
+text-align:right;
+}
+
+.progress-bar-small{
+width:100px;
+height:6px;
+background:rgba(255,255,255,0.1);
+border-radius:10px;
+margin-bottom:0.5rem;
+overflow:hidden;
+}
+
+.progress-fill-small{
+height:100%;
+background:var(--accent);
+border-radius:10px;
+}
+
+.badges-section{
+margin-top:2rem;
+}
+
+.badges-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:1rem;
+}
+
+.badge-item{
+background:var(--bg-secondary);
+border:1px solid var(--border);
+border-radius:12px;
+padding:1rem;
+text-align:center;
+transition:all 0.3s;
+}
+
+.badge-item:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 30px rgba(0,212,255,0.2);
+}
+
+.badge-icon{
+font-size:2rem;
+margin-bottom:0.5rem;
+}
+
+.badge-name{
+font-size:0.85rem;
+font-weight:700;
+}
+
+.badge-locked{
+opacity:0.3;
+}
+
+/* ============ COMMUNITY FEED ============ */
+.community-container{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:2rem;
+}
+
+.feed-container{
+display:flex;
+flex-direction:column;
+gap:1rem;
+}
+
+.post-composer{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+margin-bottom:1rem;
+}
+
+.post-composer textarea{
+width:100%;
+background:var(--bg-secondary);
+border:1px solid var(--border);
+border-radius:12px;
+padding:1rem;
+color:var(--text-primary);
+font-family:'Inter',sans-serif;
+resize:none;
+margin-bottom:1rem;
+}
+
+.post-card{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+}
+
+.post-header{
+display:flex;
+align-items:center;
+gap:1rem;
+margin-bottom:1rem;
+}
+
+.post-avatar{
+width:40px;
+height:40px;
+border-radius:50%;
+background:linear-gradient(135deg,var(--accent),var(--purple));
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+}
+
+.post-author{
+flex:1;
+}
+
+.post-name{
+font-weight:700;
+}
+
+.post-time{
+font-size:0.85rem;
+color:var(--text-secondary);
+}
+
+.post-content{
+margin-bottom:1rem;
+line-height:1.6;
+}
+
+.post-signal{
+background:var(--bg-secondary);
+border-left:3px solid var(--accent);
+padding:1rem;
+border-radius:8px;
+margin:1rem 0;
+}
+
+.post-actions{
+display:flex;
+gap:1.5rem;
+padding-top:1rem;
+border-top:1px solid var(--border);
+}
+
+.post-action{
+display:flex;
+align-items:center;
+gap:0.5rem;
+cursor:pointer;
+color:var(--text-secondary);
+transition:all 0.3s;
+}
+
+.post-action:hover{
+color:var(--accent);
+}
+
+.online-users{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+height:fit-content;
+}
+
+.online-count{
+display:flex;
+align-items:center;
+gap:0.5rem;
+margin-bottom:1.5rem;
+}
+
+.online-dot{
 width:10px;
 height:10px;
 border-radius:50%;
-background:currentColor;
-animation:blink 1.5s ease infinite;
+background:var(--green);
+animation:blink 2s infinite;
 }
 
 @keyframes blink{
@@ -495,400 +897,333 @@ animation:blink 1.5s ease infinite;
 50%{opacity:0.3;}
 }
 
-.signal-price{
+.user-list{
+display:flex;
+flex-direction:column;
+gap:0.75rem;
+}
+
+.user-item{
+display:flex;
+align-items:center;
+gap:0.75rem;
+padding:0.5rem;
+border-radius:8px;
+transition:all 0.3s;
+}
+
+.user-item:hover{
+background:var(--bg-secondary);
+}
+
+.user-item-avatar{
+width:32px;
+height:32px;
+border-radius:50%;
+background:var(--accent);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:0.85rem;
+font-weight:700;
+}
+
+/* ============ EDUCATION ============ */
+.education-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:1.5rem;
+}
+
+.lesson-card{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+transition:all 0.3s;
+cursor:pointer;
+}
+
+.lesson-card:hover{
+transform:translateY(-5px);
+border-color:var(--accent);
+box-shadow:0 10px 30px rgba(0,212,255,0.2);
+}
+
+.lesson-icon{
+width:60px;
+height:60px;
+border-radius:12px;
+background:linear-gradient(135deg,rgba(0,212,255,0.2),rgba(167,139,250,0.2));
+display:flex;
+align-items:center;
+justify-content:center;
 font-size:2rem;
-font-weight:900;
+margin-bottom:1rem;
+}
+
+.lesson-title{
+font-size:1.2rem;
+font-weight:800;
 margin-bottom:0.75rem;
 }
 
-.signal-change{
-font-size:1.1rem;
-font-weight:700;
-margin-bottom:1.5rem;
-}
-
-.signal-change.up{color:var(--green);}
-.signal-change.down{color:var(--red);}
-
-.signal-chart-mini{
-height:80px;
+.lesson-description{
+color:var(--text-secondary);
+line-height:1.6;
 margin-bottom:1rem;
-background:rgba(0,0,0,.3);
-border-radius:12px;
-padding:0.5rem;
 }
 
-.signal-reason{
-background:rgba(255,255,255,.03);
-padding:1rem;
-border-radius:12px;
-margin-bottom:1.5rem;
-border-left:3px solid var(--electric);
-}
-
-.signal-reason-label{
+.lesson-duration{
 font-size:0.85rem;
-color:var(--gray);
-margin-bottom:0.5rem;
-font-weight:600;
-text-transform:uppercase;
-letter-spacing:0.5px;
+color:var(--accent);
+font-weight:700;
 }
 
-.signal-reason-text{
-font-size:0.95rem;
-line-height:1.5;
-}
-
-/* ============ SIMULATOR ============ */
-
-.simulator-wrapper{
-max-width:1400px;
-margin:0 auto;
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:2rem;
-}
-
-.chart-panel{
-background:var(--card);
+/* ============ AI CHAT WIDGET ============ */
+.chat-widget{
+position:fixed;
+bottom:100px;
+right:30px;
+width:380px;
+height:500px;
+background:var(--bg-card);
 border:1px solid var(--border);
-border-radius:24px;
-padding:clamp(1.5rem,3vw,2.5rem);
+border-radius:20px;
+box-shadow:0 20px 60px rgba(0,0,0,0.5);
+display:flex;
+flex-direction:column;
+z-index:1001;
+transform:translateY(600px);
+transition:transform 0.3s;
 }
 
-.chart-header{
+.chat-widget.open{
+transform:translateY(0);
+}
+
+.chat-header{
+padding:1rem 1.5rem;
+background:linear-gradient(135deg,var(--accent),var(--purple));
+border-radius:20px 20px 0 0;
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:2rem;
-flex-wrap:wrap;
-gap:1rem;
 }
 
-.pair-info{
-display:flex;
-align-items:center;
-gap:1rem;
-}
-
-.pair-name{
-font-size:clamp(1.3rem,3vw,1.8rem);
-font-weight:800;
-}
-
-.live-indicator{
+.chat-title{
+font-weight:700;
 display:flex;
 align-items:center;
 gap:0.5rem;
-padding:0.5rem 1rem;
-background:rgba(0,255,136,.1);
-border-radius:999px;
-font-size:0.85rem;
-font-weight:700;
-color:var(--green);
 }
 
-.live-dot{
+.chat-close{
+background:rgba(255,255,255,0.2);
+border:none;
+width:30px;
+height:30px;
+border-radius:50%;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+}
+
+.chat-messages{
+flex:1;
+overflow-y:auto;
+padding:1.5rem;
+display:flex;
+flex-direction:column;
+gap:1rem;
+}
+
+.chat-message{
+display:flex;
+gap:0.75rem;
+}
+
+.chat-message.bot{
+align-self:flex-start;
+}
+
+.chat-message.user{
+align-self:flex-end;
+flex-direction:row-reverse;
+}
+
+.chat-avatar{
+width:36px;
+height:36px;
+border-radius:50%;
+background:var(--accent);
+display:flex;
+align-items:center;
+justify-content:center;
+flex-shrink:0;
+}
+
+.chat-bubble{
+background:var(--bg-secondary);
+padding:0.75rem 1rem;
+border-radius:12px;
+max-width:70%;
+}
+
+.chat-message.user .chat-bubble{
+background:var(--accent);
+color:var(--bg-primary);
+}
+
+.chat-input-container{
+padding:1rem;
+border-top:1px solid var(--border);
+}
+
+.chat-input{
+width:100%;
+padding:0.75rem;
+background:var(--bg-secondary);
+border:1px solid var(--border);
+border-radius:12px;
+color:var(--text-primary);
+font-family:'Inter',sans-serif;
+}
+
+.typing-indicator{
+display:flex;
+gap:0.25rem;
+padding:0.75rem 1rem;
+}
+
+.typing-dot{
 width:8px;
 height:8px;
 border-radius:50%;
-background:var(--green);
-animation:blink 1.5s ease infinite;
+background:var(--text-secondary);
+animation:typing 1.4s infinite;
 }
 
-.price-display{
-display:flex;
-align-items:baseline;
-gap:1.5rem;
-flex-wrap:wrap;
+.typing-dot:nth-child(2){
+animation-delay:0.2s;
 }
 
-.current-price{
-font-size:clamp(2rem,5vw,3rem);
-font-weight:900;
+.typing-dot:nth-child(3){
+animation-delay:0.4s;
 }
 
-.price-change{
-font-size:clamp(1rem,2vw,1.3rem);
-font-weight:700;
-padding:0.5rem 1rem;
-border-radius:12px;
+@keyframes typing{
+0%,60%,100%{transform:translateY(0);}
+30%{transform:translateY(-10px);}
 }
 
-.price-change.up{
-color:var(--green);
-background:rgba(0,255,136,.1);
-}
-
-.price-change.down{
-color:var(--red);
-background:rgba(255,51,102,.1);
-}
-
-.chart-canvas{
-position:relative;
-height:clamp(250px,40vw,400px);
-margin:2rem 0;
-}
-
-.trade-panel{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:24px;
-padding:clamp(1.5rem,3vw,2.5rem);
-display:flex;
-flex-direction:column;
-gap:2rem;
-}
-
-.trade-controls{
-display:grid;
-gap:1rem;
-}
-
-.trade-btn{
-padding:1.5rem;
-border:none;
-border-radius:16px;
-font-size:1.1rem;
-font-weight:800;
-cursor:pointer;
-transition:all .3s;
+/* ============ WHATSAPP BUTTON ============ */
+.whatsapp-float{
+position:fixed;
+bottom:30px;
+right:30px;
+width:60px;
+height:60px;
+background:#25d366;
+border-radius:50%;
 display:flex;
 align-items:center;
 justify-content:center;
-gap:0.75rem;
-min-height:70px;
+font-size:2rem;
+color:white;
+box-shadow:0 5px 20px rgba(37,211,102,0.5);
+cursor:pointer;
+z-index:1000;
+animation:pulse-whatsapp 2s infinite;
 }
 
-.trade-btn.buy{
-background:linear-gradient(135deg,var(--green),#00cc70);
-color:var(--black);
-box-shadow:0 10px 30px rgba(0,255,136,.3);
+@keyframes pulse-whatsapp{
+0%,100%{transform:scale(1);box-shadow:0 5px 20px rgba(37,211,102,0.5);}
+50%{transform:scale(1.1);box-shadow:0 8px 30px rgba(37,211,102,0.8);}
 }
 
-.trade-btn.buy:hover:not(:disabled){
-transform:translateY(-4px);
-box-shadow:0 15px 40px rgba(0,255,136,.5);
+.whatsapp-float:hover{
+background:#20ba5a;
 }
 
-.trade-btn.sell{
-background:linear-gradient(135deg,var(--red),#ff1a47);
-color:var(--white);
-box-shadow:0 10px 30px rgba(255,51,102,.3);
-}
-
-.trade-btn.sell:hover:not(:disabled){
-transform:translateY(-4px);
-box-shadow:0 15px 40px rgba(255,51,102,.5);
-}
-
-.trade-btn:disabled{
-opacity:0.5;
-cursor:not-allowed;
-}
-
-.sim-stats{
-display:grid;
-gap:1rem;
-}
-
-.sim-stat{
-background:var(--dark);
+/* ============ NOTIFICATION ============ */
+.notification{
+position:fixed;
+top:90px;
+right:30px;
+background:var(--bg-card);
 border:1px solid var(--border);
-border-radius:16px;
-padding:1.25rem;
+border-left:4px solid var(--accent);
+border-radius:12px;
+padding:1rem 1.5rem;
+box-shadow:0 10px 30px rgba(0,0,0,0.5);
+z-index:1002;
+transform:translateX(500px);
+transition:transform 0.3s;
 }
 
-.sim-stat-label{
-font-size:0.85rem;
-color:var(--gray);
-margin-bottom:0.5rem;
-text-transform:uppercase;
-letter-spacing:0.5px;
-font-weight:600;
+.notification.show{
+transform:translateX(0);
 }
 
-.sim-stat-value{
-font-size:clamp(1.5rem,3vw,2rem);
-font-weight:900;
-}
-
-.position-panel{
-background:rgba(0,212,255,.05);
-border:2px solid var(--electric);
-border-radius:20px;
-padding:1.5rem;
-display:none;
-}
-
-.position-panel.active{
-display:block;
-animation:slideUp 0.4s ease;
-}
-
-.position-header{
+.notification-content{
 display:flex;
-justify-content:space-between;
 align-items:center;
-margin-bottom:1.5rem;
-flex-wrap:wrap;
 gap:1rem;
 }
 
-.position-type{
-padding:0.6rem 1.2rem;
-border-radius:12px;
-font-weight:800;
-font-size:1rem;
+.notification-icon{
+font-size:1.5rem;
+color:var(--accent);
 }
 
-.position-type.buy{
-background:var(--green);
-color:var(--black);
+/* ============ MOBILE RESPONSIVE ============ */
+@media(max-width:1024px){
+
+.sidebar{
+transform:translateX(-100%);
 }
 
-.position-type.sell{
-background:var(--red);
-color:var(--white);
+.sidebar.open{
+transform:translateX(0);
 }
 
-.close-position-btn{
-padding:0.6rem 1.2rem;
-background:rgba(255,255,255,.1);
-border:1px solid var(--border);
-border-radius:12px;
-color:var(--white);
-font-weight:700;
-cursor:pointer;
-transition:all .3s;
-font-size:0.9rem;
+.main-content{
+margin-left:0;
 }
 
-.close-position-btn:hover{
-background:rgba(255,255,255,.2);
+.trading-panel,.gamification-grid,.community-container{
+grid-template-columns:1fr;
 }
 
-.position-details{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:1rem;
+.chat-widget{
+width:100%;
+right:0;
+left:0;
+bottom:0;
+border-radius:20px 20px 0 0;
 }
 
-.position-detail{
-background:var(--dark);
-padding:1rem;
-border-radius:12px;
 }
-
-.position-detail-label{
-font-size:0.75rem;
-color:var(--gray);
-margin-bottom:0.5rem;
-}
-
-.position-detail-value{
-font-size:1.1rem;
-font-weight:800;
-}
-
-.cta-section{
-padding:6rem 2rem;
-background:var(--dark);
-text-align:center;
-}
-
-.cta-buttons{
-display:flex;
-gap:1.5rem;
-justify-content:center;
-flex-wrap:wrap;
-margin-top:3rem;
-}
-
-.btn-primary{
-padding:1.5rem 3rem;
-background:linear-gradient(135deg,var(--electric),#0099ff);
-border:none;
-border-radius:16px;
-color:var(--black);
-font-size:1.2rem;
-font-weight:800;
-cursor:pointer;
-transition:all .3s;
-text-decoration:none;
-display:inline-flex;
-align-items:center;
-gap:0.75rem;
-}
-
-.btn-primary:hover{
-transform:translateY(-4px);
-box-shadow:0 20px 60px rgba(0,212,255,.5);
-}
-
-.btn-secondary{
-padding:1.5rem 3rem;
-background:rgba(255,255,255,.05);
-border:2px solid var(--border);
-border-radius:16px;
-color:var(--white);
-font-size:1.2rem;
-font-weight:800;
-cursor:pointer;
-transition:all .3s;
-text-decoration:none;
-display:inline-flex;
-align-items:center;
-gap:0.75rem;
-}
-
-.btn-secondary:hover{
-background:rgba(255,255,255,.1);
-border-color:var(--electric);
-}
-
-/* ============ MOBILE ============ */
 
 @media(max-width:768px){
 
-.quiz-hero,.learning-basics,.signals-section,.simulator,.cta-section{
-padding:4rem 1.5rem;
+.navbar{
+padding:0 1rem;
 }
 
-.quiz-option{
-padding:1.25rem 1.5rem;
+.main-content{
+padding:1rem;
 }
 
-.option-icon{
-width:40px;
-height:40px;
-}
-
-.basics-grid,.signals-grid{
+.dashboard-grid,.signals-details,.badges-grid{
 grid-template-columns:1fr;
 }
 
-.basic-card{
-padding:2rem 1.5rem;
-}
-
-.simulator-wrapper{
+.trade-buttons{
 grid-template-columns:1fr;
-}
-
-.position-details{
-grid-template-columns:1fr;
-}
-
-.cta-buttons{
-flex-direction:column;
-}
-
-.btn-primary,.btn-secondary{
-width:100%;
-justify-content:center;
 }
 
 }
@@ -897,474 +1232,787 @@ justify-content:center;
 </head>
 <body>
 
-<!-- ============ QUIZ ============ -->
-<section class="quiz-hero" id="quiz">
-<div class="quiz-bg">
-<div class="grid-bg"></div>
-<div class="particles" id="particles"></div>
+<!-- ============ LOADER SCREEN ============ -->
+<div class="loader-screen" id="loader">
+<div class="loader-logo">
+<i class="fa-solid fa-rocket"></i> AI Trading Room Pro
+</div>
+<div class="loader-bar">
+<div class="loader-progress"></div>
+</div>
+<div class="loader-text">Conectando a datos de mercado...</div>
 </div>
 
-<div class="quiz-container">
-<div class="quiz-badge">
-<i class="fa-solid fa-question-circle"></i>
-<span>PREGUNTA INTERACTIVA</span>
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar">
+<div class="nav-brand">
+<i class="fa-solid fa-rocket"></i>
+AI Trading Room Pro
 </div>
-
-<h1 class="quiz-question">¿Qué crees que es el Trading?</h1>
-<p class="quiz-subtitle">Selecciona la respuesta correcta</p>
-
-<div class="quiz-options">
-<div class="quiz-option" onclick="selectAnswer(this, false)">
-<div class="option-icon"><i class="fa-solid fa-dice"></i></div>
-<div class="option-text">Es como apostar en un casino</div>
-</div>
-
-<div class="quiz-option" onclick="selectAnswer(this, false)">
-<div class="option-icon"><i class="fa-solid fa-magic"></i></div>
-<div class="option-text">Es para gente con suerte</div>
-</div>
-
-<div class="quiz-option" onclick="selectAnswer(this, true)">
-<div class="option-icon"><i class="fa-solid fa-chart-line"></i></div>
-<div class="option-text">Es analizar mercados y tomar decisiones informadas</div>
-</div>
-
-<div class="quiz-option" onclick="selectAnswer(this, false)">
-<div class="option-icon"><i class="fa-solid fa-rocket"></i></div>
-<div class="option-text">Es hacerse rico rápido</div>
+<div class="nav-actions">
+<div class="nav-user" onclick="navigateTo('gamification')">
+<div class="user-avatar">JD</div>
+<div class="user-level">
+<div class="user-name">John Doe</div>
+<div class="user-rank">Nivel 12 - Trader Pro</div>
 </div>
 </div>
+</div>
+</nav>
 
-<div class="quiz-result" id="quizResult">
-<h3>🎉 ¡Correcto!</h3>
-<p>El trading es análisis técnico, gestión de riesgo y decisiones basadas en datos reales del mercado.</p>
-<button class="continue-btn" onclick="scrollToBasics()">
-<span>Aprender los Conceptos</span>
+<!-- ============ SIDEBAR ============ -->
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-section">
+<div class="sidebar-title">Principal</div>
+<div class="sidebar-menu">
+<div class="menu-item active" onclick="navigateTo('dashboard')">
+<i class="fa-solid fa-chart-line menu-icon"></i>
+<span>Dashboard</span>
+</div>
+<div class="menu-item" onclick="navigateTo('signals')">
+<i class="fa-solid fa-signal menu-icon"></i>
+<span>Señales de Trading</span>
+</div>
+<div class="menu-item" onclick="navigateTo('simulator')">
+<i class="fa-solid fa-gamepad menu-icon"></i>
+<span>Simulador</span>
+</div>
+</div>
+</div>
+
+<div class="sidebar-section">
+<div class="sidebar-title">Gamificación</div>
+<div class="sidebar-menu">
+<div class="menu-item" onclick="navigateTo('gamification')">
+<i class="fa-solid fa-trophy menu-icon"></i>
+<span>Perfil & Misiones</span>
+</div>
+<div class="menu-item" onclick="navigateTo('ranking')">
+<i class="fa-solid fa-ranking-star menu-icon"></i>
+<span>Ranking Global</span>
+</div>
+</div>
+</div>
+
+<div class="sidebar-section">
+<div class="sidebar-title">Comunidad</div>
+<div class="sidebar-menu">
+<div class="menu-item" onclick="navigateTo('community')">
+<i class="fa-solid fa-users menu-icon"></i>
+<span>Feed</span>
+</div>
+<div class="menu-item" onclick="navigateTo('education')">
+<i class="fa-solid fa-graduation-cap menu-icon"></i>
+<span>Educación</span>
+</div>
+</div>
+</div>
+</aside>
+
+<!-- ============ MAIN CONTENT ============ -->
+<main class="main-content">
+
+<!-- DASHBOARD PAGE -->
+<section id="dashboard" class="page-section active">
+<div class="page-header">
+<h1 class="page-title">Dashboard</h1>
+<p class="page-subtitle">Visión general de tu actividad de trading</p>
+</div>
+
+<div class="dashboard-grid">
+<div class="stat-card">
+<div class="stat-info">
+<h3>Balance</h3>
+<div class="stat-value" style="color:var(--accent)">$10,245.50</div>
+</div>
+<i class="fa-solid fa-wallet stat-icon"></i>
+</div>
+
+<div class="stat-card">
+<div class="stat-info">
+<h3>P&L Hoy</h3>
+<div class="stat-value" style="color:var(--green)">+$342.80</div>
+</div>
+<i class="fa-solid fa-arrow-trend-up stat-icon"></i>
+</div>
+
+<div class="stat-card">
+<div class="stat-info">
+<h3>Operaciones</h3>
+<div class="stat-value">127</div>
+</div>
+<i class="fa-solid fa-chart-simple stat-icon"></i>
+</div>
+
+<div class="stat-card">
+<div class="stat-info">
+<h3>Win Rate</h3>
+<div class="stat-value" style="color:var(--purple)">68.5%</div>
+</div>
+<i class="fa-solid fa-percent stat-icon"></i>
+</div>
+</div>
+
+<div class="trading-panel">
+<div class="chart-container">
+<div class="chart-header">
+<div>
+<div class="chart-title">EUR/USD</div>
+<span class="chart-price" id="dashPrice">1.0850</span>
+<span class="price-change up" id="dashChange">▲ +0.15%</span>
+</div>
+</div>
+<div class="chart-canvas">
+<canvas id="dashChart"></canvas>
+</div>
+</div>
+
+<div class="trade-sidebar">
+<h3 style="margin-bottom:1rem;">Operar Ahora</h3>
+<div class="trade-buttons">
+<button class="btn btn-buy btn-lg" onclick="openTrade('buy')">
+<i class="fa-solid fa-arrow-up"></i>
+COMPRAR
+</button>
+<button class="btn btn-sell btn-lg" onclick="openTrade('sell')">
 <i class="fa-solid fa-arrow-down"></i>
+VENDER
 </button>
 </div>
-</div>
-</section>
 
-<!-- ============ LEARNING BASICS ============ -->
-<section class="learning-basics" id="basics">
-<div class="section-header">
-<div class="section-badge">
-<i class="fa-solid fa-graduation-cap"></i> CONCEPTOS BÁSICOS
+<div class="trade-stats">
+<div class="trade-stat">
+<span class="trade-stat-label">Spread</span>
+<span class="trade-stat-value">0.8 pips</span>
 </div>
-<h2 class="section-title">Aprende los Fundamentos del Trading</h2>
-<p class="section-subtitle">
-Todo lo que necesitas saber para empezar a operar de forma inteligente
-</p>
+<div class="trade-stat">
+<span class="trade-stat-label">Apalancamiento</span>
+<span class="trade-stat-value">1:100</span>
 </div>
-
-<div class="basics-container">
-<div class="basics-grid">
-
-<!-- BUY -->
-<div class="basic-card">
-<div class="basic-icon">
-<i class="fa-solid fa-arrow-trend-up"></i>
-</div>
-<h3>Comprar (Buy / Long)</h3>
-<p class="basic-description">
-Comprar significa que esperas que el precio SUBA. Ganas dinero cuando el activo vale más de lo que pagaste.
-</p>
-<div class="basic-example">
-<div class="basic-example-label">Ejemplo</div>
-<div class="basic-example-text">
-Compras EUR/USD a <span class="example-highlight">1.0850</span><br>
-El precio sube a <span class="example-highlight">1.0900</span><br>
-<span class="example-highlight">✅ Ganaste porque el precio subió</span>
+<div class="trade-stat">
+<span class="trade-stat-label">Margen Usado</span>
+<span class="trade-stat-value">$245.00</span>
 </div>
 </div>
-</div>
-
-<!-- SELL -->
-<div class="basic-card">
-<div class="basic-icon">
-<i class="fa-solid fa-arrow-trend-down"></i>
-</div>
-<h3>Vender (Sell / Short)</h3>
-<p class="basic-description">
-Vender significa que esperas que el precio BAJE. Ganas dinero cuando el activo vale menos que cuando vendiste.
-</p>
-<div class="basic-example">
-<div class="basic-example-label">Ejemplo</div>
-<div class="basic-example-text">
-Vendes EUR/USD a <span class="example-highlight red">1.0850</span><br>
-El precio baja a <span class="example-highlight red">1.0800</span><br>
-<span class="example-highlight">✅ Ganaste porque el precio bajó</span>
-</div>
-</div>
-</div>
-
-<!-- STOP LOSS -->
-<div class="basic-card">
-<div class="basic-icon">
-<i class="fa-solid fa-shield-halved"></i>
-</div>
-<h3>Stop Loss (SL)</h3>
-<p class="basic-description">
-Es tu red de seguridad. Cierra automáticamente tu operación si el precio va en tu contra, limitando tus pérdidas.
-</p>
-<div class="basic-example">
-<div class="basic-example-label">Ejemplo</div>
-<div class="basic-example-text">
-Compras a 1.0850<br>
-Pones Stop Loss en <span class="example-highlight red">1.0800</span><br>
-Si el precio baja a 1.0800, se cierra automáticamente<br>
-<span class="example-highlight red">Pérdida máxima controlada: 50 pips</span>
-</div>
-</div>
-</div>
-
-<!-- TAKE PROFIT -->
-<div class="basic-card">
-<div class="basic-icon">
-<i class="fa-solid fa-bullseye"></i>
-</div>
-<h3>Take Profit (TP)</h3>
-<p class="basic-description">
-Es tu objetivo de ganancia. Cierra automáticamente tu operación cuando alcanzas el beneficio que buscabas.
-</p>
-<div class="basic-example">
-<div class="basic-example-label">Ejemplo</div>
-<div class="basic-example-text">
-Compras a 1.0850<br>
-Pones Take Profit en <span class="example-highlight">1.0950</span><br>
-Cuando el precio llega a 1.0950, se cierra automáticamente<br>
-<span class="example-highlight">✅ Ganancia asegurada: 100 pips</span>
-</div>
-</div>
-</div>
-
-<!-- LEVERAGE -->
-<div class="basic-card">
-<div class="basic-icon">
-<i class="fa-solid fa-chart-line"></i>
-</div>
-<h3>Apalancamiento (Leverage)</h3>
-<p class="basic-description">
-Te permite operar con más dinero del que tienes. Es como un préstamo automático para aumentar tu posición.
-</p>
-<div class="basic-example">
-<div class="basic-example-label">Ejemplo</div>
-<div class="basic-example-text">
-Tienes $1,000 en tu cuenta<br>
-Con apalancamiento 1:100 puedes operar <span class="example-highlight">$100,000</span><br>
-⚠️ <span class="example-highlight red">Aumenta ganancias pero también riesgos</span>
-</div>
-</div>
-</div>
-
-<!-- LOT SIZE -->
-<div class="basic-card">
-<div class="basic-icon">
-<i class="fa-solid fa-wallet"></i>
-</div>
-<h3>Tamaño de Lote (Lot Size)</h3>
-<p class="basic-description">
-Define cuánto dinero estás arriesgando en cada operación. A mayor lote, mayor ganancia o pérdida por cada movimiento.
-</p>
-<div class="basic-example">
-<div class="basic-example-label">Ejemplo</div>
-<div class="basic-example-text">
-<span class="example-highlight">Lote estándar (1.0)</span> = $100,000<br>
-<span class="example-highlight">Mini lote (0.1)</span> = $10,000<br>
-<span class="example-highlight">Micro lote (0.01)</span> = $1,000<br>
-Empieza con lotes pequeños para aprender
-</div>
-</div>
-</div>
-
 </div>
 </div>
 </section>
 
-<!-- ============ LIVE SIGNALS ============ -->
-<section class="signals-section" id="signals">
-<div class="section-header">
-<div class="section-badge pulse-badge">
-<i class="fa-solid fa-signal"></i> SEÑALES EN TIEMPO REAL
-</div>
-<h2 class="section-title">Datos Reales de TradingView</h2>
-<p class="section-subtitle">
-Forex, Oro, Petróleo y Plata con datos actualizados cada 5 segundos
-</p>
+<!-- SIGNALS PAGE -->
+<section id="signals" class="page-section">
+<div class="page-header">
+<h1 class="page-title">Señales de Trading en Tiempo Real</h1>
+<p class="page-subtitle">Señales educativas basadas en análisis técnico</p>
 </div>
 
-<div class="signals-grid" id="signalsGrid">
-<!-- Populated by JavaScript -->
+<div class="signals-container" id="signalsContainer">
+<!-- Signals populated by JavaScript -->
 </div>
 </section>
 
-<!-- ============ SIMULATOR ============ -->
-<section class="simulator" id="simulator">
-<div class="section-header">
-<div class="section-badge pulse-badge">
-<i class="fa-solid fa-gamepad"></i> SIMULADOR INTERACTIVO
-</div>
-<h2 class="section-title">Prueba Tu Primera Operación</h2>
-<p class="section-subtitle">
-Abre y cierra posiciones. Sin riesgo, sin dinero real. Aprende haciendo.
-</p>
+<!-- SIMULATOR PAGE -->
+<section id="simulator" class="page-section">
+<div class="page-header">
+<h1 class="page-title">Simulador de Trading</h1>
+<p class="page-subtitle">Practica sin riesgo con dinero virtual</p>
 </div>
 
-<div class="simulator-wrapper">
-<div class="chart-panel">
+<div class="trading-panel">
+<div class="chart-container">
 <div class="chart-header">
-<div class="pair-info">
-<div class="pair-name">EUR/USD</div>
-<div class="live-indicator">
-<div class="live-dot"></div>
-<span>EN VIVO</span>
+<div>
+<div class="chart-title">EUR/USD - Cuenta Demo</div>
+<span class="chart-price" id="simPrice">1.0850</span>
+<span class="price-change up" id="simChange">▲ +0.15%</span>
 </div>
 </div>
-<div class="price-display">
-<div class="current-price" id="simPrice">1.0850</div>
-<div class="price-change up" id="simChange">▲ +0.15%</div>
-</div>
-</div>
-
 <div class="chart-canvas">
 <canvas id="simChart"></canvas>
 </div>
 </div>
 
-<div class="trade-panel">
-<div class="trade-controls">
-<button class="trade-btn buy" id="buyBtn" onclick="openTrade('buy')">
+<div class="trade-sidebar">
+<h3 style="margin-bottom:1rem;">Panel de Trading</h3>
+<div class="trade-buttons">
+<button class="btn btn-buy btn-lg" id="simBuyBtn" onclick="simOpenTrade('buy')">
 <i class="fa-solid fa-arrow-up"></i>
-<span>COMPRAR</span>
+COMPRAR
 </button>
-<button class="trade-btn sell" id="sellBtn" onclick="openTrade('sell')">
+<button class="btn btn-sell btn-lg" id="simSellBtn" onclick="simOpenTrade('sell')">
 <i class="fa-solid fa-arrow-down"></i>
-<span>VENDER</span>
+VENDER
 </button>
 </div>
 
-<div class="sim-stats">
-<div class="sim-stat">
-<div class="sim-stat-label">Balance</div>
-<div class="sim-stat-value" id="balance">$10,000</div>
+<div class="trade-stats">
+<div class="trade-stat">
+<span class="trade-stat-label">Balance Demo</span>
+<span class="trade-stat-value" id="simBalance">$10,000</span>
 </div>
-<div class="sim-stat">
-<div class="sim-stat-label">P&L Total</div>
-<div class="sim-stat-value" id="totalPnl">$0</div>
+<div class="trade-stat">
+<span class="trade-stat-label">P&L Total</span>
+<span class="trade-stat-value" id="simPnl">$0.00</span>
 </div>
-<div class="sim-stat">
-<div class="sim-stat-label">Operaciones</div>
-<div class="sim-stat-value" id="tradeCount">0</div>
+<div class="trade-stat">
+<span class="trade-stat-label">Operaciones</span>
+<span class="trade-stat-value" id="simTrades">0</span>
 </div>
 </div>
 
-<div class="position-panel" id="positionPanel">
-<div class="position-header">
-<div class="position-type buy" id="posType">COMPRA</div>
-<button class="close-position-btn" onclick="closeTrade()">Cerrar</button>
+<div id="simPosition" style="display:none;margin-top:1rem;padding:1rem;background:rgba(0,212,255,0.1);border-radius:12px;">
+<div style="display:flex;justify-content:space-between;margin-bottom:1rem;">
+<strong id="simPosType">COMPRA</strong>
+<button class="btn btn-secondary btn-sm" onclick="simCloseTrade()">Cerrar</button>
 </div>
-<div class="position-details">
-<div class="position-detail">
-<div class="position-detail-label">Entrada</div>
-<div class="position-detail-value" id="entryPrice">1.0850</div>
-</div>
-<div class="position-detail">
-<div class="position-detail-label">Actual</div>
-<div class="position-detail-value" id="currentPricePos">1.0850</div>
-</div>
-<div class="position-detail">
-<div class="position-detail-label">P&L</div>
-<div class="position-detail-value" id="pnl">$0.00</div>
-</div>
-<div class="position-detail">
-<div class="position-detail-label">Duración</div>
-<div class="position-detail-value" id="duration">0s</div>
-</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.85rem;">
+<div>Entrada: <strong id="simEntry">1.0850</strong></div>
+<div>Actual: <strong id="simCurrent">1.0850</strong></div>
+<div>P&L: <strong id="simPosPnl" style="color:var(--green)">$0.00</strong></div>
+<div>Duración: <strong id="simDuration">0s</strong></div>
 </div>
 </div>
 </div>
 </div>
 </section>
 
-<!-- ============ CTA SECTION ============ -->
-<section class="cta-section">
-<div class="section-header">
-<h2 class="section-title">¿Listo para Comenzar?</h2>
-<p class="section-subtitle">
-Abre tu cuenta demo gratis y practica con dinero virtual. Sin riesgo, con acompañamiento profesional.
+<!-- GAMIFICATION PAGE -->
+<section id="gamification" class="page-section">
+<div class="page-header">
+<h1 class="page-title">Tu Perfil de Trader</h1>
+<p class="page-subtitle">Completa misiones y sube de nivel</p>
+</div>
+
+<div class="gamification-grid">
+<div class="profile-card">
+<div class="profile-avatar">JD</div>
+<div class="profile-name">John Doe</div>
+<div class="profile-level">Nivel 12 - Trader Pro</div>
+<div class="xp-bar">
+<div class="xp-progress" style="width:65%"></div>
+</div>
+<div class="xp-text">6,500 / 10,000 XP</div>
+</div>
+
+<div class="missions-card">
+<h3 class="missions-title">Misiones Activas</h3>
+
+<div class="mission-item">
+<div class="mission-info">
+<h4>Completa 5 trades simulados</h4>
+<div class="mission-reward"><i class="fa-solid fa-star"></i> +500 XP</div>
+</div>
+<div class="mission-progress">
+<div class="progress-bar-small">
+<div class="progress-fill-small" style="width:60%"></div>
+</div>
+<span style="font-size:0.85rem;color:var(--text-secondary)">3/5</span>
+</div>
+</div>
+
+<div class="mission-item">
+<div class="mission-info">
+<h4>Aprende sobre Stop Loss</h4>
+<div class="mission-reward"><i class="fa-solid fa-star"></i> +200 XP</div>
+</div>
+<div class="mission-progress">
+<div class="progress-bar-small">
+<div class="progress-fill-small" style="width:0%"></div>
+</div>
+<span style="font-size:0.85rem;color:var(--text-secondary)">0/1</span>
+</div>
+</div>
+
+<div class="mission-item">
+<div class="mission-info">
+<h4>Comparte una señal en comunidad</h4>
+<div class="mission-reward"><i class="fa-solid fa-star"></i> +100 XP</div>
+</div>
+<div class="mission-progress">
+<div class="progress-bar-small">
+<div class="progress-fill-small" style="width:100%"></div>
+</div>
+<span style="font-size:0.85rem;color:var(--green)">✓ Completada</span>
+</div>
+</div>
+</div>
+</div>
+
+<div class="badges-section">
+<h3 style="margin-bottom:1.5rem;">Insignias Desbloqueadas</h3>
+<div class="badges-grid">
+<div class="badge-item">
+<div class="badge-icon" style="color:var(--gold)">🥇</div>
+<div class="badge-name">Bronze Trader</div>
+</div>
+<div class="badge-item">
+<div class="badge-icon" style="color:var(--accent)">💎</div>
+<div class="badge-name">Silver Trader</div>
+</div>
+<div class="badge-item badge-locked">
+<div class="badge-icon">🏆</div>
+<div class="badge-name">Gold Trader</div>
+</div>
+<div class="badge-item badge-locked">
+<div class="badge-icon">👑</div>
+<div class="badge-name">Master Trader</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- RANKING PAGE -->
+<section id="ranking" class="page-section">
+<div class="page-header">
+<h1 class="page-title">Ranking Global</h1>
+<p class="page-subtitle">Los mejores traders de la comunidad</p>
+</div>
+
+<div class="card">
+<table style="width:100%;border-collapse:collapse;">
+<thead>
+<tr style="border-bottom:1px solid var(--border);">
+<th style="padding:1rem;text-align:left;">Posición</th>
+<th style="padding:1rem;text-align:left;">Usuario</th>
+<th style="padding:1rem;text-align:left;">Nivel</th>
+<th style="padding:1rem;text-align:left;">XP</th>
+<th style="padding:1rem;text-align:left;">Win Rate</th>
+</tr>
+</thead>
+<tbody id="rankingTable">
+<!-- Populated by JavaScript -->
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- COMMUNITY PAGE -->
+<section id="community" class="page-section">
+<div class="page-header">
+<h1 class="page-title">Comunidad</h1>
+<p class="page-subtitle">Comparte señales y aprende de otros traders</p>
+</div>
+
+<div class="community-container">
+<div class="feed-container">
+<div class="post-composer">
+<textarea placeholder="Comparte tu análisis, señal o pregunta..." rows="3" id="postInput"></textarea>
+<button class="btn btn-primary" onclick="createPost()">
+<i class="fa-solid fa-paper-plane"></i>
+Publicar
+</button>
+</div>
+
+<div id="feedContainer">
+<!-- Posts populated by JavaScript -->
+</div>
+</div>
+
+<div class="online-users">
+<div class="online-count">
+<div class="online-dot"></div>
+<strong id="onlineCount">247</strong> usuarios en línea
+</div>
+<div class="user-list" id="onlineUsersList">
+<!-- Users populated by JavaScript -->
+</div>
+</div>
+</div>
+</section>
+
+<!-- EDUCATION PAGE -->
+<section id="education" class="page-section">
+<div class="page-header">
+<h1 class="page-title">Academia de Trading</h1>
+<p class="page-subtitle">Aprende desde cero hasta trader profesional</p>
+</div>
+
+<div class="education-grid">
+<div class="lesson-card" onclick="showLessonModal('basics')">
+<div class="lesson-icon">
+<i class="fa-solid fa-book"></i>
+</div>
+<h3 class="lesson-title">Fundamentos del Trading</h3>
+<p class="lesson-description">
+Aprende qué es el trading, cómo funciona el mercado y conceptos básicos esenciales.
 </p>
+<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 15 minutos</div>
 </div>
 
-<div class="cta-buttons">
-<a href="https://registration.cfifinancial.com/mu/en/registration?promo=3569" target="_blank" class="btn-primary">
+<div class="lesson-card" onclick="showLessonModal('analysis')">
+<div class="lesson-icon">
+<i class="fa-solid fa-chart-line"></i>
+</div>
+<h3 class="lesson-title">Análisis Técnico</h3>
+<p class="lesson-description">
+Domina gráficos, indicadores, soportes, resistencias y patrones de velas.
+</p>
+<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 30 minutos</div>
+</div>
+
+<div class="lesson-card" onclick="showLessonModal('risk')">
+<div class="lesson-icon">
+<i class="fa-solid fa-shield-halved"></i>
+</div>
+<h3 class="lesson-title">Gestión de Riesgo</h3>
+<p class="lesson-description">
+Aprende a proteger tu capital con Stop Loss, Take Profit y tamaño de posición.
+</p>
+<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 20 minutos</div>
+</div>
+
+<div class="lesson-card" onclick="showLessonModal('leverage')">
+<div class="lesson-icon">
 <i class="fa-solid fa-rocket"></i>
-<span>Abrir Cuenta Ahora</span>
-</a>
-<a href="https://wa.me/573058362590?text=Hola,%20quiero%20aprender%20trading%20con%20CFI" target="_blank" class="btn-secondary">
-<i class="fa-brands fa-whatsapp"></i>
-<span>Hablar con Asesor</span>
-</a>
+</div>
+<h3 class="lesson-title">Apalancamiento</h3>
+<p class="lesson-description">
+Entiende cómo funciona el apalancamiento, sus ventajas y riesgos.
+</p>
+<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 15 minutos</div>
+</div>
+
+<div class="lesson-card" onclick="showLessonModal('psychology')">
+<div class="lesson-icon">
+<i class="fa-solid fa-brain"></i>
+</div>
+<h3 class="lesson-title">Psicología del Trader</h3>
+<p class="lesson-description">
+Controla emociones, evita errores comunes y desarrolla disciplina.
+</p>
+<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 25 minutos</div>
+</div>
+
+<div class="lesson-card" onclick="showLessonModal('strategies')">
+<div class="lesson-icon">
+<i class="fa-solid fa-chess"></i>
+</div>
+<h3 class="lesson-title">Estrategias de Trading</h3>
+<p class="lesson-description">
+Descubre estrategias probadas: scalping, day trading, swing trading.
+</p>
+<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 35 minutos</div>
+</div>
 </div>
 </section>
+
+</main>
+
+<!-- ============ AI CHAT WIDGET ============ -->
+<div class="chat-widget" id="chatWidget">
+<div class="chat-header">
+<div class="chat-title">
+<i class="fa-solid fa-robot"></i>
+Asesor IA
+</div>
+<button class="chat-close" onclick="toggleChat()">
+<i class="fa-solid fa-xmark"></i>
+</button>
+</div>
+<div class="chat-messages" id="chatMessages">
+<div class="chat-message bot">
+<div class="chat-avatar"><i class="fa-solid fa-robot"></i></div>
+<div class="chat-bubble">
+¡Hola! Soy tu asesor virtual. ¿En qué puedo ayudarte hoy?
+</div>
+</div>
+</div>
+<div class="chat-input-container">
+<input type="text" class="chat-input" id="chatInput" placeholder="Escribe tu pregunta..." onkeypress="handleChatEnter(event)">
+</div>
+</div>
+
+<!-- Chat Toggle Button -->
+<button class="btn btn-primary" style="position:fixed;bottom:100px;right:100px;border-radius:50%;width:60px;height:60px;z-index:999;box-shadow:0 5px 20px rgba(0,212,255,0.5);" onclick="toggleChat()">
+<i class="fa-solid fa-robot" style="font-size:1.5rem;"></i>
+</button>
+
+<!-- ============ WHATSAPP BUTTON ============ -->
+<a href="https://wa.me/573058362590?text=Hola,%20quiero%20aprender%20trading%20profesional%20con%20AI%20Trading%20Room%20Pro" target="_blank" class="whatsapp-float">
+<i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<!-- ============ NOTIFICATION ============ -->
+<div class="notification" id="notification">
+<div class="notification-content">
+<i class="fa-solid fa-bell notification-icon"></i>
+<div>
+<strong>Nueva señal disponible!</strong><br>
+<span style="font-size:0.85rem;color:var(--text-secondary);">EUR/USD - BUY con 85% confianza</span>
+</div>
+</div>
+</div>
 
 <script>
-// ============ PARTICLES ============
-function createParticles(){
-const container=document.getElementById('particles');
-for(let i=0;i<30;i++){
-const particle=document.createElement('div');
-particle.className='particle';
-particle.style.left=Math.random()*100+'%';
-particle.style.animationDuration=(Math.random()*10+10)+'s';
-particle.style.animationDelay=Math.random()*5+'s';
-container.appendChild(particle);
-}
-}
-createParticles();
+// ============ STATE MANAGEMENT ============
+const AppState={
+currentPage:'dashboard',
+user:{
+name:'John Doe',
+level:12,
+xp:6500,
+maxXp:10000,
+balance:10000,
+pnl:0,
+trades:0
+},
+signals:[],
+posts:[],
+onlineUsers:247,
+soundEnabled:true
+};
 
-// ============ QUIZ ============
-function selectAnswer(element, isCorrect){
-const options=document.querySelectorAll('.quiz-option');
-options.forEach(opt=>opt.style.pointerEvents='none');
-if(isCorrect){
-element.classList.add('correct');
+// ============ LOADER ============
+window.addEventListener('load',()=>{
 setTimeout(()=>{
-document.getElementById('quizResult').classList.add('show');
-},800);
-}else{
-element.style.opacity='0.5';
-element.style.border='2px solid var(--red)';
-}
+document.getElementById('loader').classList.add('hidden');
+initializeApp();
+},2000);
+});
+
+// ============ INITIALIZE APP ============
+function initializeApp(){
+generateSignals();
+generateRanking();
+generatePosts();
+generateOnlineUsers();
+initDashboardChart();
+initSimulatorChart();
+startLivePriceUpdates();
+startSignalGenerator();
 }
 
-function scrollToBasics(){
-document.getElementById('basics').scrollIntoView({behavior:'smooth'});
+// ============ NAVIGATION ============
+function navigateTo(page){
+document.querySelectorAll('.page-section').forEach(section=>{
+section.classList.remove('active');
+});
+document.querySelectorAll('.menu-item').forEach(item=>{
+item.classList.remove('active');
+});
+document.getElementById(page).classList.add('active');
+event.target.closest('.menu-item')?.classList.add('active');
+AppState.currentPage=page;
 }
 
-// ============ TRADINGVIEW SIGNALS ============
-
-const tradingPairs=[
-{symbol:'FX:EURUSD',name:'EUR/USD',icon:'💵'},
-{symbol:'FX:GBPUSD',name:'GBP/USD',icon:'💷'},
-{symbol:'TVC:GOLD',name:'ORO',icon:'🥇'},
-{symbol:'TVC:SILVER',name:'PLATA',icon:'⚪'},
-{symbol:'TVC:USOIL',name:'PETRÓLEO',icon:'🛢️'},
-{symbol:'CRYPTOCAP:BTC',name:'BITCOIN',icon:'₿'}
+// ============ SIGNAL GENERATOR ============
+const ASSETS=[
+{symbol:'EURUSD',name:'EUR/USD',category:'Forex'},
+{symbol:'GBPUSD',name:'GBP/USD',category:'Forex'},
+{symbol:'USDJPY',name:'USD/JPY',category:'Forex'},
+{symbol:'AUDUSD',name:'AUD/USD',category:'Forex'},
+{symbol:'XAUUSD',name:'ORO/USD',category:'Metales'},
+{symbol:'XAGUSD',name:'PLATA/USD',category:'Metales'},
+{symbol:'USOIL',name:'PETRÓLEO WTI',category:'Energía'},
+{symbol:'UKOIL',name:'PETRÓLEO BRENT',category:'Energía'},
+{symbol:'NAS100',name:'NASDAQ 100',category:'Índices'},
+{symbol:'SPX500',name:'S&P 500',category:'Índices'},
+{symbol:'US30',name:'DOW JONES',category:'Índices'},
+{symbol:'BTCUSD',name:'BITCOIN',category:'Cripto'},
+{symbol:'ETHUSD',name:'ETHEREUM',category:'Cripto'},
+{symbol:'AAPL',name:'APPLE',category:'Acciones'},
+{symbol:'TSLA',name:'TESLA',category:'Acciones'},
+{symbol:'GOOGL',name:'GOOGLE',category:'Acciones'},
+{symbol:'AMZN',name:'AMAZON',category:'Acciones'},
+{symbol:'MSFT',name:'MICROSOFT',category:'Acciones'}
 ];
 
-function initTradingViewSignals(){
-const grid=document.getElementById('signalsGrid');
-grid.innerHTML='';
+function generateSignals(){
+AppState.signals=[];
+const numSignals=8;
+const usedAssets=new Set();
 
-tradingPairs.forEach((pair,index)=>{
+for(let i=0;i<numSignals;i++){
+let asset;
+do{
+asset=ASSETS[Math.floor(Math.random()*ASSETS.length)];
+}while(usedAssets.has(asset.symbol)&&usedAssets.size<ASSETS.length);
+
+usedAssets.add(asset.symbol);
+
+const direction=Math.random()>0.5?'buy':'sell';
+const basePrice=getBasePrice(asset.symbol);
+const entry=basePrice*(1+(Math.random()-0.5)*0.02);
+const sl=direction==='buy'?entry*0.985:entry*1.015;
+const tp=direction==='buy'?entry*1.03:entry*0.97;
+const confidence=Math.floor(Math.random()*30)+70;
+const expiresIn=Math.floor(Math.random()*120)+30;
+
+AppState.signals.push({
+id:`sig-${Date.now()}-${i}`,
+asset:asset.name,
+symbol:asset.symbol,
+category:asset.category,
+direction,
+entry:entry.toFixed(getPrecision(asset.symbol)),
+sl:sl.toFixed(getPrecision(asset.symbol)),
+tp:tp.toFixed(getPrecision(asset.symbol)),
+confidence,
+expiresIn,
+timestamp:Date.now()
+});
+}
+
+renderSignals();
+}
+
+function getBasePrice(symbol){
+const prices={
+EURUSD:1.0850,GBPUSD:1.2645,USDJPY:149.85,AUDUSD:0.6540,
+XAUUSD:2315,XAGUSD:28.50,USOIL:78.20,UKOIL:82.40,
+NAS100:18250,SPX500:5120,US30:38950,
+BTCUSD:64500,ETHUSD:3150,
+AAPL:182.50,TSLA:175.20,GOOGL:158.30,AMZN:178.90,MSFT:425.80
+};
+return prices[symbol]||100;
+}
+
+function getPrecision(symbol){
+if(symbol.includes('JPY'))return 2;
+if(symbol.includes('XAU')||symbol.includes('XAG'))return 2;
+if(symbol.includes('USD')&&!symbol.includes('BTC')&&!symbol.includes('ETH'))return 4;
+return 2;
+}
+
+function renderSignals(){
+const container=document.getElementById('signalsContainer');
+container.innerHTML='';
+
+AppState.signals.forEach(signal=>{
 const card=document.createElement('div');
-card.className='signal-card neutral';
-card.id=`signal-${index}`;
+card.className=`signal-card ${signal.direction}`;
 card.innerHTML=`
+<div class="signal-icon-box">
+${signal.direction==='buy'?'↑':'↓'}
+</div>
+<div class="signal-info">
 <div class="signal-header">
-<div class="signal-pair">${pair.icon} ${pair.name}</div>
-<div class="signal-badge neutral">
-<div class="signal-icon"></div>
-<span>CARGANDO...</span>
+<div class="signal-asset">${signal.asset}</div>
+<div class="signal-direction ${signal.direction}">${signal.direction==='buy'?'COMPRAR':'VENDER'}</div>
+<div class="signal-confidence">${signal.confidence}% confianza</div>
+</div>
+<div class="signal-details">
+<div class="signal-detail">
+<div class="signal-label">Entrada</div>
+<div class="signal-value">${signal.entry}</div>
+</div>
+<div class="signal-detail">
+<div class="signal-label">Stop Loss</div>
+<div class="signal-value" style="color:var(--red)">${signal.sl}</div>
+</div>
+<div class="signal-detail">
+<div class="signal-label">Take Profit</div>
+<div class="signal-value" style="color:var(--green)">${signal.tp}</div>
 </div>
 </div>
-<div class="signal-price">---</div>
-<div class="signal-change">Obteniendo datos...</div>
-<div class="signal-chart-mini" id="mini-chart-${index}"></div>
-<div class="signal-reason">
-<div class="signal-reason-label">Análisis Técnico</div>
-<div class="signal-reason-text" id="reason-${index}">Calculando indicadores...</div>
+</div>
+<div class="signal-actions">
+<button class="btn btn-primary btn-sm" onclick="simulateFromSignal('${signal.id}')">
+<i class="fa-solid fa-play"></i> Simular
+</button>
+<button class="btn btn-secondary btn-sm" onclick="shareSignal('${signal.id}')">
+<i class="fa-solid fa-share"></i> Compartir
+</button>
 </div>
 `;
-grid.appendChild(card);
-
-// TradingView mini chart
-new TradingView.MediumWidget({
-container_id:`mini-chart-${index}`,
-symbols:[[pair.name,pair.symbol]],
-chartOnly:true,
-width:'100%',
-height:'80',
-locale:'es',
-colorTheme:'dark',
-gridLineColor:'rgba(255,255,255,0.06)',
-trendLineColor:'#00d4ff',
-fontColor:'#787B86',
-underLineColor:'rgba(0,212,255,0.3)',
-isTransparent:true,
-autosize:false,
-largeChartUrl:''
-});
-
-updateSignalData(index,pair);
-setInterval(()=>updateSignalData(index,pair),5000);
+container.appendChild(card);
 });
 }
 
-function updateSignalData(index,pair){
-const mockPrice=generateRealisticPrice(pair.symbol);
-const mockChange=(Math.random()-0.5)*2;
-const signal=determineSignal(mockChange);
+function startSignalGenerator(){
+setInterval(()=>{
+if(Math.random()>0.7){
+const asset=ASSETS[Math.floor(Math.random()*ASSETS.length)];
+const direction=Math.random()>0.5?'buy':'sell';
+const basePrice=getBasePrice(asset.symbol);
+const entry=basePrice*(1+(Math.random()-0.5)*0.02);
+const sl=direction==='buy'?entry*0.985:entry*1.015;
+const tp=direction==='buy'?entry*1.03:entry*0.97;
+const confidence=Math.floor(Math.random()*30)+70;
 
-const card=document.getElementById(`signal-${index}`);
-if(!card)return;
+AppState.signals.unshift({
+id:`sig-${Date.now()}`,
+asset:asset.name,
+symbol:asset.symbol,
+category:asset.category,
+direction,
+entry:entry.toFixed(getPrecision(asset.symbol)),
+sl:sl.toFixed(getPrecision(asset.symbol)),
+tp:tp.toFixed(getPrecision(asset.symbol)),
+confidence,
+expiresIn:Math.floor(Math.random()*120)+30,
+timestamp:Date.now()
+});
 
-card.className=`signal-card ${signal.type}`;
+if(AppState.signals.length>12)AppState.signals.pop();
 
-const badge=card.querySelector('.signal-badge');
-badge.className=`signal-badge ${signal.type}`;
-badge.querySelector('span').innerText=signal.label;
+if(AppState.currentPage==='signals')renderSignals();
 
-card.querySelector('.signal-price').innerText=mockPrice;
-
-const changeEl=card.querySelector('.signal-change');
-const changeClass=mockChange>=0?'up':'down';
-const changeSymbol=mockChange>=0?'▲':'▼';
-changeEl.className=`signal-change ${changeClass}`;
-changeEl.innerText=`${changeSymbol} ${Math.abs(mockChange).toFixed(2)}%`;
-
-document.getElementById(`reason-${index}`).innerText=signal.reason;
+showNotification(`Nueva señal: ${asset.name} - ${direction.toUpperCase()} con ${confidence}% confianza`);
+playNotificationSound();
+}
+},15000);
 }
 
-function generateRealisticPrice(symbol){
-if(symbol.includes('EURUSD'))return(1.08+Math.random()*0.02).toFixed(4);
-if(symbol.includes('GBPUSD'))return(1.26+Math.random()*0.02).toFixed(4);
-if(symbol.includes('GOLD'))return'$'+(2300+Math.random()*50).toFixed(2);
-if(symbol.includes('SILVER'))return'$'+(28+Math.random()*2).toFixed(2);
-if(symbol.includes('USOIL'))return'$'+(78+Math.random()*5).toFixed(2);
-if(symbol.includes('BTC'))return'$'+(64000+Math.random()*2000).toFixed(0);
-return'---';
-}
-
-function determineSignal(change){
-if(change>0.5)return{type:'buy',label:'COMPRAR',reason:'Momentum alcista + Volumen creciente + RSI < 70'};
-if(change<-0.5)return{type:'sell',label:'VENDER',reason:'Presión bajista + Ruptura soporte + RSI > 30'};
-return{type:'neutral',label:'ESPERAR',reason:'Mercado lateral sin tendencia clara'};
-}
-
-initTradingViewSignals();
-
-// ============ TRADING SIMULATOR ============
-
-let simBalance=10000;
-let simTotalPnl=0;
-let simTradeCount=0;
-let activePos=null;
-let posStartTime=null;
-let posDurationInterval=null;
-let simBasePrice=1.0850;
-let simCurrentPrice=simBasePrice;
+// ============ CHARTS ============
+let dashChart,simChart;
+let dashPrice=1.0850;
+let simPrice=1.0850;
 let candleData=[];
-let simChart=null;
+
+function initDashboardChart(){
+generateInitialCandles();
+const ctx=document.getElementById('dashChart').getContext('2d');
+dashChart=new Chart(ctx,{
+type:'candlestick',
+data:{
+datasets:[{
+label:'EUR/USD',
+data:candleData,
+color:{up:'#00ff88',down:'#ff3366',unchanged:'#8b92a8'}
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+plugins:{legend:{display:false}},
+scales:{
+x:{type:'time',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8b92a8'}},
+y:{position:'right',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8b92a8',precision:4}}
+}
+}
+});
+}
+
+function initSimulatorChart(){
+const ctx=document.getElementById('simChart').getContext('2d');
+simChart=new Chart(ctx,{
+type:'candlestick',
+data:{
+datasets:[{
+label:'EUR/USD',
+data:candleData,
+color:{up:'#00ff88',down:'#ff3366',unchanged:'#8b92a8'}
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+plugins:{legend:{display:false}},
+scales:{
+x:{type:'time',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8b92a8'}},
+y:{position:'right',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8b92a8',precision:4}}
+}
+}
+});
+}
 
 function generateInitialCandles(){
 const now=Date.now();
 let price=1.0850;
-for(let i=30;i>=0;i--){
+for(let i=40;i>=0;i--){
 const timestamp=now-(i*3000);
 const open=price;
-const movement=(Math.random()-0.5)*0.0015;
+const movement=(Math.random()-0.5)*0.002;
 price+=movement;
 const high=Math.max(open,price)+(Math.random()*0.0005);
 const low=Math.min(open,price)-(Math.random()*0.0005);
@@ -1373,64 +2021,43 @@ candleData.push({x:timestamp,o:open,h:high,l:low,c:close});
 }
 }
 
-function createSimChart(){
-const ctx=document.getElementById('simChart').getContext('2d');
-simChart=new Chart(ctx,{
-type:'candlestick',
-data:{
-datasets:[{
-label:'EUR/USD',
-data:candleData,
-color:{up:'#00ff88',down:'#ff3366',unchanged:'#8b8b9e'}
-}]
-},
-options:{
-responsive:true,
-maintainAspectRatio:false,
-plugins:{legend:{display:false}},
-scales:{
-x:{
-type:'time',
-time:{unit:'minute',displayFormats:{minute:'HH:mm'}},
-grid:{color:'rgba(255,255,255,0.05)'},
-ticks:{color:'#8b8b9e'}
-},
-y:{
-position:'right',
-grid:{color:'rgba(255,255,255,0.05)'},
-ticks:{color:'#8b8b9e',precision:4}
-}
-}
-}
-});
-}
-
 let currentCandle=null;
 let candleStartTime=Date.now();
 
-function updateSimPrice(){
-const priceEl=document.getElementById('simPrice');
-const changeEl=document.getElementById('simChange');
+function startLivePriceUpdates(){
+setInterval(()=>{
+const movement=(Math.random()-0.5)*0.0008;
+dashPrice+=movement;
+simPrice+=movement;
 
-let movement=(Math.random()-0.5)*0.0008;
-simBasePrice+=movement;
-if(simBasePrice<1.08)simBasePrice=1.08;
-if(simBasePrice>1.10)simBasePrice=1.10;
+if(dashPrice<1.08)dashPrice=1.08;
+if(dashPrice>1.10)dashPrice=1.10;
 
-simCurrentPrice=simBasePrice;
-priceEl.innerText=simCurrentPrice.toFixed(4);
+updatePriceDisplay();
+updateCandle();
+updateSimulator();
+},1500);
+}
 
-let percent=((simCurrentPrice-1.0850)/1.0850*100).toFixed(2);
+function updatePriceDisplay(){
+document.getElementById('dashPrice').innerText=dashPrice.toFixed(4);
+document.getElementById('simPrice').innerText=simPrice.toFixed(4);
+
+const percent=((dashPrice-1.0850)/1.0850*100).toFixed(2);
+const changeEl=document.getElementById('dashChange');
+const simChangeEl=document.getElementById('simChange');
+
 if(percent>=0){
 changeEl.innerHTML=`▲ +${percent}%`;
 changeEl.className='price-change up';
+simChangeEl.innerHTML=`▲ +${percent}%`;
+simChangeEl.className='price-change up';
 }else{
 changeEl.innerHTML=`▼ ${percent}%`;
 changeEl.className='price-change down';
+simChangeEl.innerHTML=`▼ ${percent}%`;
+simChangeEl.className='price-change down';
 }
-
-updateCandle();
-if(activePos)updatePositionPnl();
 }
 
 function updateCandle(){
@@ -1438,15 +2065,23 @@ const now=Date.now();
 if(!currentCandle||now-candleStartTime>3000){
 if(currentCandle){
 candleData.push(currentCandle);
-if(candleData.length>40)candleData.shift();
+if(candleData.length>50)candleData.shift();
 }
-currentCandle={x:now,o:simCurrentPrice,h:simCurrentPrice,l:simCurrentPrice,c:simCurrentPrice};
+currentCandle={x:now,o:dashPrice,h:dashPrice,l:dashPrice,c:dashPrice};
 candleStartTime=now;
 }else{
-currentCandle.c=simCurrentPrice;
-currentCandle.h=Math.max(currentCandle.h,simCurrentPrice);
-currentCandle.l=Math.min(currentCandle.l,simCurrentPrice);
+currentCandle.c=dashPrice;
+currentCandle.h=Math.max(currentCandle.h,dashPrice);
+currentCandle.l=Math.min(currentCandle.l,dashPrice);
 }
+
+if(dashChart){
+const tempData=[...candleData];
+if(currentCandle)tempData.push(currentCandle);
+dashChart.data.datasets[0].data=tempData;
+dashChart.update('none');
+}
+
 if(simChart){
 const tempData=[...candleData];
 if(currentCandle)tempData.push(currentCandle);
@@ -1455,93 +2090,398 @@ simChart.update('none');
 }
 }
 
-function openTrade(type){
-if(activePos){
+// ============ SIMULATOR ============
+let simPosition=null;
+let simDurationInterval=null;
+
+function simOpenTrade(type){
+if(simPosition){
 alert('⚠️ Ya tienes una operación abierta');
 return;
 }
-activePos={type:type,entryPrice:simCurrentPrice,entryTime:Date.now()};
-posStartTime=Date.now();
 
-const panel=document.getElementById('positionPanel');
-const typeLabel=document.getElementById('posType');
-const entryPriceLabel=document.getElementById('entryPrice');
+simPosition={
+type,
+entry:simPrice,
+startTime:Date.now()
+};
 
-panel.classList.add('active');
-typeLabel.innerText=type==='buy'?'COMPRA':'VENTA';
-typeLabel.className=`position-type ${type}`;
-entryPriceLabel.innerText=simCurrentPrice.toFixed(4);
+document.getElementById('simPosition').style.display='block';
+document.getElementById('simPosType').innerText=type==='buy'?'COMPRA':'VENTA';
+document.getElementById('simEntry').innerText=simPrice.toFixed(4);
+document.getElementById('simBuyBtn').disabled=true;
+document.getElementById('simSellBtn').disabled=true;
 
-document.getElementById('buyBtn').disabled=true;
-document.getElementById('sellBtn').disabled=true;
-
-posDurationInterval=setInterval(updateDuration,1000);
+simDurationInterval=setInterval(updateSimDuration,1000);
 }
 
-function closeTrade(){
-if(!activePos)return;
+function simCloseTrade(){
+if(!simPosition)return;
 
-let priceDiff=0;
-let pnl=0;
-if(activePos.type==='buy'){
-priceDiff=simCurrentPrice-activePos.entryPrice;
-}else{
-priceDiff=activePos.entryPrice-simCurrentPrice;
-}
-pnl=priceDiff*10000*10;
+const priceDiff=simPosition.type==='buy'
+?(simPrice-simPosition.entry)
+:(simPosition.entry-simPrice);
 
-simBalance+=pnl;
-simTotalPnl+=pnl;
-simTradeCount++;
+const pnl=priceDiff*10000*10;
 
-document.getElementById('balance').innerText=`$${simBalance.toFixed(2)}`;
-document.getElementById('totalPnl').innerText=`$${simTotalPnl.toFixed(2)}`;
-document.getElementById('tradeCount').innerText=simTradeCount;
+AppState.user.balance+=pnl;
+AppState.user.pnl+=pnl;
+AppState.user.trades++;
 
-const resultMsg=pnl>=0?`✅ ¡Ganancia! +$${pnl.toFixed(2)}`:`❌ Pérdida: $${pnl.toFixed(2)}`;
-const durationSec=Math.floor((Date.now()-activePos.entryTime)/1000);
-alert(`Operación cerrada\n${resultMsg}\nDuración: ${durationSec}s\nBalance: $${simBalance.toFixed(2)}`);
+document.getElementById('simBalance').innerText=`$${AppState.user.balance.toFixed(2)}`;
+document.getElementById('simPnl').innerText=`$${AppState.user.pnl.toFixed(2)}`;
+document.getElementById('simTrades').innerText=AppState.user.trades;
 
-activePos=null;
-clearInterval(posDurationInterval);
-document.getElementById('positionPanel').classList.remove('active');
-document.getElementById('buyBtn').disabled=false;
-document.getElementById('sellBtn').disabled=false;
+const duration=Math.floor((Date.now()-simPosition.startTime)/1000);
+alert(`Operación cerrada\n${pnl>=0?'✅':'❌'} ${pnl>=0?'Ganancia':'Pérdida'}: $${pnl.toFixed(2)}\nDuración: ${duration}s`);
+
+simPosition=null;
+clearInterval(simDurationInterval);
+document.getElementById('simPosition').style.display='none';
+document.getElementById('simBuyBtn').disabled=false;
+document.getElementById('simSellBtn').disabled=false;
 }
 
-function updatePositionPnl(){
-if(!activePos)return;
+function updateSimulator(){
+if(!simPosition)return;
 
-const currentPriceEl=document.getElementById('currentPricePos');
-const pnlEl=document.getElementById('pnl');
+document.getElementById('simCurrent').innerText=simPrice.toFixed(4);
 
-currentPriceEl.innerText=simCurrentPrice.toFixed(4);
+const priceDiff=simPosition.type==='buy'
+?(simPrice-simPosition.entry)
+:(simPosition.entry-simPrice);
 
-let priceDiff=0;
-let pnl=0;
-if(activePos.type==='buy'){
-priceDiff=simCurrentPrice-activePos.entryPrice;
-}else{
-priceDiff=activePos.entryPrice-simCurrentPrice;
-}
-pnl=priceDiff*10000*10;
+const pnl=priceDiff*10000*10;
 
+const pnlEl=document.getElementById('simPosPnl');
 pnlEl.innerText=`$${pnl.toFixed(2)}`;
-pnlEl.style.color=pnl>=0?'#00ff88':'#ff3366';
+pnlEl.style.color=pnl>=0?'var(--green)':'var(--red)';
 }
 
-function updateDuration(){
-if(!posStartTime)return;
-const elapsed=Math.floor((Date.now()-posStartTime)/1000);
+function updateSimDuration(){
+if(!simPosition)return;
+const elapsed=Math.floor((Date.now()-simPosition.startTime)/1000);
 const mins=Math.floor(elapsed/60);
 const secs=elapsed%60;
-document.getElementById('duration').innerText=mins>0?`${mins}m ${secs}s`:`${secs}s`;
+document.getElementById('simDuration').innerText=mins>0?`${mins}m ${secs}s`:`${secs}s`;
 }
 
-// Initialize simulator
-generateInitialCandles();
-createSimChart();
-setInterval(updateSimPrice,1500);
+function openTrade(type){
+alert(`Funcionalidad demo: Abrir posición ${type.toUpperCase()}\nVe al Simulador para practicar sin riesgo`);
+navigateTo('simulator');
+}
+
+function simulateFromSignal(signalId){
+navigateTo('simulator');
+alert('Señal cargada en el simulador. ¡Hora de practicar!');
+}
+
+function shareSignal(signalId){
+const signal=AppState.signals.find(s=>s.id===signalId);
+if(!signal)return;
+
+const post={
+id:`post-${Date.now()}`,
+author:'John Doe',
+avatar:'JD',
+time:'Ahora',
+content:`Acabo de compartir esta señal:`,
+signal:signal,
+likes:0,
+comments:[]
+};
+
+AppState.posts.unshift(post);
+renderPosts();
+navigateTo('community');
+alert('¡Señal compartida en la comunidad!');
+}
+
+// ============ RANKING ============
+function generateRanking(){
+const users=[
+{name:'TraderPro',level:25,xp:45000,winRate:78.5},
+{name:'MarketMaster',level:22,xp:38500,winRate:75.2},
+{name:'John Doe',level:12,xp:6500,winRate:68.5},
+{name:'CryptoKing',level:18,xp:22000,winRate:71.8},
+{name:'ForexNinja',level:15,xp:14200,winRate:69.3},
+{name:'WallStreetBull',level:20,xp:30000,winRate:73.1},
+{name:'SignalHunter',level:14,xp:11800,winRate:67.9},
+{name:'ChartWizard',level:16,xp:17500,winRate:70.2}
+];
+
+users.sort((a,b)=>b.xp-a.xp);
+
+const tbody=document.getElementById('rankingTable');
+tbody.innerHTML='';
+
+users.forEach((user,index)=>{
+const tr=document.createElement('tr');
+tr.style.borderBottom='1px solid var(--border)';
+if(user.name==='John Doe'){
+tr.style.background='rgba(0,212,255,0.1)';
+}
+
+let medal='';
+if(index===0)medal='🥇';
+else if(index===1)medal='🥈';
+else if(index===2)medal='🥉';
+
+tr.innerHTML=`
+<td style="padding:1rem;font-size:1.5rem;">${medal||index+1}</td>
+<td style="padding:1rem;font-weight:700;">${user.name}</td>
+<td style="padding:1rem;">Nivel ${user.level}</td>
+<td style="padding:1rem;font-family:JetBrains Mono;">${user.xp.toLocaleString()} XP</td>
+<td style="padding:1rem;color:var(--green);font-weight:700;">${user.winRate}%</td>
+`;
+tbody.appendChild(tr);
+});
+}
+
+// ============ COMMUNITY ============
+function generatePosts(){
+const samplePosts=[
+{
+author:'TraderPro',
+avatar:'TP',
+time:'Hace 5 min',
+content:'Excelente día de trading! 5/5 operaciones positivas en EUR/USD 🚀',
+likes:12,
+comments:3
+},
+{
+author:'MarketMaster',
+avatar:'MM',
+time:'Hace 15 min',
+content:'Cuidado con el oro hoy, hay mucha volatilidad por datos del FED.',
+likes:8,
+comments:2
+},
+{
+author:'CryptoKing',
+avatar:'CK',
+time:'Hace 1 hora',
+content:'Bitcoin rompiendo resistencia en $65,000. Momento interesante!',
+signal:{asset:'BITCOIN',direction:'buy',entry:'64,500',confidence:82},
+likes:24,
+comments:7
+}
+];
+
+AppState.posts=samplePosts.map((p,i)=>({
+id:`post-${i}`,
+author:p.author,
+avatar:p.avatar,
+time:p.time,
+content:p.content,
+signal:p.signal,
+likes:p.likes,
+comments:p.comments||0
+}));
+
+renderPosts();
+}
+
+function renderPosts(){
+const container=document.getElementById('feedContainer');
+container.innerHTML='';
+
+AppState.posts.forEach(post=>{
+const card=document.createElement('div');
+card.className='post-card';
+card.innerHTML=`
+<div class="post-header">
+<div class="post-avatar">${post.avatar}</div>
+<div class="post-author">
+<div class="post-name">${post.author}</div>
+<div class="post-time">${post.time}</div>
+</div>
+</div>
+<div class="post-content">${post.content}</div>
+${post.signal?`
+<div class="post-signal">
+<strong>${post.signal.asset}</strong> - ${post.signal.direction.toUpperCase()}<br>
+Entrada: ${post.signal.entry} | Confianza: ${post.signal.confidence}%
+</div>
+`:''}
+<div class="post-actions">
+<div class="post-action" onclick="likePost('${post.id}')">
+<i class="fa-solid fa-heart"></i> ${post.likes}
+</div>
+<div class="post-action">
+<i class="fa-solid fa-comment"></i> ${post.comments}
+</div>
+<div class="post-action">
+<i class="fa-solid fa-share"></i> Compartir
+</div>
+</div>
+`;
+container.appendChild(card);
+});
+}
+
+function createPost(){
+const input=document.getElementById('postInput');
+const content=input.value.trim();
+if(!content)return;
+
+const post={
+id:`post-${Date.now()}`,
+author:'John Doe',
+avatar:'JD',
+time:'Ahora',
+content:content,
+likes:0,
+comments:0
+};
+
+AppState.posts.unshift(post);
+renderPosts();
+input.value='';
+alert('✅ Publicación compartida!');
+}
+
+function likePost(postId){
+const post=AppState.posts.find(p=>p.id===postId);
+if(post){
+post.likes++;
+renderPosts();
+}
+}
+
+function generateOnlineUsers(){
+const users=['TraderPro','MarketMaster','CryptoKing','ForexNinja','ChartWizard','SignalHunter'];
+const container=document.getElementById('onlineUsersList');
+container.innerHTML='';
+
+users.forEach(user=>{
+const div=document.createElement('div');
+div.className='user-item';
+div.innerHTML=`
+<div class="user-item-avatar">${user.substring(0,2).toUpperCase()}</div>
+<div>${user}</div>
+`;
+container.appendChild(div);
+});
+
+setInterval(()=>{
+AppState.onlineUsers=Math.floor(Math.random()*50)+220;
+document.getElementById('onlineCount').innerText=AppState.onlineUsers;
+},10000);
+}
+
+// ============ AI CHAT ============
+let chatOpen=false;
+
+function toggleChat(){
+chatOpen=!chatOpen;
+document.getElementById('chatWidget').classList.toggle('open',chatOpen);
+}
+
+function handleChatEnter(event){
+if(event.key==='Enter'){
+sendChatMessage();
+}
+}
+
+function sendChatMessage(){
+const input=document.getElementById('chatInput');
+const message=input.value.trim();
+if(!message)return;
+
+addChatMessage(message,'user');
+input.value='';
+
+setTimeout(()=>{
+showTyping();
+setTimeout(()=>{
+removeTyping();
+const response=getChatResponse(message);
+addChatMessage(response,'bot');
+},1500);
+},500);
+}
+
+function addChatMessage(text,type){
+const container=document.getElementById('chatMessages');
+const div=document.createElement('div');
+div.className=`chat-message ${type}`;
+div.innerHTML=`
+<div class="chat-avatar">
+<i class="fa-solid fa-${type==='bot'?'robot':'user'}"></i>
+</div>
+<div class="chat-bubble">${text}</div>
+`;
+container.appendChild(div);
+container.scrollTop=container.scrollHeight;
+}
+
+function showTyping(){
+const container=document.getElementById('chatMessages');
+const div=document.createElement('div');
+div.className='chat-message bot typing-message';
+div.innerHTML=`
+<div class="chat-avatar"><i class="fa-solid fa-robot"></i></div>
+<div class="typing-indicator">
+<div class="typing-dot"></div>
+<div class="typing-dot"></div>
+<div class="typing-dot"></div>
+</div>
+`;
+container.appendChild(div);
+container.scrollTop=container.scrollHeight;
+}
+
+function removeTyping(){
+const typing=document.querySelector('.typing-message');
+if(typing)typing.remove();
+}
+
+function getChatResponse(message){
+const msg=message.toLowerCase();
+
+if(msg.includes('hola')||msg.includes('hi'))
+return'¡Hola! Estoy aquí para ayudarte. ¿Quieres aprender sobre trading o tienes alguna pregunta?';
+
+if(msg.includes('empezar')||msg.includes('comenzar'))
+return'Te recomiendo empezar por la sección de Educación. Allí encontrarás lecciones desde lo básico hasta estrategias avanzadas.';
+
+if(msg.includes('señal'))
+return'Puedes ver las señales en tiempo real en la sección "Señales de Trading". Todas incluyen entrada, SL, TP y nivel de confianza.';
+
+if(msg.includes('simulador'))
+return'El simulador te permite practicar sin riesgo con dinero virtual. Ve a la sección Simulador y comienza a operar!';
+
+if(msg.includes('riesgo')||msg.includes('stop loss'))
+return'El Stop Loss es tu red de seguridad. Limita tus pérdidas cerrando automáticamente la operación si va en tu contra. ¡Nunca operes sin SL!';
+
+if(msg.includes('cuenta')||msg.includes('registro'))
+return'Para abrir tu cuenta real, haz clic en el botón de WhatsApp y un asesor te guiará paso a paso.';
+
+return'Interesante pregunta. Te recomiendo revisar la sección de Educación o contactar con un asesor humano vía WhatsApp para una respuesta personalizada.';
+}
+
+// ============ NOTIFICATIONS ============
+function showNotification(message){
+const notification=document.getElementById('notification');
+notification.querySelector('.notification-content div strong').nextSibling.textContent=message;
+notification.classList.add('show');
+setTimeout(()=>{
+notification.classList.remove('show');
+},5000);
+}
+
+function playNotificationSound(){
+if(!AppState.soundEnabled)return;
+// Sound would play here if audio file is available
+// const audio=new Audio('assets/sounds/notification.mp3');
+// audio.play();
+}
+
+// ============ EDUCATION ============
+function showLessonModal(lesson){
+alert(`Lección: ${lesson}\n\nEsta sección abriría el contenido educativo completo.\nPor ahora es una demo.`);
+}
 
 </script>
 
