@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Trading Room Pro - Plataforma Educativa de Trading</title>
+<title>AI Trading Room Pro - Plataforma Multiusuario</title>
 
 <!-- FONT AWESOME -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
@@ -11,11 +11,8 @@
 <!-- GOOGLE FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-<!-- CHART.JS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial@0.2.0/dist/chartjs-chart-financial.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
+<!-- EMAILJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
 <style>
 :root{
@@ -26,12 +23,10 @@
 --text-primary:#ffffff;
 --text-secondary:#8b92a8;
 --accent:#00d4ff;
---accent-hover:#00b8e6;
 --green:#00ff88;
 --red:#ff3366;
 --gold:#ffd700;
 --purple:#a78bfa;
---blue:#3b82f6;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -43,63 +38,154 @@ color:var(--text-primary);
 overflow-x:hidden;
 }
 
-/* ============ LOADER ============ */
-.loader-screen{
+/* ============ LOGIN SCREEN ============ */
+.login-screen{
 position:fixed;
 inset:0;
-background:var(--bg-primary);
+background:linear-gradient(135deg,rgba(0,212,255,0.1),rgba(167,139,250,0.1));
+backdrop-filter:blur(100px);
 display:flex;
-flex-direction:column;
 align-items:center;
 justify-content:center;
 z-index:10000;
-transition:opacity 0.5s;
 }
 
-.loader-screen.hidden{
-opacity:0;
-pointer-events:none;
+.login-screen.hidden{
+display:none;
 }
 
-.loader-logo{
-font-size:3rem;
+.login-container{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:24px;
+padding:3rem;
+max-width:450px;
+width:90%;
+}
+
+.login-logo{
+text-align:center;
+margin-bottom:2rem;
+}
+
+.login-title{
+font-size:2.5rem;
 font-weight:900;
 background:linear-gradient(135deg,var(--accent),var(--purple));
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-margin-bottom:2rem;
-animation:pulse 2s ease infinite;
 }
 
-@keyframes pulse{
-0%,100%{transform:scale(1);}
-50%{transform:scale(1.05);}
-}
-
-.loader-bar{
-width:300px;
-height:4px;
-background:rgba(255,255,255,0.1);
-border-radius:10px;
-overflow:hidden;
-}
-
-.loader-progress{
-height:100%;
-background:linear-gradient(90deg,var(--accent),var(--purple));
-width:0%;
-animation:loading 2s ease-in-out forwards;
-}
-
-@keyframes loading{
-0%{width:0%;}
-100%{width:100%;}
-}
-
-.loader-text{
-margin-top:1rem;
+.login-subtitle{
 color:var(--text-secondary);
+margin-top:0.5rem;
+}
+
+.login-form{
+display:flex;
+flex-direction:column;
+gap:1.5rem;
+margin-top:2rem;
+}
+
+.form-group{
+display:flex;
+flex-direction:column;
+gap:0.5rem;
+}
+
+.form-label{
+font-weight:600;
 font-size:0.9rem;
+}
+
+.form-input{
+padding:1rem;
+background:var(--bg-secondary);
+border:1px solid var(--border);
+border-radius:12px;
+color:var(--text-primary);
+font-size:1rem;
+font-family:'Inter',sans-serif;
+transition:all 0.3s;
+}
+
+.form-input:focus{
+outline:none;
+border-color:var(--accent);
+box-shadow:0 0 0 3px rgba(0,212,255,0.1);
+}
+
+.btn-login{
+padding:1rem 2rem;
+background:linear-gradient(135deg,var(--accent),var(--purple));
+border:none;
+border-radius:12px;
+color:var(--text-primary);
+font-weight:700;
+font-size:1.1rem;
+cursor:pointer;
+transition:all 0.3s;
+}
+
+.btn-login:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 30px rgba(0,212,255,0.4);
+}
+
+.btn-login:disabled{
+opacity:0.6;
+cursor:not-allowed;
+}
+
+.login-divider{
+text-align:center;
+color:var(--text-secondary);
+margin:1.5rem 0;
+position:relative;
+}
+
+.login-divider::before,
+.login-divider::after{
+content:'';
+position:absolute;
+top:50%;
+width:40%;
+height:1px;
+background:var(--border);
+}
+
+.login-divider::before{left:0;}
+.login-divider::after{right:0;}
+
+.admin-link{
+margin-top:1rem;
+text-align:center;
+}
+
+.admin-link a{
+color:var(--accent);
+text-decoration:none;
+font-size:0.9rem;
+}
+
+.admin-link a:hover{
+text-decoration:underline;
+}
+
+/* ============ LOADING SPINNER ============ */
+.spinner{
+display:inline-block;
+width:20px;
+height:20px;
+border:3px solid rgba(255,255,255,0.3);
+border-radius:50%;
+border-top-color:var(--text-primary);
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg);}
 }
 
 /* ============ NAVBAR ============ */
@@ -143,12 +229,6 @@ gap:1rem;
 padding:0.5rem 1rem;
 background:var(--bg-card);
 border-radius:12px;
-cursor:pointer;
-transition:all 0.3s;
-}
-
-.nav-user:hover{
-background:var(--bg-secondary);
 }
 
 .user-avatar{
@@ -160,9 +240,10 @@ display:flex;
 align-items:center;
 justify-content:center;
 font-weight:700;
+font-size:0.9rem;
 }
 
-.user-level{
+.user-info{
 display:flex;
 flex-direction:column;
 }
@@ -172,126 +253,53 @@ font-weight:700;
 font-size:0.9rem;
 }
 
-.user-rank{
-font-size:0.75rem;
-color:var(--text-secondary);
-}
-
-/* ============ SIDEBAR ============ */
-.sidebar{
-position:fixed;
-left:0;
-top:70px;
-bottom:0;
-width:280px;
-background:var(--bg-secondary);
-border-right:1px solid var(--border);
-overflow-y:auto;
-z-index:999;
-transition:transform 0.3s;
-}
-
-.sidebar-section{
-padding:1.5rem 1rem;
-border-bottom:1px solid var(--border);
-}
-
-.sidebar-title{
-font-size:0.75rem;
-font-weight:700;
-color:var(--text-secondary);
-text-transform:uppercase;
-letter-spacing:1px;
-margin-bottom:1rem;
-}
-
-.sidebar-menu{
-display:flex;
-flex-direction:column;
-gap:0.5rem;
-}
-
-.menu-item{
-display:flex;
-align-items:center;
-gap:1rem;
-padding:0.75rem 1rem;
-border-radius:12px;
+.btn-logout{
+padding:0.5rem 1rem;
+background:rgba(255,51,102,0.1);
+border:1px solid var(--red);
+border-radius:8px;
+color:var(--red);
+font-weight:600;
 cursor:pointer;
-transition:all 0.3s;
-color:var(--text-secondary);
 }
 
-.menu-item:hover{
-background:var(--bg-card);
-color:var(--text-primary);
-}
-
-.menu-item.active{
-background:var(--bg-card);
-color:var(--accent);
-border-left:3px solid var(--accent);
-}
-
-.menu-icon{
-font-size:1.2rem;
-width:24px;
-text-align:center;
-}
-
-/* ============ MAIN CONTENT ============ */
-.main-content{
-margin-left:280px;
-margin-top:70px;
-padding:2rem;
-min-height:calc(100vh - 70px);
-}
-
-.page-section{
+/* ============ ADMIN PANEL ============ */
+.admin-panel{
+position:fixed;
+inset:0;
+z-index:10000;
 display:none;
-animation:fadeIn 0.5s ease;
+overflow-y:auto;
 }
 
-.page-section.active{
+.admin-panel.active{
 display:block;
 }
 
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(20px);}
-to{opacity:1;transform:translateY(0);}
+.admin-container{
+padding:2rem;
+max-width:1400px;
+margin:0 auto;
 }
 
-.page-header{
+.admin-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
 margin-bottom:2rem;
+padding-bottom:1.5rem;
+border-bottom:2px solid var(--border);
 }
 
-.page-title{
-font-size:2rem;
+.admin-title{
+font-size:2.5rem;
 font-weight:900;
-margin-bottom:0.5rem;
+background:linear-gradient(135deg,var(--gold),var(--accent));
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
-.page-subtitle{
-color:var(--text-secondary);
-font-size:1rem;
-}
-
-/* ============ CARDS ============ */
-.card{
-background:var(--bg-card);
-border:1px solid var(--border);
-border-radius:16px;
-padding:1.5rem;
-}
-
-.card-glass{
-background:rgba(26,31,46,0.6);
-backdrop-filter:blur(20px);
-border:1px solid rgba(255,255,255,0.1);
-}
-
-/* ============ DASHBOARD GRID ============ */
-.dashboard-grid{
+.admin-stats{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:1.5rem;
@@ -303,823 +311,178 @@ background:var(--bg-card);
 border:1px solid var(--border);
 border-radius:16px;
 padding:1.5rem;
-display:flex;
-justify-content:space-between;
-align-items:center;
-transition:all 0.3s;
 }
 
-.stat-card:hover{
-transform:translateY(-5px);
-box-shadow:0 10px 30px rgba(0,212,255,0.2);
-}
-
-.stat-info h3{
-font-size:0.85rem;
+.stat-label{
 color:var(--text-secondary);
+font-size:0.85rem;
 margin-bottom:0.5rem;
 }
 
 .stat-value{
-font-size:2rem;
+font-size:2.5rem;
 font-weight:900;
 }
 
-.stat-icon{
-font-size:2.5rem;
-opacity:0.3;
-}
-
-/* ============ SIGNALS ============ */
-.signals-container{
-display:grid;
-gap:1rem;
-}
-
-.signal-card{
+.users-table{
 background:var(--bg-card);
 border:1px solid var(--border);
 border-radius:16px;
 padding:1.5rem;
-display:grid;
-grid-template-columns:auto 1fr auto;
-gap:1.5rem;
-align-items:center;
-transition:all 0.3s;
-position:relative;
-overflow:hidden;
+overflow-x:auto;
 }
 
-.signal-card::before{
-content:'';
-position:absolute;
-top:0;
-left:0;
-width:4px;
-height:100%;
-}
-
-.signal-card.buy::before{
-background:var(--green);
-}
-
-.signal-card.sell::before{
-background:var(--red);
-}
-
-.signal-icon-box{
-width:60px;
-height:60px;
-border-radius:12px;
+.table-header{
 display:flex;
+justify-content:space-between;
 align-items:center;
-justify-content:center;
-font-size:1.5rem;
+margin-bottom:1.5rem;
+flex-wrap:wrap;
+gap:1rem;
+}
+
+.search-input{
+padding:0.75rem 1rem;
+background:var(--bg-secondary);
+border:1px solid var(--border);
+border-radius:12px;
+color:var(--text-primary);
+width:300px;
+}
+
+.btn-export{
+padding:0.75rem 1.5rem;
+background:var(--green);
+border:none;
+border-radius:12px;
+color:var(--bg-primary);
 font-weight:700;
+cursor:pointer;
 }
 
-.signal-card.buy .signal-icon-box{
-background:rgba(0,255,136,0.1);
-color:var(--green);
+table{
+width:100%;
+border-collapse:collapse;
 }
 
-.signal-card.sell .signal-icon-box{
-background:rgba(255,51,102,0.1);
-color:var(--red);
+th{
+text-align:left;
+padding:1rem;
+border-bottom:1px solid var(--border);
+color:var(--text-secondary);
+font-size:0.85rem;
+text-transform:uppercase;
+letter-spacing:0.5px;
 }
 
-.signal-info{
-flex:1;
+td{
+padding:1rem;
+border-bottom:1px solid var(--border);
 }
 
-.signal-header{
+.user-cell{
 display:flex;
 align-items:center;
 gap:1rem;
-margin-bottom:0.75rem;
 }
 
-.signal-asset{
-font-size:1.2rem;
-font-weight:800;
+.user-avatar-small{
+width:35px;
+height:35px;
+border-radius:50%;
+background:linear-gradient(135deg,var(--accent),var(--purple));
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+font-size:0.8rem;
 }
 
-.signal-direction{
+.status-badge{
 padding:0.25rem 0.75rem;
-border-radius:6px;
+border-radius:999px;
 font-size:0.75rem;
 font-weight:700;
-text-transform:uppercase;
 }
 
-.signal-direction.buy{
+.status-online{
 background:rgba(0,255,136,0.2);
 color:var(--green);
 }
 
-.signal-direction.sell{
-background:rgba(255,51,102,0.2);
-color:var(--red);
+.status-offline{
+background:rgba(139,139,158,0.2);
+color:var(--text-secondary);
 }
 
-.signal-confidence{
-padding:0.25rem 0.75rem;
-border-radius:6px;
-font-size:0.75rem;
+.btn-action{
+padding:0.5rem 1rem;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:600;
+transition:all 0.3s;
+}
+
+.btn-view{
 background:rgba(0,212,255,0.1);
 color:var(--accent);
-font-weight:700;
 }
 
-.signal-details{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:1rem;
-font-size:0.85rem;
+.btn-view:hover{
+background:rgba(0,212,255,0.2);
 }
 
-.signal-detail{
-display:flex;
-flex-direction:column;
-gap:0.25rem;
-}
-
-.signal-label{
-color:var(--text-secondary);
-font-size:0.75rem;
-}
-
-.signal-value{
-font-weight:700;
-font-family:'JetBrains Mono',monospace;
-}
-
-.signal-actions{
-display:flex;
-flex-direction:column;
-gap:0.5rem;
-}
-
-.btn{
-padding:0.75rem 1.5rem;
-border:none;
-border-radius:12px;
-font-weight:700;
-cursor:pointer;
-transition:all 0.3s;
-display:inline-flex;
-align-items:center;
-justify-content:center;
-gap:0.5rem;
-white-space:nowrap;
-}
-
-.btn-primary{
-background:var(--accent);
-color:var(--bg-primary);
-}
-
-.btn-primary:hover{
-background:var(--accent-hover);
-transform:translateY(-2px);
-box-shadow:0 5px 20px rgba(0,212,255,0.4);
-}
-
-.btn-secondary{
-background:rgba(255,255,255,0.05);
-color:var(--text-primary);
-border:1px solid var(--border);
-}
-
-.btn-secondary:hover{
-background:rgba(255,255,255,0.1);
-}
-
-.btn-sm{
-padding:0.5rem 1rem;
-font-size:0.85rem;
-}
-
-/* ============ TRADING CHART ============ */
-.trading-panel{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:2rem;
-margin-bottom:2rem;
-}
-
-.chart-container{
-background:var(--bg-card);
-border:1px solid var(--border);
-border-radius:16px;
-padding:1.5rem;
-}
-
-.chart-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:1.5rem;
-}
-
-.chart-title{
-font-size:1.5rem;
-font-weight:800;
-}
-
-.chart-price{
-font-size:2rem;
-font-weight:900;
-font-family:'JetBrains Mono',monospace;
-}
-
-.price-change{
-font-size:1rem;
-font-weight:700;
-margin-left:1rem;
-}
-
-.price-change.up{
-color:var(--green);
-}
-
-.price-change.down{
-color:var(--red);
-}
-
-.chart-canvas{
-height:400px;
-}
-
-.trade-sidebar{
-background:var(--bg-card);
-border:1px solid var(--border);
-border-radius:16px;
-padding:1.5rem;
-display:flex;
-flex-direction:column;
-gap:1.5rem;
-}
-
-.trade-buttons{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:1rem;
-}
-
-.btn-buy{
-background:var(--green);
-color:var(--bg-primary);
-}
-
-.btn-buy:hover{
-background:#00e67a;
-box-shadow:0 5px 20px rgba(0,255,136,0.4);
-}
-
-.btn-sell{
-background:var(--red);
-color:var(--text-primary);
-}
-
-.btn-sell:hover{
-background:#ff1a52;
-box-shadow:0 5px 20px rgba(255,51,102,0.4);
-}
-
-.trade-stats{
-display:flex;
-flex-direction:column;
-gap:1rem;
-}
-
-.trade-stat{
-display:flex;
-justify-content:space-between;
-padding:0.75rem;
-background:var(--bg-secondary);
-border-radius:8px;
-}
-
-.trade-stat-label{
-color:var(--text-secondary);
-font-size:0.85rem;
-}
-
-.trade-stat-value{
-font-weight:700;
-font-family:'JetBrains Mono',monospace;
-}
-
-/* ============ GAMIFICATION ============ */
-.gamification-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:2rem;
-margin-bottom:2rem;
-}
-
-.profile-card{
-background:linear-gradient(135deg,rgba(0,212,255,0.1),rgba(167,139,250,0.1));
-border:1px solid var(--border);
-border-radius:16px;
-padding:2rem;
-text-align:center;
-}
-
-.profile-avatar{
-width:100px;
-height:100px;
-margin:0 auto 1rem;
-border-radius:50%;
-background:linear-gradient(135deg,var(--accent),var(--purple));
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:3rem;
-font-weight:900;
-}
-
-.profile-name{
-font-size:1.5rem;
-font-weight:800;
-margin-bottom:0.5rem;
-}
-
-.profile-level{
-font-size:1rem;
-color:var(--accent);
-font-weight:700;
-margin-bottom:1.5rem;
-}
-
-.xp-bar{
-width:100%;
-height:10px;
-background:rgba(255,255,255,0.1);
-border-radius:10px;
-overflow:hidden;
-margin-bottom:0.5rem;
-}
-
-.xp-progress{
-height:100%;
-background:linear-gradient(90deg,var(--accent),var(--purple));
-border-radius:10px;
-transition:width 0.5s;
-}
-
-.xp-text{
-font-size:0.85rem;
-color:var(--text-secondary);
-}
-
-.missions-card{
-background:var(--bg-card);
-border:1px solid var(--border);
-border-radius:16px;
-padding:1.5rem;
-}
-
-.missions-title{
-font-size:1.2rem;
-font-weight:800;
-margin-bottom:1.5rem;
-}
-
-.mission-item{
-padding:1rem;
-background:var(--bg-secondary);
-border-radius:12px;
-margin-bottom:1rem;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.mission-info h4{
-font-size:1rem;
-margin-bottom:0.5rem;
-}
-
-.mission-reward{
-font-size:0.85rem;
-color:var(--gold);
-font-weight:700;
-}
-
-.mission-progress{
-text-align:right;
-}
-
-.progress-bar-small{
-width:100px;
-height:6px;
-background:rgba(255,255,255,0.1);
-border-radius:10px;
-margin-bottom:0.5rem;
-overflow:hidden;
-}
-
-.progress-fill-small{
-height:100%;
-background:var(--accent);
-border-radius:10px;
-}
-
-.badges-section{
-margin-top:2rem;
-}
-
-.badges-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:1rem;
-}
-
-.badge-item{
-background:var(--bg-secondary);
-border:1px solid var(--border);
-border-radius:12px;
-padding:1rem;
-text-align:center;
-transition:all 0.3s;
-}
-
-.badge-item:hover{
-transform:translateY(-5px);
-box-shadow:0 10px 30px rgba(0,212,255,0.2);
-}
-
-.badge-icon{
-font-size:2rem;
-margin-bottom:0.5rem;
-}
-
-.badge-name{
-font-size:0.85rem;
-font-weight:700;
-}
-
-.badge-locked{
-opacity:0.3;
-}
-
-/* ============ COMMUNITY FEED ============ */
-.community-container{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:2rem;
-}
-
-.feed-container{
-display:flex;
-flex-direction:column;
-gap:1rem;
-}
-
-.post-composer{
-background:var(--bg-card);
-border:1px solid var(--border);
-border-radius:16px;
-padding:1.5rem;
-margin-bottom:1rem;
-}
-
-.post-composer textarea{
-width:100%;
-background:var(--bg-secondary);
-border:1px solid var(--border);
-border-radius:12px;
-padding:1rem;
-color:var(--text-primary);
-font-family:'Inter',sans-serif;
-resize:none;
-margin-bottom:1rem;
-}
-
-.post-card{
-background:var(--bg-card);
-border:1px solid var(--border);
-border-radius:16px;
-padding:1.5rem;
-}
-
-.post-header{
-display:flex;
-align-items:center;
-gap:1rem;
-margin-bottom:1rem;
-}
-
-.post-avatar{
-width:40px;
-height:40px;
-border-radius:50%;
-background:linear-gradient(135deg,var(--accent),var(--purple));
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:700;
-}
-
-.post-author{
-flex:1;
-}
-
-.post-name{
-font-weight:700;
-}
-
-.post-time{
-font-size:0.85rem;
-color:var(--text-secondary);
-}
-
-.post-content{
-margin-bottom:1rem;
-line-height:1.6;
-}
-
-.post-signal{
-background:var(--bg-secondary);
-border-left:3px solid var(--accent);
-padding:1rem;
-border-radius:8px;
-margin:1rem 0;
-}
-
-.post-actions{
-display:flex;
-gap:1.5rem;
-padding-top:1rem;
-border-top:1px solid var(--border);
-}
-
-.post-action{
-display:flex;
-align-items:center;
-gap:0.5rem;
-cursor:pointer;
-color:var(--text-secondary);
-transition:all 0.3s;
-}
-
-.post-action:hover{
-color:var(--accent);
-}
-
-.online-users{
-background:var(--bg-card);
-border:1px solid var(--border);
-border-radius:16px;
-padding:1.5rem;
-height:fit-content;
-}
-
-.online-count{
-display:flex;
-align-items:center;
-gap:0.5rem;
-margin-bottom:1.5rem;
-}
-
-.online-dot{
-width:10px;
-height:10px;
-border-radius:50%;
-background:var(--green);
-animation:blink 2s infinite;
-}
-
-@keyframes blink{
-0%,100%{opacity:1;}
-50%{opacity:0.3;}
-}
-
-.user-list{
-display:flex;
-flex-direction:column;
-gap:0.75rem;
-}
-
-.user-item{
-display:flex;
-align-items:center;
-gap:0.75rem;
-padding:0.5rem;
-border-radius:8px;
-transition:all 0.3s;
-}
-
-.user-item:hover{
-background:var(--bg-secondary);
-}
-
-.user-item-avatar{
-width:32px;
-height:32px;
-border-radius:50%;
-background:var(--accent);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:0.85rem;
-font-weight:700;
-}
-
-/* ============ EDUCATION ============ */
-.education-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:1.5rem;
-}
-
-.lesson-card{
-background:var(--bg-card);
-border:1px solid var(--border);
-border-radius:16px;
-padding:1.5rem;
-transition:all 0.3s;
-cursor:pointer;
-}
-
-.lesson-card:hover{
-transform:translateY(-5px);
-border-color:var(--accent);
-box-shadow:0 10px 30px rgba(0,212,255,0.2);
-}
-
-.lesson-icon{
-width:60px;
-height:60px;
-border-radius:12px;
-background:linear-gradient(135deg,rgba(0,212,255,0.2),rgba(167,139,250,0.2));
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:2rem;
-margin-bottom:1rem;
-}
-
-.lesson-title{
-font-size:1.2rem;
-font-weight:800;
-margin-bottom:0.75rem;
-}
-
-.lesson-description{
-color:var(--text-secondary);
-line-height:1.6;
-margin-bottom:1rem;
-}
-
-.lesson-duration{
-font-size:0.85rem;
-color:var(--accent);
-font-weight:700;
-}
-
-/* ============ AI CHAT WIDGET ============ */
-.chat-widget{
+/* ============ NOTIFICATION TOAST ============ */
+.toast-notification{
 position:fixed;
-bottom:100px;
+top:90px;
 right:30px;
-width:380px;
-height:500px;
 background:var(--bg-card);
-border:1px solid var(--border);
-border-radius:20px;
-box-shadow:0 20px 60px rgba(0,0,0,0.5);
-display:flex;
-flex-direction:column;
-z-index:1001;
-transform:translateY(600px);
+border:2px solid var(--green);
+border-radius:16px;
+padding:1.5rem;
+min-width:350px;
+box-shadow:0 10px 40px rgba(0,0,0,0.5);
+z-index:10001;
+transform:translateX(500px);
 transition:transform 0.3s;
 }
 
-.chat-widget.open{
-transform:translateY(0);
+.toast-notification.show{
+transform:translateX(0);
 }
 
-.chat-header{
-padding:1rem 1.5rem;
-background:linear-gradient(135deg,var(--accent),var(--purple));
-border-radius:20px 20px 0 0;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.chat-title{
-font-weight:700;
+.toast-header{
 display:flex;
 align-items:center;
-gap:0.5rem;
-}
-
-.chat-close{
-background:rgba(255,255,255,0.2);
-border:none;
-width:30px;
-height:30px;
-border-radius:50%;
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-}
-
-.chat-messages{
-flex:1;
-overflow-y:auto;
-padding:1.5rem;
-display:flex;
-flex-direction:column;
 gap:1rem;
+margin-bottom:0.75rem;
 }
 
-.chat-message{
-display:flex;
-gap:0.75rem;
-}
-
-.chat-message.bot{
-align-self:flex-start;
-}
-
-.chat-message.user{
-align-self:flex-end;
-flex-direction:row-reverse;
-}
-
-.chat-avatar{
-width:36px;
-height:36px;
+.toast-icon{
+width:40px;
+height:40px;
 border-radius:50%;
-background:var(--accent);
+background:var(--green);
 display:flex;
 align-items:center;
 justify-content:center;
-flex-shrink:0;
-}
-
-.chat-bubble{
-background:var(--bg-secondary);
-padding:0.75rem 1rem;
-border-radius:12px;
-max-width:70%;
-}
-
-.chat-message.user .chat-bubble{
-background:var(--accent);
 color:var(--bg-primary);
+font-size:1.2rem;
 }
 
-.chat-input-container{
-padding:1rem;
-border-top:1px solid var(--border);
+.toast-title{
+font-weight:700;
+font-size:1.1rem;
 }
 
-.chat-input{
-width:100%;
-padding:0.75rem;
-background:var(--bg-secondary);
-border:1px solid var(--border);
-border-radius:12px;
-color:var(--text-primary);
-font-family:'Inter',sans-serif;
+.toast-message{
+color:var(--text-secondary);
+line-height:1.5;
 }
 
-.typing-indicator{
-display:flex;
-gap:0.25rem;
-padding:0.75rem 1rem;
-}
-
-.typing-dot{
-width:8px;
-height:8px;
-border-radius:50%;
-background:var(--text-secondary);
-animation:typing 1.4s infinite;
-}
-
-.typing-dot:nth-child(2){
-animation-delay:0.2s;
-}
-
-.typing-dot:nth-child(3){
-animation-delay:0.4s;
-}
-
-@keyframes typing{
-0%,60%,100%{transform:translateY(0);}
-30%{transform:translateY(-10px);}
-}
-
-/* ============ WHATSAPP BUTTON ============ */
+/* ============ WHATSAPP ============ */
 .whatsapp-float{
 position:fixed;
 bottom:30px;
@@ -1137,1350 +500,497 @@ box-shadow:0 5px 20px rgba(37,211,102,0.5);
 cursor:pointer;
 z-index:1000;
 animation:pulse-whatsapp 2s infinite;
+text-decoration:none;
 }
 
 @keyframes pulse-whatsapp{
-0%,100%{transform:scale(1);box-shadow:0 5px 20px rgba(37,211,102,0.5);}
-50%{transform:scale(1.1);box-shadow:0 8px 30px rgba(37,211,102,0.8);}
+0%,100%{transform:scale(1);}
+50%{transform:scale(1.1);}
 }
 
-.whatsapp-float:hover{
-background:#20ba5a;
-}
-
-/* ============ NOTIFICATION ============ */
-.notification{
-position:fixed;
-top:90px;
-right:30px;
-background:var(--bg-card);
-border:1px solid var(--border);
-border-left:4px solid var(--accent);
-border-radius:12px;
-padding:1rem 1.5rem;
-box-shadow:0 10px 30px rgba(0,0,0,0.5);
-z-index:1002;
-transform:translateX(500px);
-transition:transform 0.3s;
-}
-
-.notification.show{
-transform:translateX(0);
-}
-
-.notification-content{
-display:flex;
-align-items:center;
-gap:1rem;
-}
-
-.notification-icon{
-font-size:1.5rem;
-color:var(--accent);
-}
-
-/* ============ MOBILE RESPONSIVE ============ */
-@media(max-width:1024px){
-
-.sidebar{
-transform:translateX(-100%);
-}
-
-.sidebar.open{
-transform:translateX(0);
-}
-
-.main-content{
-margin-left:0;
-}
-
-.trading-panel,.gamification-grid,.community-container{
-grid-template-columns:1fr;
-}
-
-.chat-widget{
-width:100%;
-right:0;
-left:0;
-bottom:0;
-border-radius:20px 20px 0 0;
-}
-
-}
-
+/* ============ MOBILE ============ */
 @media(max-width:768px){
-
-.navbar{
-padding:0 1rem;
-}
-
-.main-content{
+.admin-container{
 padding:1rem;
 }
 
-.dashboard-grid,.signals-details,.badges-grid{
-grid-template-columns:1fr;
+.search-input{
+width:100%;
 }
 
-.trade-buttons{
-grid-template-columns:1fr;
+table{
+font-size:0.85rem;
 }
 
+td,th{
+padding:0.5rem;
+}
 }
 
 </style>
 </head>
 <body>
 
-<!-- ============ LOADER SCREEN ============ -->
-<div class="loader-screen" id="loader">
-<div class="loader-logo">
-<i class="fa-solid fa-rocket"></i> AI Trading Room Pro
-</div>
-<div class="loader-bar">
-<div class="loader-progress"></div>
-</div>
-<div class="loader-text">Conectando a datos de mercado...</div>
-</div>
-
-<!-- ============ NAVBAR ============ -->
-<nav class="navbar">
-<div class="nav-brand">
-<i class="fa-solid fa-rocket"></i>
+<!-- ============ LOGIN SCREEN ============ -->
+<div class="login-screen" id="loginScreen">
+<div class="login-container">
+<div class="login-logo">
+<div class="login-title">
+<i class="fa-solid fa-rocket"></i><br>
 AI Trading Room Pro
 </div>
-<div class="nav-actions">
-<div class="nav-user" onclick="navigateTo('gamification')">
-<div class="user-avatar">JD</div>
-<div class="user-level">
-<div class="user-name">John Doe</div>
-<div class="user-rank">Nivel 12 - Trader Pro</div>
-</div>
-</div>
-</div>
-</nav>
-
-<!-- ============ SIDEBAR ============ -->
-<aside class="sidebar" id="sidebar">
-<div class="sidebar-section">
-<div class="sidebar-title">Principal</div>
-<div class="sidebar-menu">
-<div class="menu-item active" onclick="navigateTo('dashboard')">
-<i class="fa-solid fa-chart-line menu-icon"></i>
-<span>Dashboard</span>
-</div>
-<div class="menu-item" onclick="navigateTo('signals')">
-<i class="fa-solid fa-signal menu-icon"></i>
-<span>Señales de Trading</span>
-</div>
-<div class="menu-item" onclick="navigateTo('simulator')">
-<i class="fa-solid fa-gamepad menu-icon"></i>
-<span>Simulador</span>
-</div>
-</div>
+<p class="login-subtitle">Únete a la comunidad de traders</p>
 </div>
 
-<div class="sidebar-section">
-<div class="sidebar-title">Gamificación</div>
-<div class="sidebar-menu">
-<div class="menu-item" onclick="navigateTo('gamification')">
-<i class="fa-solid fa-trophy menu-icon"></i>
-<span>Perfil & Misiones</span>
+<form class="login-form" onsubmit="handleLogin(event)" id="registrationForm">
+<div class="form-group">
+<label class="form-label">Nombre de usuario</label>
+<input type="text" class="form-input" id="loginUsername" placeholder="TraderPro123" required>
 </div>
-<div class="menu-item" onclick="navigateTo('ranking')">
-<i class="fa-solid fa-ranking-star menu-icon"></i>
-<span>Ranking Global</span>
+
+<div class="form-group">
+<label class="form-label">Email</label>
+<input type="email" class="form-input" id="loginEmail" placeholder="tu@email.com" required>
+</div>
+
+<div class="form-group">
+<label class="form-label">WhatsApp (opcional)</label>
+<input type="tel" class="form-input" id="loginPhone" placeholder="+57 300 123 4567">
+</div>
+
+<button type="submit" class="btn-login" id="submitBtn">
+<i class="fa-solid fa-rocket"></i> Crear Cuenta y Entrar
+</button>
+</form>
+
+<div class="admin-link">
+<a href="#" onclick="showAdminLogin(event)">
+<i class="fa-solid fa-shield-halved"></i> Acceso Admin
+</a>
 </div>
 </div>
 </div>
 
-<div class="sidebar-section">
-<div class="sidebar-title">Comunidad</div>
-<div class="sidebar-menu">
-<div class="menu-item" onclick="navigateTo('community')">
-<i class="fa-solid fa-users menu-icon"></i>
-<span>Feed</span>
+<!-- ============ ADMIN LOGIN ============ -->
+<div class="login-screen hidden" id="adminLoginScreen">
+<div class="login-container">
+<div class="login-logo">
+<div class="login-title">
+<i class="fa-solid fa-shield-halved"></i><br>
+Panel Admin
 </div>
-<div class="menu-item" onclick="navigateTo('education')">
-<i class="fa-solid fa-graduation-cap menu-icon"></i>
-<span>Educación</span>
-</div>
-</div>
-</div>
-</aside>
-
-<!-- ============ MAIN CONTENT ============ -->
-<main class="main-content">
-
-<!-- DASHBOARD PAGE -->
-<section id="dashboard" class="page-section active">
-<div class="page-header">
-<h1 class="page-title">Dashboard</h1>
-<p class="page-subtitle">Visión general de tu actividad de trading</p>
+<p class="login-subtitle">Acceso solo para administradores</p>
 </div>
 
-<div class="dashboard-grid">
-<div class="stat-card">
-<div class="stat-info">
-<h3>Balance</h3>
-<div class="stat-value" style="color:var(--accent)">$10,245.50</div>
-</div>
-<i class="fa-solid fa-wallet stat-icon"></i>
+<form class="login-form" onsubmit="handleAdminLogin(event)">
+<div class="form-group">
+<label class="form-label">Contraseña de Admin</label>
+<input type="password" class="form-input" id="adminPassword" placeholder="Ingresa la contraseña" required>
 </div>
 
-<div class="stat-card">
-<div class="stat-info">
-<h3>P&L Hoy</h3>
-<div class="stat-value" style="color:var(--green)">+$342.80</div>
-</div>
-<i class="fa-solid fa-arrow-trend-up stat-icon"></i>
-</div>
+<button type="submit" class="btn-login">
+<i class="fa-solid fa-lock-open"></i> Acceder
+</button>
+</form>
 
-<div class="stat-card">
-<div class="stat-info">
-<h3>Operaciones</h3>
-<div class="stat-value">127</div>
+<div class="admin-link">
+<a href="#" onclick="backToLogin(event)">
+<i class="fa-solid fa-arrow-left"></i> Volver al login
+</a>
 </div>
-<i class="fa-solid fa-chart-simple stat-icon"></i>
-</div>
-
-<div class="stat-card">
-<div class="stat-info">
-<h3>Win Rate</h3>
-<div class="stat-value" style="color:var(--purple)">68.5%</div>
-</div>
-<i class="fa-solid fa-percent stat-icon"></i>
 </div>
 </div>
 
-<div class="trading-panel">
-<div class="chart-container">
-<div class="chart-header">
+<!-- ============ ADMIN PANEL ============ -->
+<div class="admin-panel" id="adminPanel">
+<div class="admin-container">
+<div class="admin-header">
 <div>
-<div class="chart-title">EUR/USD</div>
-<span class="chart-price" id="dashPrice">1.0850</span>
-<span class="price-change up" id="dashChange">▲ +0.15%</span>
+<div class="admin-title">
+<i class="fa-solid fa-shield-halved"></i> Panel de Administración
 </div>
+<p style="color:var(--text-secondary);margin-top:0.5rem;">Gestión completa de usuarios - CFI Trading Room</p>
 </div>
-<div class="chart-canvas">
-<canvas id="dashChart"></canvas>
-</div>
-</div>
-
-<div class="trade-sidebar">
-<h3 style="margin-bottom:1rem;">Operar Ahora</h3>
-<div class="trade-buttons">
-<button class="btn btn-buy btn-lg" onclick="openTrade('buy')">
-<i class="fa-solid fa-arrow-up"></i>
-COMPRAR
-</button>
-<button class="btn btn-sell btn-lg" onclick="openTrade('sell')">
-<i class="fa-solid fa-arrow-down"></i>
-VENDER
+<button class="btn-logout" onclick="logoutAdmin()">
+<i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
 </button>
 </div>
 
-<div class="trade-stats">
-<div class="trade-stat">
-<span class="trade-stat-label">Spread</span>
-<span class="trade-stat-value">0.8 pips</span>
+<div class="admin-stats">
+<div class="stat-card">
+<div class="stat-label">Total Usuarios</div>
+<div class="stat-value" style="color:var(--accent)" id="adminTotalUsers">0</div>
 </div>
-<div class="trade-stat">
-<span class="trade-stat-label">Apalancamiento</span>
-<span class="trade-stat-value">1:100</span>
+<div class="stat-card">
+<div class="stat-label">Registros Hoy</div>
+<div class="stat-value" style="color:var(--green)" id="adminTodayUsers">0</div>
 </div>
-<div class="trade-stat">
-<span class="trade-stat-label">Margen Usado</span>
-<span class="trade-stat-value">$245.00</span>
+<div class="stat-card">
+<div class="stat-label">Usuarios Activos</div>
+<div class="stat-value" style="color:var(--purple)" id="adminActiveUsers">0</div>
 </div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- SIGNALS PAGE -->
-<section id="signals" class="page-section">
-<div class="page-header">
-<h1 class="page-title">Señales de Trading en Tiempo Real</h1>
-<p class="page-subtitle">Señales educativas basadas en análisis técnico</p>
-</div>
-
-<div class="signals-container" id="signalsContainer">
-<!-- Signals populated by JavaScript -->
-</div>
-</section>
-
-<!-- SIMULATOR PAGE -->
-<section id="simulator" class="page-section">
-<div class="page-header">
-<h1 class="page-title">Simulador de Trading</h1>
-<p class="page-subtitle">Practica sin riesgo con dinero virtual</p>
-</div>
-
-<div class="trading-panel">
-<div class="chart-container">
-<div class="chart-header">
-<div>
-<div class="chart-title">EUR/USD - Cuenta Demo</div>
-<span class="chart-price" id="simPrice">1.0850</span>
-<span class="price-change up" id="simChange">▲ +0.15%</span>
-</div>
-</div>
-<div class="chart-canvas">
-<canvas id="simChart"></canvas>
+<div class="stat-card">
+<div class="stat-label">Total Operaciones</div>
+<div class="stat-value" style="color:var(--gold)" id="adminTotalTrades">0</div>
 </div>
 </div>
 
-<div class="trade-sidebar">
-<h3 style="margin-bottom:1rem;">Panel de Trading</h3>
-<div class="trade-buttons">
-<button class="btn btn-buy btn-lg" id="simBuyBtn" onclick="simOpenTrade('buy')">
-<i class="fa-solid fa-arrow-up"></i>
-COMPRAR
-</button>
-<button class="btn btn-sell btn-lg" id="simSellBtn" onclick="simOpenTrade('sell')">
-<i class="fa-solid fa-arrow-down"></i>
-VENDER
+<div class="users-table">
+<div class="table-header">
+<h2>Lista de Usuarios Registrados</h2>
+<div style="display:flex;gap:1rem;flex-wrap:wrap;">
+<input type="text" class="search-input" placeholder="Buscar usuario..." id="searchInput" onkeyup="searchUsers()">
+<button class="btn-export" onclick="exportUsersToCSV()">
+<i class="fa-solid fa-download"></i> Exportar CSV
 </button>
 </div>
-
-<div class="trade-stats">
-<div class="trade-stat">
-<span class="trade-stat-label">Balance Demo</span>
-<span class="trade-stat-value" id="simBalance">$10,000</span>
-</div>
-<div class="trade-stat">
-<span class="trade-stat-label">P&L Total</span>
-<span class="trade-stat-value" id="simPnl">$0.00</span>
-</div>
-<div class="trade-stat">
-<span class="trade-stat-label">Operaciones</span>
-<span class="trade-stat-value" id="simTrades">0</span>
-</div>
 </div>
 
-<div id="simPosition" style="display:none;margin-top:1rem;padding:1rem;background:rgba(0,212,255,0.1);border-radius:12px;">
-<div style="display:flex;justify-content:space-between;margin-bottom:1rem;">
-<strong id="simPosType">COMPRA</strong>
-<button class="btn btn-secondary btn-sm" onclick="simCloseTrade()">Cerrar</button>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.85rem;">
-<div>Entrada: <strong id="simEntry">1.0850</strong></div>
-<div>Actual: <strong id="simCurrent">1.0850</strong></div>
-<div>P&L: <strong id="simPosPnl" style="color:var(--green)">$0.00</strong></div>
-<div>Duración: <strong id="simDuration">0s</strong></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- GAMIFICATION PAGE -->
-<section id="gamification" class="page-section">
-<div class="page-header">
-<h1 class="page-title">Tu Perfil de Trader</h1>
-<p class="page-subtitle">Completa misiones y sube de nivel</p>
-</div>
-
-<div class="gamification-grid">
-<div class="profile-card">
-<div class="profile-avatar">JD</div>
-<div class="profile-name">John Doe</div>
-<div class="profile-level">Nivel 12 - Trader Pro</div>
-<div class="xp-bar">
-<div class="xp-progress" style="width:65%"></div>
-</div>
-<div class="xp-text">6,500 / 10,000 XP</div>
-</div>
-
-<div class="missions-card">
-<h3 class="missions-title">Misiones Activas</h3>
-
-<div class="mission-item">
-<div class="mission-info">
-<h4>Completa 5 trades simulados</h4>
-<div class="mission-reward"><i class="fa-solid fa-star"></i> +500 XP</div>
-</div>
-<div class="mission-progress">
-<div class="progress-bar-small">
-<div class="progress-fill-small" style="width:60%"></div>
-</div>
-<span style="font-size:0.85rem;color:var(--text-secondary)">3/5</span>
-</div>
-</div>
-
-<div class="mission-item">
-<div class="mission-info">
-<h4>Aprende sobre Stop Loss</h4>
-<div class="mission-reward"><i class="fa-solid fa-star"></i> +200 XP</div>
-</div>
-<div class="mission-progress">
-<div class="progress-bar-small">
-<div class="progress-fill-small" style="width:0%"></div>
-</div>
-<span style="font-size:0.85rem;color:var(--text-secondary)">0/1</span>
-</div>
-</div>
-
-<div class="mission-item">
-<div class="mission-info">
-<h4>Comparte una señal en comunidad</h4>
-<div class="mission-reward"><i class="fa-solid fa-star"></i> +100 XP</div>
-</div>
-<div class="mission-progress">
-<div class="progress-bar-small">
-<div class="progress-fill-small" style="width:100%"></div>
-</div>
-<span style="font-size:0.85rem;color:var(--green)">✓ Completada</span>
-</div>
-</div>
-</div>
-</div>
-
-<div class="badges-section">
-<h3 style="margin-bottom:1.5rem;">Insignias Desbloqueadas</h3>
-<div class="badges-grid">
-<div class="badge-item">
-<div class="badge-icon" style="color:var(--gold)">🥇</div>
-<div class="badge-name">Bronze Trader</div>
-</div>
-<div class="badge-item">
-<div class="badge-icon" style="color:var(--accent)">💎</div>
-<div class="badge-name">Silver Trader</div>
-</div>
-<div class="badge-item badge-locked">
-<div class="badge-icon">🏆</div>
-<div class="badge-name">Gold Trader</div>
-</div>
-<div class="badge-item badge-locked">
-<div class="badge-icon">👑</div>
-<div class="badge-name">Master Trader</div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- RANKING PAGE -->
-<section id="ranking" class="page-section">
-<div class="page-header">
-<h1 class="page-title">Ranking Global</h1>
-<p class="page-subtitle">Los mejores traders de la comunidad</p>
-</div>
-
-<div class="card">
-<table style="width:100%;border-collapse:collapse;">
+<table id="usersTable">
 <thead>
-<tr style="border-bottom:1px solid var(--border);">
-<th style="padding:1rem;text-align:left;">Posición</th>
-<th style="padding:1rem;text-align:left;">Usuario</th>
-<th style="padding:1rem;text-align:left;">Nivel</th>
-<th style="padding:1rem;text-align:left;">XP</th>
-<th style="padding:1rem;text-align:left;">Win Rate</th>
+<tr>
+<th>Usuario</th>
+<th>Email</th>
+<th>WhatsApp</th>
+<th>Fecha Registro</th>
+<th>Nivel</th>
+<th>Balance</th>
+<th>Estado</th>
+<th>Acciones</th>
 </tr>
 </thead>
-<tbody id="rankingTable">
+<tbody id="usersTableBody">
 <!-- Populated by JavaScript -->
 </tbody>
 </table>
 </div>
-</section>
-
-<!-- COMMUNITY PAGE -->
-<section id="community" class="page-section">
-<div class="page-header">
-<h1 class="page-title">Comunidad</h1>
-<p class="page-subtitle">Comparte señales y aprende de otros traders</p>
-</div>
-
-<div class="community-container">
-<div class="feed-container">
-<div class="post-composer">
-<textarea placeholder="Comparte tu análisis, señal o pregunta..." rows="3" id="postInput"></textarea>
-<button class="btn btn-primary" onclick="createPost()">
-<i class="fa-solid fa-paper-plane"></i>
-Publicar
-</button>
-</div>
-
-<div id="feedContainer">
-<!-- Posts populated by JavaScript -->
 </div>
 </div>
 
-<div class="online-users">
-<div class="online-count">
-<div class="online-dot"></div>
-<strong id="onlineCount">247</strong> usuarios en línea
+<!-- ============ NOTIFICATION TOAST ============ -->
+<div class="toast-notification" id="toast">
+<div class="toast-header">
+<div class="toast-icon">
+<i class="fa-solid fa-user-plus"></i>
 </div>
-<div class="user-list" id="onlineUsersList">
-<!-- Users populated by JavaScript -->
+<div class="toast-title">Nuevo Registro</div>
 </div>
-</div>
-</div>
-</section>
-
-<!-- EDUCATION PAGE -->
-<section id="education" class="page-section">
-<div class="page-header">
-<h1 class="page-title">Academia de Trading</h1>
-<p class="page-subtitle">Aprende desde cero hasta trader profesional</p>
-</div>
-
-<div class="education-grid">
-<div class="lesson-card" onclick="showLessonModal('basics')">
-<div class="lesson-icon">
-<i class="fa-solid fa-book"></i>
-</div>
-<h3 class="lesson-title">Fundamentos del Trading</h3>
-<p class="lesson-description">
-Aprende qué es el trading, cómo funciona el mercado y conceptos básicos esenciales.
-</p>
-<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 15 minutos</div>
-</div>
-
-<div class="lesson-card" onclick="showLessonModal('analysis')">
-<div class="lesson-icon">
-<i class="fa-solid fa-chart-line"></i>
-</div>
-<h3 class="lesson-title">Análisis Técnico</h3>
-<p class="lesson-description">
-Domina gráficos, indicadores, soportes, resistencias y patrones de velas.
-</p>
-<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 30 minutos</div>
-</div>
-
-<div class="lesson-card" onclick="showLessonModal('risk')">
-<div class="lesson-icon">
-<i class="fa-solid fa-shield-halved"></i>
-</div>
-<h3 class="lesson-title">Gestión de Riesgo</h3>
-<p class="lesson-description">
-Aprende a proteger tu capital con Stop Loss, Take Profit y tamaño de posición.
-</p>
-<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 20 minutos</div>
-</div>
-
-<div class="lesson-card" onclick="showLessonModal('leverage')">
-<div class="lesson-icon">
-<i class="fa-solid fa-rocket"></i>
-</div>
-<h3 class="lesson-title">Apalancamiento</h3>
-<p class="lesson-description">
-Entiende cómo funciona el apalancamiento, sus ventajas y riesgos.
-</p>
-<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 15 minutos</div>
-</div>
-
-<div class="lesson-card" onclick="showLessonModal('psychology')">
-<div class="lesson-icon">
-<i class="fa-solid fa-brain"></i>
-</div>
-<h3 class="lesson-title">Psicología del Trader</h3>
-<p class="lesson-description">
-Controla emociones, evita errores comunes y desarrolla disciplina.
-</p>
-<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 25 minutos</div>
-</div>
-
-<div class="lesson-card" onclick="showLessonModal('strategies')">
-<div class="lesson-icon">
-<i class="fa-solid fa-chess"></i>
-</div>
-<h3 class="lesson-title">Estrategias de Trading</h3>
-<p class="lesson-description">
-Descubre estrategias probadas: scalping, day trading, swing trading.
-</p>
-<div class="lesson-duration"><i class="fa-solid fa-clock"></i> 35 minutos</div>
-</div>
-</div>
-</section>
-
-</main>
-
-<!-- ============ AI CHAT WIDGET ============ -->
-<div class="chat-widget" id="chatWidget">
-<div class="chat-header">
-<div class="chat-title">
-<i class="fa-solid fa-robot"></i>
-Asesor IA
-</div>
-<button class="chat-close" onclick="toggleChat()">
-<i class="fa-solid fa-xmark"></i>
-</button>
-</div>
-<div class="chat-messages" id="chatMessages">
-<div class="chat-message bot">
-<div class="chat-avatar"><i class="fa-solid fa-robot"></i></div>
-<div class="chat-bubble">
-¡Hola! Soy tu asesor virtual. ¿En qué puedo ayudarte hoy?
-</div>
-</div>
-</div>
-<div class="chat-input-container">
-<input type="text" class="chat-input" id="chatInput" placeholder="Escribe tu pregunta..." onkeypress="handleChatEnter(event)">
+<div class="toast-message" id="toastMessage">
+Un nuevo usuario se ha registrado en la plataforma
 </div>
 </div>
 
-<!-- Chat Toggle Button -->
-<button class="btn btn-primary" style="position:fixed;bottom:100px;right:100px;border-radius:50%;width:60px;height:60px;z-index:999;box-shadow:0 5px 20px rgba(0,212,255,0.5);" onclick="toggleChat()">
-<i class="fa-solid fa-robot" style="font-size:1.5rem;"></i>
-</button>
-
-<!-- ============ WHATSAPP BUTTON ============ -->
-<a href="https://wa.me/573058362590?text=Hola,%20quiero%20aprender%20trading%20profesional%20con%20AI%20Trading%20Room%20Pro" target="_blank" class="whatsapp-float">
+<!-- ============ WHATSAPP ============ -->
+<a href="https://wa.me/573058362590?text=Hola,%20quiero%20unirme%20a%20AI%20Trading%20Room%20Pro" target="_blank" class="whatsapp-float">
 <i class="fa-brands fa-whatsapp"></i>
 </a>
 
-<!-- ============ NOTIFICATION ============ -->
-<div class="notification" id="notification">
-<div class="notification-content">
-<i class="fa-solid fa-bell notification-icon"></i>
-<div>
-<strong>Nueva señal disponible!</strong><br>
-<span style="font-size:0.85rem;color:var(--text-secondary);">EUR/USD - BUY con 85% confianza</span>
-</div>
-</div>
-</div>
-
 <script>
-// ============ STATE MANAGEMENT ============
-const AppState={
-currentPage:'dashboard',
-user:{
-name:'John Doe',
-level:12,
-xp:6500,
-maxXp:10000,
+// ============ CONFIGURATION ============
+const CONFIG={
+ADMIN_PASSWORD:'CFI2024Admin',
+ADMIN_EMAIL:'a.fuentes@cfi.trade',
+ADMIN_WHATSAPP:'573058362590',
+EMAILJS_SERVICE_ID:'service_cfi2024',
+EMAILJS_TEMPLATE_ID:'template_newuser',
+EMAILJS_PUBLIC_KEY:'YOUR_PUBLIC_KEY_HERE'
+};
+
+// ============ EMAILJS INIT ============
+(function(){
+emailjs.init(CONFIG.EMAILJS_PUBLIC_KEY);
+})();
+
+// ============ STATE ============
+let allUsers=[];
+let isAdminMode=false;
+
+// ============ STORAGE ============
+function saveToStorage(key,value){
+localStorage.setItem(key,JSON.stringify(value));
+}
+
+function getFromStorage(key){
+const data=localStorage.getItem(key);
+return data?JSON.parse(data):null;
+}
+
+function getAllUsers(){
+return getFromStorage('allUsers')||[];
+}
+
+function saveAllUsers(users){
+saveToStorage('allUsers',users);
+}
+
+// ============ INITIALIZE ============
+window.addEventListener('load',()=>{
+allUsers=getAllUsers();
+});
+
+// ============ USER LOGIN ============
+async function handleLogin(event){
+event.preventDefault();
+
+const submitBtn=document.getElementById('submitBtn');
+const originalHTML=submitBtn.innerHTML;
+
+// Disable button
+submitBtn.disabled=true;
+submitBtn.innerHTML='<span class="spinner"></span> Registrando...';
+
+const username=document.getElementById('loginUsername').value;
+const email=document.getElementById('loginEmail').value;
+const phone=document.getElementById('loginPhone').value;
+
+const user={
+id:`user-${Date.now()}`,
+username:username,
+email:email,
+phone:phone,
+avatar:username.substring(0,2).toUpperCase(),
+level:1,
+xp:0,
 balance:10000,
 pnl:0,
-trades:0
-},
-signals:[],
-posts:[],
-onlineUsers:247,
-soundEnabled:true
+trades:0,
+registeredAt:new Date().toISOString(),
+lastActive:new Date().toISOString(),
+isOnline:true
 };
 
-// ============ LOADER ============
-window.addEventListener('load',()=>{
+// Guardar usuario
+allUsers.push(user);
+saveAllUsers(allUsers);
+
+// Enviar notificaciones
+try{
+await sendEmailNotification(user);
+sendWhatsAppNotification(user);
+showToast(`Nuevo usuario: ${user.username}`);
+
+alert(`✅ ¡Bienvenido ${username}!\n\nTu cuenta ha sido creada exitosamente.\n\n📧 El administrador ha recibido una notificación por email a:\n${CONFIG.ADMIN_EMAIL}`);
+
+// Reset form
+document.getElementById('registrationForm').reset();
+submitBtn.disabled=false;
+submitBtn.innerHTML=originalHTML;
+
+}catch(error){
+console.error('Error al enviar notificación:',error);
+alert(`✅ Cuenta creada: ${username}\n\n⚠️ Hubo un problema al enviar la notificación por email.\nPero tu cuenta fue creada correctamente.`);
+
+submitBtn.disabled=false;
+submitBtn.innerHTML=originalHTML;
+}
+}
+
+// ============ EMAIL NOTIFICATION ============
+async function sendEmailNotification(user){
+const templateParams={
+to_email:CONFIG.ADMIN_EMAIL,
+to_name:'Administrador CFI',
+user_name:user.username,
+user_email:user.email,
+user_phone:user.phone||'No proporcionado',
+user_id:user.id,
+registration_date:new Date(user.registeredAt).toLocaleString('es-ES'),
+message:`Nuevo usuario registrado en AI Trading Room Pro`
+};
+
+try{
+const response=await emailjs.send(
+CONFIG.EMAILJS_SERVICE_ID,
+CONFIG.EMAILJS_TEMPLATE_ID,
+templateParams
+);
+
+console.log('✅ Email enviado exitosamente:',response);
+return response;
+}catch(error){
+console.error('❌ Error al enviar email:',error);
+throw error;
+}
+}
+
+// ============ WHATSAPP NOTIFICATION ============
+function sendWhatsAppNotification(user){
+const message=`🔔 *NUEVO REGISTRO - AI Trading Room Pro*\n\n` +
+`👤 Usuario: ${user.username}\n` +
+`📧 Email: ${user.email}\n` +
+`📱 WhatsApp: ${user.phone||'No proporcionado'}\n` +
+`📅 Fecha: ${new Date().toLocaleString('es-ES')}\n` +
+`🆔 ID: ${user.id}\n\n` +
+`💰 Balance inicial: $${user.balance}\n` +
+`🎯 Nivel: ${user.level}`;
+
+const whatsappURL=`https://wa.me/${CONFIG.ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+console.log('📱 WhatsApp notification URL:',whatsappURL);
+
+// Guardar para el admin
+const notifications=getFromStorage('adminNotifications')||[];
+notifications.unshift({
+type:'new_user',
+user:user,
+timestamp:Date.now(),
+read:false
+});
+saveToStorage('adminNotifications',notifications);
+}
+
+// ============ TOAST NOTIFICATION ============
+function showToast(message){
+const toast=document.getElementById('toast');
+document.getElementById('toastMessage').innerText=message;
+toast.classList.add('show');
+
 setTimeout(()=>{
-document.getElementById('loader').classList.add('hidden');
-initializeApp();
-},2000);
-});
-
-// ============ INITIALIZE APP ============
-function initializeApp(){
-generateSignals();
-generateRanking();
-generatePosts();
-generateOnlineUsers();
-initDashboardChart();
-initSimulatorChart();
-startLivePriceUpdates();
-startSignalGenerator();
+toast.classList.remove('show');
+},5000);
 }
 
-// ============ NAVIGATION ============
-function navigateTo(page){
-document.querySelectorAll('.page-section').forEach(section=>{
-section.classList.remove('active');
-});
-document.querySelectorAll('.menu-item').forEach(item=>{
-item.classList.remove('active');
-});
-document.getElementById(page).classList.add('active');
-event.target.closest('.menu-item')?.classList.add('active');
-AppState.currentPage=page;
+// ============ ADMIN LOGIN ============
+function showAdminLogin(e){
+e.preventDefault();
+document.getElementById('loginScreen').classList.add('hidden');
+document.getElementById('adminLoginScreen').classList.remove('hidden');
 }
 
-// ============ SIGNAL GENERATOR ============
-const ASSETS=[
-{symbol:'EURUSD',name:'EUR/USD',category:'Forex'},
-{symbol:'GBPUSD',name:'GBP/USD',category:'Forex'},
-{symbol:'USDJPY',name:'USD/JPY',category:'Forex'},
-{symbol:'AUDUSD',name:'AUD/USD',category:'Forex'},
-{symbol:'XAUUSD',name:'ORO/USD',category:'Metales'},
-{symbol:'XAGUSD',name:'PLATA/USD',category:'Metales'},
-{symbol:'USOIL',name:'PETRÓLEO WTI',category:'Energía'},
-{symbol:'UKOIL',name:'PETRÓLEO BRENT',category:'Energía'},
-{symbol:'NAS100',name:'NASDAQ 100',category:'Índices'},
-{symbol:'SPX500',name:'S&P 500',category:'Índices'},
-{symbol:'US30',name:'DOW JONES',category:'Índices'},
-{symbol:'BTCUSD',name:'BITCOIN',category:'Cripto'},
-{symbol:'ETHUSD',name:'ETHEREUM',category:'Cripto'},
-{symbol:'AAPL',name:'APPLE',category:'Acciones'},
-{symbol:'TSLA',name:'TESLA',category:'Acciones'},
-{symbol:'GOOGL',name:'GOOGLE',category:'Acciones'},
-{symbol:'AMZN',name:'AMAZON',category:'Acciones'},
-{symbol:'MSFT',name:'MICROSOFT',category:'Acciones'}
-];
-
-function generateSignals(){
-AppState.signals=[];
-const numSignals=8;
-const usedAssets=new Set();
-
-for(let i=0;i<numSignals;i++){
-let asset;
-do{
-asset=ASSETS[Math.floor(Math.random()*ASSETS.length)];
-}while(usedAssets.has(asset.symbol)&&usedAssets.size<ASSETS.length);
-
-usedAssets.add(asset.symbol);
-
-const direction=Math.random()>0.5?'buy':'sell';
-const basePrice=getBasePrice(asset.symbol);
-const entry=basePrice*(1+(Math.random()-0.5)*0.02);
-const sl=direction==='buy'?entry*0.985:entry*1.015;
-const tp=direction==='buy'?entry*1.03:entry*0.97;
-const confidence=Math.floor(Math.random()*30)+70;
-const expiresIn=Math.floor(Math.random()*120)+30;
-
-AppState.signals.push({
-id:`sig-${Date.now()}-${i}`,
-asset:asset.name,
-symbol:asset.symbol,
-category:asset.category,
-direction,
-entry:entry.toFixed(getPrecision(asset.symbol)),
-sl:sl.toFixed(getPrecision(asset.symbol)),
-tp:tp.toFixed(getPrecision(asset.symbol)),
-confidence,
-expiresIn,
-timestamp:Date.now()
-});
+function backToLogin(e){
+e.preventDefault();
+document.getElementById('adminLoginScreen').classList.add('hidden');
+document.getElementById('loginScreen').classList.remove('hidden');
 }
 
-renderSignals();
-}
+function handleAdminLogin(event){
+event.preventDefault();
 
-function getBasePrice(symbol){
-const prices={
-EURUSD:1.0850,GBPUSD:1.2645,USDJPY:149.85,AUDUSD:0.6540,
-XAUUSD:2315,XAGUSD:28.50,USOIL:78.20,UKOIL:82.40,
-NAS100:18250,SPX500:5120,US30:38950,
-BTCUSD:64500,ETHUSD:3150,
-AAPL:182.50,TSLA:175.20,GOOGL:158.30,AMZN:178.90,MSFT:425.80
-};
-return prices[symbol]||100;
-}
+const password=document.getElementById('adminPassword').value;
 
-function getPrecision(symbol){
-if(symbol.includes('JPY'))return 2;
-if(symbol.includes('XAU')||symbol.includes('XAG'))return 2;
-if(symbol.includes('USD')&&!symbol.includes('BTC')&&!symbol.includes('ETH'))return 4;
-return 2;
-}
-
-function renderSignals(){
-const container=document.getElementById('signalsContainer');
-container.innerHTML='';
-
-AppState.signals.forEach(signal=>{
-const card=document.createElement('div');
-card.className=`signal-card ${signal.direction}`;
-card.innerHTML=`
-<div class="signal-icon-box">
-${signal.direction==='buy'?'↑':'↓'}
-</div>
-<div class="signal-info">
-<div class="signal-header">
-<div class="signal-asset">${signal.asset}</div>
-<div class="signal-direction ${signal.direction}">${signal.direction==='buy'?'COMPRAR':'VENDER'}</div>
-<div class="signal-confidence">${signal.confidence}% confianza</div>
-</div>
-<div class="signal-details">
-<div class="signal-detail">
-<div class="signal-label">Entrada</div>
-<div class="signal-value">${signal.entry}</div>
-</div>
-<div class="signal-detail">
-<div class="signal-label">Stop Loss</div>
-<div class="signal-value" style="color:var(--red)">${signal.sl}</div>
-</div>
-<div class="signal-detail">
-<div class="signal-label">Take Profit</div>
-<div class="signal-value" style="color:var(--green)">${signal.tp}</div>
-</div>
-</div>
-</div>
-<div class="signal-actions">
-<button class="btn btn-primary btn-sm" onclick="simulateFromSignal('${signal.id}')">
-<i class="fa-solid fa-play"></i> Simular
-</button>
-<button class="btn btn-secondary btn-sm" onclick="shareSignal('${signal.id}')">
-<i class="fa-solid fa-share"></i> Compartir
-</button>
-</div>
-`;
-container.appendChild(card);
-});
-}
-
-function startSignalGenerator(){
-setInterval(()=>{
-if(Math.random()>0.7){
-const asset=ASSETS[Math.floor(Math.random()*ASSETS.length)];
-const direction=Math.random()>0.5?'buy':'sell';
-const basePrice=getBasePrice(asset.symbol);
-const entry=basePrice*(1+(Math.random()-0.5)*0.02);
-const sl=direction==='buy'?entry*0.985:entry*1.015;
-const tp=direction==='buy'?entry*1.03:entry*0.97;
-const confidence=Math.floor(Math.random()*30)+70;
-
-AppState.signals.unshift({
-id:`sig-${Date.now()}`,
-asset:asset.name,
-symbol:asset.symbol,
-category:asset.category,
-direction,
-entry:entry.toFixed(getPrecision(asset.symbol)),
-sl:sl.toFixed(getPrecision(asset.symbol)),
-tp:tp.toFixed(getPrecision(asset.symbol)),
-confidence,
-expiresIn:Math.floor(Math.random()*120)+30,
-timestamp:Date.now()
-});
-
-if(AppState.signals.length>12)AppState.signals.pop();
-
-if(AppState.currentPage==='signals')renderSignals();
-
-showNotification(`Nueva señal: ${asset.name} - ${direction.toUpperCase()} con ${confidence}% confianza`);
-playNotificationSound();
-}
-},15000);
-}
-
-// ============ CHARTS ============
-let dashChart,simChart;
-let dashPrice=1.0850;
-let simPrice=1.0850;
-let candleData=[];
-
-function initDashboardChart(){
-generateInitialCandles();
-const ctx=document.getElementById('dashChart').getContext('2d');
-dashChart=new Chart(ctx,{
-type:'candlestick',
-data:{
-datasets:[{
-label:'EUR/USD',
-data:candleData,
-color:{up:'#00ff88',down:'#ff3366',unchanged:'#8b92a8'}
-}]
-},
-options:{
-responsive:true,
-maintainAspectRatio:false,
-plugins:{legend:{display:false}},
-scales:{
-x:{type:'time',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8b92a8'}},
-y:{position:'right',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8b92a8',precision:4}}
-}
-}
-});
-}
-
-function initSimulatorChart(){
-const ctx=document.getElementById('simChart').getContext('2d');
-simChart=new Chart(ctx,{
-type:'candlestick',
-data:{
-datasets:[{
-label:'EUR/USD',
-data:candleData,
-color:{up:'#00ff88',down:'#ff3366',unchanged:'#8b92a8'}
-}]
-},
-options:{
-responsive:true,
-maintainAspectRatio:false,
-plugins:{legend:{display:false}},
-scales:{
-x:{type:'time',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8b92a8'}},
-y:{position:'right',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#8b92a8',precision:4}}
-}
-}
-});
-}
-
-function generateInitialCandles(){
-const now=Date.now();
-let price=1.0850;
-for(let i=40;i>=0;i--){
-const timestamp=now-(i*3000);
-const open=price;
-const movement=(Math.random()-0.5)*0.002;
-price+=movement;
-const high=Math.max(open,price)+(Math.random()*0.0005);
-const low=Math.min(open,price)-(Math.random()*0.0005);
-const close=price;
-candleData.push({x:timestamp,o:open,h:high,l:low,c:close});
-}
-}
-
-let currentCandle=null;
-let candleStartTime=Date.now();
-
-function startLivePriceUpdates(){
-setInterval(()=>{
-const movement=(Math.random()-0.5)*0.0008;
-dashPrice+=movement;
-simPrice+=movement;
-
-if(dashPrice<1.08)dashPrice=1.08;
-if(dashPrice>1.10)dashPrice=1.10;
-
-updatePriceDisplay();
-updateCandle();
-updateSimulator();
-},1500);
-}
-
-function updatePriceDisplay(){
-document.getElementById('dashPrice').innerText=dashPrice.toFixed(4);
-document.getElementById('simPrice').innerText=simPrice.toFixed(4);
-
-const percent=((dashPrice-1.0850)/1.0850*100).toFixed(2);
-const changeEl=document.getElementById('dashChange');
-const simChangeEl=document.getElementById('simChange');
-
-if(percent>=0){
-changeEl.innerHTML=`▲ +${percent}%`;
-changeEl.className='price-change up';
-simChangeEl.innerHTML=`▲ +${percent}%`;
-simChangeEl.className='price-change up';
+if(password===CONFIG.ADMIN_PASSWORD){
+isAdminMode=true;
+document.getElementById('adminLoginScreen').classList.add('hidden');
+document.getElementById('adminPanel').classList.add('active');
+loadAdminPanel();
 }else{
-changeEl.innerHTML=`▼ ${percent}%`;
-changeEl.className='price-change down';
-simChangeEl.innerHTML=`▼ ${percent}%`;
-simChangeEl.className='price-change down';
+alert('❌ Contraseña incorrecta');
 }
 }
 
-function updateCandle(){
-const now=Date.now();
-if(!currentCandle||now-candleStartTime>3000){
-if(currentCandle){
-candleData.push(currentCandle);
-if(candleData.length>50)candleData.shift();
-}
-currentCandle={x:now,o:dashPrice,h:dashPrice,l:dashPrice,c:dashPrice};
-candleStartTime=now;
-}else{
-currentCandle.c=dashPrice;
-currentCandle.h=Math.max(currentCandle.h,dashPrice);
-currentCandle.l=Math.min(currentCandle.l,dashPrice);
+function logoutAdmin(){
+isAdminMode=false;
+document.getElementById('adminPanel').classList.remove('active');
+document.getElementById('loginScreen').classList.remove('hidden');
 }
 
-if(dashChart){
-const tempData=[...candleData];
-if(currentCandle)tempData.push(currentCandle);
-dashChart.data.datasets[0].data=tempData;
-dashChart.update('none');
+// ============ ADMIN PANEL ============
+function loadAdminPanel(){
+allUsers=getAllUsers();
+
+const today=new Date().toDateString();
+const todayUsers=allUsers.filter(u=>new Date(u.registeredAt).toDateString()===today);
+const activeUsers=allUsers.filter(u=>u.isOnline);
+const totalTrades=allUsers.reduce((sum,u)=>sum+u.trades,0);
+
+document.getElementById('adminTotalUsers').innerText=allUsers.length;
+document.getElementById('adminTodayUsers').innerText=todayUsers.length;
+document.getElementById('adminActiveUsers').innerText=activeUsers.length;
+document.getElementById('adminTotalTrades').innerText=totalTrades;
+
+renderUsersTable(allUsers);
 }
 
-if(simChart){
-const tempData=[...candleData];
-if(currentCandle)tempData.push(currentCandle);
-simChart.data.datasets[0].data=tempData;
-simChart.update('none');
-}
-}
+function renderUsersTable(users){
+const tbody=document.getElementById('usersTableBody');
+tbody.innerHTML='';
 
-// ============ SIMULATOR ============
-let simPosition=null;
-let simDurationInterval=null;
-
-function simOpenTrade(type){
-if(simPosition){
-alert('⚠️ Ya tienes una operación abierta');
+if(users.length===0){
+tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-secondary);">No hay usuarios registrados aún</td></tr>';
 return;
 }
 
-simPosition={
-type,
-entry:simPrice,
-startTime:Date.now()
-};
-
-document.getElementById('simPosition').style.display='block';
-document.getElementById('simPosType').innerText=type==='buy'?'COMPRA':'VENTA';
-document.getElementById('simEntry').innerText=simPrice.toFixed(4);
-document.getElementById('simBuyBtn').disabled=true;
-document.getElementById('simSellBtn').disabled=true;
-
-simDurationInterval=setInterval(updateSimDuration,1000);
-}
-
-function simCloseTrade(){
-if(!simPosition)return;
-
-const priceDiff=simPosition.type==='buy'
-?(simPrice-simPosition.entry)
-:(simPosition.entry-simPrice);
-
-const pnl=priceDiff*10000*10;
-
-AppState.user.balance+=pnl;
-AppState.user.pnl+=pnl;
-AppState.user.trades++;
-
-document.getElementById('simBalance').innerText=`$${AppState.user.balance.toFixed(2)}`;
-document.getElementById('simPnl').innerText=`$${AppState.user.pnl.toFixed(2)}`;
-document.getElementById('simTrades').innerText=AppState.user.trades;
-
-const duration=Math.floor((Date.now()-simPosition.startTime)/1000);
-alert(`Operación cerrada\n${pnl>=0?'✅':'❌'} ${pnl>=0?'Ganancia':'Pérdida'}: $${pnl.toFixed(2)}\nDuración: ${duration}s`);
-
-simPosition=null;
-clearInterval(simDurationInterval);
-document.getElementById('simPosition').style.display='none';
-document.getElementById('simBuyBtn').disabled=false;
-document.getElementById('simSellBtn').disabled=false;
-}
-
-function updateSimulator(){
-if(!simPosition)return;
-
-document.getElementById('simCurrent').innerText=simPrice.toFixed(4);
-
-const priceDiff=simPosition.type==='buy'
-?(simPrice-simPosition.entry)
-:(simPosition.entry-simPrice);
-
-const pnl=priceDiff*10000*10;
-
-const pnlEl=document.getElementById('simPosPnl');
-pnlEl.innerText=`$${pnl.toFixed(2)}`;
-pnlEl.style.color=pnl>=0?'var(--green)':'var(--red)';
-}
-
-function updateSimDuration(){
-if(!simPosition)return;
-const elapsed=Math.floor((Date.now()-simPosition.startTime)/1000);
-const mins=Math.floor(elapsed/60);
-const secs=elapsed%60;
-document.getElementById('simDuration').innerText=mins>0?`${mins}m ${secs}s`:`${secs}s`;
-}
-
-function openTrade(type){
-alert(`Funcionalidad demo: Abrir posición ${type.toUpperCase()}\nVe al Simulador para practicar sin riesgo`);
-navigateTo('simulator');
-}
-
-function simulateFromSignal(signalId){
-navigateTo('simulator');
-alert('Señal cargada en el simulador. ¡Hora de practicar!');
-}
-
-function shareSignal(signalId){
-const signal=AppState.signals.find(s=>s.id===signalId);
-if(!signal)return;
-
-const post={
-id:`post-${Date.now()}`,
-author:'John Doe',
-avatar:'JD',
-time:'Ahora',
-content:`Acabo de compartir esta señal:`,
-signal:signal,
-likes:0,
-comments:[]
-};
-
-AppState.posts.unshift(post);
-renderPosts();
-navigateTo('community');
-alert('¡Señal compartida en la comunidad!');
-}
-
-// ============ RANKING ============
-function generateRanking(){
-const users=[
-{name:'TraderPro',level:25,xp:45000,winRate:78.5},
-{name:'MarketMaster',level:22,xp:38500,winRate:75.2},
-{name:'John Doe',level:12,xp:6500,winRate:68.5},
-{name:'CryptoKing',level:18,xp:22000,winRate:71.8},
-{name:'ForexNinja',level:15,xp:14200,winRate:69.3},
-{name:'WallStreetBull',level:20,xp:30000,winRate:73.1},
-{name:'SignalHunter',level:14,xp:11800,winRate:67.9},
-{name:'ChartWizard',level:16,xp:17500,winRate:70.2}
-];
-
-users.sort((a,b)=>b.xp-a.xp);
-
-const tbody=document.getElementById('rankingTable');
-tbody.innerHTML='';
-
-users.forEach((user,index)=>{
+users.forEach(user=>{
 const tr=document.createElement('tr');
-tr.style.borderBottom='1px solid var(--border)';
-if(user.name==='John Doe'){
-tr.style.background='rgba(0,212,255,0.1)';
-}
-
-let medal='';
-if(index===0)medal='🥇';
-else if(index===1)medal='🥈';
-else if(index===2)medal='🥉';
-
 tr.innerHTML=`
-<td style="padding:1rem;font-size:1.5rem;">${medal||index+1}</td>
-<td style="padding:1rem;font-weight:700;">${user.name}</td>
-<td style="padding:1rem;">Nivel ${user.level}</td>
-<td style="padding:1rem;font-family:JetBrains Mono;">${user.xp.toLocaleString()} XP</td>
-<td style="padding:1rem;color:var(--green);font-weight:700;">${user.winRate}%</td>
+<td>
+<div class="user-cell">
+<div class="user-avatar-small">${user.avatar}</div>
+<strong>${user.username}</strong>
+</div>
+</td>
+<td>${user.email}</td>
+<td>${user.phone||'N/A'}</td>
+<td>${new Date(user.registeredAt).toLocaleString('es-ES')}</td>
+<td>Nivel ${user.level}</td>
+<td style="font-family:JetBrains Mono;">$${user.balance.toFixed(2)}</td>
+<td>
+<span class="status-badge ${user.isOnline?'status-online':'status-offline'}">
+${user.isOnline?'● Online':'○ Offline'}
+</span>
+</td>
+<td>
+<button class="btn-action btn-view" onclick="viewUser('${user.id}')">
+<i class="fa-solid fa-eye"></i> Ver
+</button>
+</td>
 `;
 tbody.appendChild(tr);
 });
 }
 
-// ============ COMMUNITY ============
-function generatePosts(){
-const samplePosts=[
-{
-author:'TraderPro',
-avatar:'TP',
-time:'Hace 5 min',
-content:'Excelente día de trading! 5/5 operaciones positivas en EUR/USD 🚀',
-likes:12,
-comments:3
-},
-{
-author:'MarketMaster',
-avatar:'MM',
-time:'Hace 15 min',
-content:'Cuidado con el oro hoy, hay mucha volatilidad por datos del FED.',
-likes:8,
-comments:2
-},
-{
-author:'CryptoKing',
-avatar:'CK',
-time:'Hace 1 hora',
-content:'Bitcoin rompiendo resistencia en $65,000. Momento interesante!',
-signal:{asset:'BITCOIN',direction:'buy',entry:'64,500',confidence:82},
-likes:24,
-comments:7
-}
-];
-
-AppState.posts=samplePosts.map((p,i)=>({
-id:`post-${i}`,
-author:p.author,
-avatar:p.avatar,
-time:p.time,
-content:p.content,
-signal:p.signal,
-likes:p.likes,
-comments:p.comments||0
-}));
-
-renderPosts();
+function searchUsers(){
+const query=document.getElementById('searchInput').value.toLowerCase();
+const filtered=allUsers.filter(u=>
+u.username.toLowerCase().includes(query)||
+u.email.toLowerCase().includes(query)||
+(u.phone&&u.phone.includes(query))
+);
+renderUsersTable(filtered);
 }
 
-function renderPosts(){
-const container=document.getElementById('feedContainer');
-container.innerHTML='';
+function viewUser(userId){
+const user=allUsers.find(u=>u.id===userId);
+if(user){
+const info=`📊 DETALLES DEL USUARIO\n\n` +
+`👤 Usuario: ${user.username}\n` +
+`📧 Email: ${user.email}\n` +
+`📱 WhatsApp: ${user.phone||'No proporcionado'}\n` +
+`🆔 ID: ${user.id}\n\n` +
+`💰 Balance: $${user.balance.toFixed(2)}\n` +
+`📈 P&L Total: $${user.pnl.toFixed(2)}\n` +
+`🎯 Nivel: ${user.level}\n` +
+`📊 XP: ${user.xp}\n` +
+`🔢 Operaciones: ${user.trades}\n\n` +
+`📅 Registro: ${new Date(user.registeredAt).toLocaleString('es-ES')}\n` +
+`⏰ Última actividad: ${new Date(user.lastActive).toLocaleString('es-ES')}`;
 
-AppState.posts.forEach(post=>{
-const card=document.createElement('div');
-card.className='post-card';
-card.innerHTML=`
-<div class="post-header">
-<div class="post-avatar">${post.avatar}</div>
-<div class="post-author">
-<div class="post-name">${post.author}</div>
-<div class="post-time">${post.time}</div>
-</div>
-</div>
-<div class="post-content">${post.content}</div>
-${post.signal?`
-<div class="post-signal">
-<strong>${post.signal.asset}</strong> - ${post.signal.direction.toUpperCase()}<br>
-Entrada: ${post.signal.entry} | Confianza: ${post.signal.confidence}%
-</div>
-`:''}
-<div class="post-actions">
-<div class="post-action" onclick="likePost('${post.id}')">
-<i class="fa-solid fa-heart"></i> ${post.likes}
-</div>
-<div class="post-action">
-<i class="fa-solid fa-comment"></i> ${post.comments}
-</div>
-<div class="post-action">
-<i class="fa-solid fa-share"></i> Compartir
-</div>
-</div>
-`;
-container.appendChild(card);
-});
-}
-
-function createPost(){
-const input=document.getElementById('postInput');
-const content=input.value.trim();
-if(!content)return;
-
-const post={
-id:`post-${Date.now()}`,
-author:'John Doe',
-avatar:'JD',
-time:'Ahora',
-content:content,
-likes:0,
-comments:0
-};
-
-AppState.posts.unshift(post);
-renderPosts();
-input.value='';
-alert('✅ Publicación compartida!');
-}
-
-function likePost(postId){
-const post=AppState.posts.find(p=>p.id===postId);
-if(post){
-post.likes++;
-renderPosts();
+alert(info);
 }
 }
 
-function generateOnlineUsers(){
-const users=['TraderPro','MarketMaster','CryptoKing','ForexNinja','ChartWizard','SignalHunter'];
-const container=document.getElementById('onlineUsersList');
-container.innerHTML='';
+// ============ EXPORT CSV ============
+function exportUsersToCSV(){
+if(allUsers.length===0){
+alert('⚠️ No hay usuarios para exportar');
+return;
+}
 
-users.forEach(user=>{
-const div=document.createElement('div');
-div.className='user-item';
-div.innerHTML=`
-<div class="user-item-avatar">${user.substring(0,2).toUpperCase()}</div>
-<div>${user}</div>
-`;
-container.appendChild(div);
+let csv='Usuario,Email,WhatsApp,Fecha Registro,Nivel,Balance,P&L,Operaciones,ID\n';
+
+allUsers.forEach(user=>{
+csv+=`"${user.username}","${user.email}","${user.phone||'N/A'}","${new Date(user.registeredAt).toLocaleString('es-ES')}",${user.level},$${user.balance},$${user.pnl},${user.trades},"${user.id}"\n`;
 });
 
-setInterval(()=>{
-AppState.onlineUsers=Math.floor(Math.random()*50)+220;
-document.getElementById('onlineCount').innerText=AppState.onlineUsers;
-},10000);
-}
+const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+const url=window.URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=url;
+a.download=`usuarios-cfi-trading-${Date.now()}.csv`;
+a.click();
+window.URL.revokeObjectURL(url);
 
-// ============ AI CHAT ============
-let chatOpen=false;
-
-function toggleChat(){
-chatOpen=!chatOpen;
-document.getElementById('chatWidget').classList.toggle('open',chatOpen);
-}
-
-function handleChatEnter(event){
-if(event.key==='Enter'){
-sendChatMessage();
-}
-}
-
-function sendChatMessage(){
-const input=document.getElementById('chatInput');
-const message=input.value.trim();
-if(!message)return;
-
-addChatMessage(message,'user');
-input.value='';
-
-setTimeout(()=>{
-showTyping();
-setTimeout(()=>{
-removeTyping();
-const response=getChatResponse(message);
-addChatMessage(response,'bot');
-},1500);
-},500);
-}
-
-function addChatMessage(text,type){
-const container=document.getElementById('chatMessages');
-const div=document.createElement('div');
-div.className=`chat-message ${type}`;
-div.innerHTML=`
-<div class="chat-avatar">
-<i class="fa-solid fa-${type==='bot'?'robot':'user'}"></i>
-</div>
-<div class="chat-bubble">${text}</div>
-`;
-container.appendChild(div);
-container.scrollTop=container.scrollHeight;
-}
-
-function showTyping(){
-const container=document.getElementById('chatMessages');
-const div=document.createElement('div');
-div.className='chat-message bot typing-message';
-div.innerHTML=`
-<div class="chat-avatar"><i class="fa-solid fa-robot"></i></div>
-<div class="typing-indicator">
-<div class="typing-dot"></div>
-<div class="typing-dot"></div>
-<div class="typing-dot"></div>
-</div>
-`;
-container.appendChild(div);
-container.scrollTop=container.scrollHeight;
-}
-
-function removeTyping(){
-const typing=document.querySelector('.typing-message');
-if(typing)typing.remove();
-}
-
-function getChatResponse(message){
-const msg=message.toLowerCase();
-
-if(msg.includes('hola')||msg.includes('hi'))
-return'¡Hola! Estoy aquí para ayudarte. ¿Quieres aprender sobre trading o tienes alguna pregunta?';
-
-if(msg.includes('empezar')||msg.includes('comenzar'))
-return'Te recomiendo empezar por la sección de Educación. Allí encontrarás lecciones desde lo básico hasta estrategias avanzadas.';
-
-if(msg.includes('señal'))
-return'Puedes ver las señales en tiempo real en la sección "Señales de Trading". Todas incluyen entrada, SL, TP y nivel de confianza.';
-
-if(msg.includes('simulador'))
-return'El simulador te permite practicar sin riesgo con dinero virtual. Ve a la sección Simulador y comienza a operar!';
-
-if(msg.includes('riesgo')||msg.includes('stop loss'))
-return'El Stop Loss es tu red de seguridad. Limita tus pérdidas cerrando automáticamente la operación si va en tu contra. ¡Nunca operes sin SL!';
-
-if(msg.includes('cuenta')||msg.includes('registro'))
-return'Para abrir tu cuenta real, haz clic en el botón de WhatsApp y un asesor te guiará paso a paso.';
-
-return'Interesante pregunta. Te recomiendo revisar la sección de Educación o contactar con un asesor humano vía WhatsApp para una respuesta personalizada.';
-}
-
-// ============ NOTIFICATIONS ============
-function showNotification(message){
-const notification=document.getElementById('notification');
-notification.querySelector('.notification-content div strong').nextSibling.textContent=message;
-notification.classList.add('show');
-setTimeout(()=>{
-notification.classList.remove('show');
-},5000);
-}
-
-function playNotificationSound(){
-if(!AppState.soundEnabled)return;
-// Sound would play here if audio file is available
-// const audio=new Audio('assets/sounds/notification.mp3');
-// audio.play();
-}
-
-// ============ EDUCATION ============
-function showLessonModal(lesson){
-alert(`Lección: ${lesson}\n\nEsta sección abriría el contenido educativo completo.\nPor ahora es una demo.`);
+alert('✅ Archivo CSV descargado exitosamente');
 }
 
 </script>
