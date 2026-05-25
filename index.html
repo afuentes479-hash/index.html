@@ -98,6 +98,11 @@ body{position:relative;}
 
 .market-card{cursor:pointer;position:relative;overflow:hidden;}
 
+.market-card.active{
+border:2px solid var(--primary);
+box-shadow:0 0 30px rgba(124,58,237,.4);
+}
+
 .market-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.04));opacity:0;transition:opacity .3s ease;}
 
 .market-card:hover::before{opacity:1;}
@@ -111,15 +116,57 @@ body{position:relative;}
 .positive{color:var(--green);}
 .negative{color:var(--red);}
 
-.news-panel{margin-top:35px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:30px;border-radius:25px;display:none;backdrop-filter:blur(14px);max-width:1200px;margin-left:auto;margin-right:auto;}
+.news-panel{
+margin-top:20px;
+background:rgba(124,58,237,.15);
+border:2px solid var(--primary);
+padding:20px;
+border-radius:20px;
+display:none;
+backdrop-filter:blur(14px);
+animation:slideDown .4s ease;
+}
 
-.news-panel.active{display:block;animation:fade .4s ease;}
+@keyframes slideDown{
+from{
+opacity:0;
+transform:translateY(-10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
 
-.news-title{font-size:28px;margin-bottom:25px;}
+.news-panel.active{
+display:block;
+}
 
-.news-card{background:rgba(255,255,255,.05);padding:18px;border-radius:18px;margin-bottom:15px;border-left:5px solid var(--accent);transition:all .3s ease;}
+.news-title{
+font-size:20px;
+margin-bottom:15px;
+color:var(--primary);
+font-weight:800;
+}
 
-.news-card:hover{transform:translateX(8px);background:rgba(255,255,255,.08);}
+.news-card{
+background:rgba(255,255,255,.08);
+padding:12px 15px;
+border-radius:12px;
+margin-bottom:10px;
+border-left:4px solid var(--accent);
+transition:all .3s ease;
+font-size:15px;
+}
+
+.news-card:last-child{
+margin-bottom:0;
+}
+
+.news-card:hover{
+transform:translateX(5px);
+background:rgba(255,255,255,.12);
+}
 
 .simulator{display:grid;grid-template-columns:1fr;gap:25px;max-width:1200px;margin:0 auto;}
 
@@ -216,8 +263,9 @@ html,body{overflow-x:hidden;}
 .slide-counter{left:15px;bottom:15px;padding:12px 18px;font-size:14px;}
 .market-icon{width:60px;height:60px;font-size:26px;}
 .market-change{font-size:16px;}
-.news-panel{padding:20px;margin-top:25px;}
-.news-title{font-size:22px;}
+.news-panel{padding:15px;margin-top:15px;}
+.news-title{font-size:18px;margin-bottom:12px;}
+.news-card{font-size:14px;padding:10px 12px;}
 .bg-blur,.bg-blur-2{filter:blur(80px);}
 .position-info{grid-template-columns:1fr;}
 .stat-value{font-size:24px;}
@@ -297,56 +345,74 @@ html,body{overflow-x:hidden;}
 <h2 class="section-title">Mercados Globales</h2>
 <p class="section-subtitle">Selecciona un activo para ver noticias relevantes que impactan el mercado.</p>
 <div class="market-grid">
-<div class="card market-card" onclick="showNews('forex')">
+
+<!-- FOREX -->
+<div class="card market-card" id="card-forex" onclick="showNews('forex')">
 <div class="market-top">
 <div class="market-icon"><i class="fa-solid fa-dollar-sign"></i></div>
 <div class="market-change positive">+1.25%</div>
 </div>
 <h3>Forex</h3>
 <p>Mercado global de divisas con alta liquidez y operación 24/5.</p>
+<div class="news-panel" id="news-forex"></div>
 </div>
-<div class="card market-card" onclick="showNews('gold')">
+
+<!-- GOLD -->
+<div class="card market-card" id="card-gold" onclick="showNews('gold')">
 <div class="market-top">
 <div class="market-icon"><i class="fa-solid fa-medal"></i></div>
 <div class="market-change negative">-0.84%</div>
 </div>
 <h3>Metales</h3>
 <p>Oro y plata reaccionan ante inflación y política monetaria.</p>
+<div class="news-panel" id="news-gold"></div>
 </div>
-<div class="card market-card" onclick="showNews('indices')">
+
+<!-- INDICES -->
+<div class="card market-card" id="card-indices" onclick="showNews('indices')">
 <div class="market-top">
 <div class="market-icon"><i class="fa-solid fa-chart-column"></i></div>
 <div class="market-change positive">+2.11%</div>
 </div>
 <h3>Índices</h3>
 <p>Opera los mercados bursátiles más importantes del mundo.</p>
+<div class="news-panel" id="news-indices"></div>
 </div>
-<div class="card market-card" onclick="showNews('stocks')">
+
+<!-- STOCKS -->
+<div class="card market-card" id="card-stocks" onclick="showNews('stocks')">
 <div class="market-top">
 <div class="market-icon"><i class="fa-solid fa-building"></i></div>
 <div class="market-change positive">+3.18%</div>
 </div>
 <h3>Acciones</h3>
 <p>Invierte en compañías líderes como Apple, Tesla y Amazon.</p>
+<div class="news-panel" id="news-stocks"></div>
 </div>
-<div class="card market-card" onclick="showNews('oil')">
+
+<!-- OIL -->
+<div class="card market-card" id="card-oil" onclick="showNews('oil')">
 <div class="market-top">
 <div class="market-icon"><i class="fa-solid fa-oil-can"></i></div>
 <div class="market-change negative">-1.09%</div>
 </div>
 <h3>Commodities</h3>
 <p>Petróleo, gas y materias primas esenciales para la economía global.</p>
+<div class="news-panel" id="news-oil"></div>
 </div>
-<div class="card market-card" onclick="showNews('crypto')">
+
+<!-- CRYPTO -->
+<div class="card market-card" id="card-crypto" onclick="showNews('crypto')">
 <div class="market-top">
 <div class="market-icon"><i class="fa-brands fa-bitcoin"></i></div>
 <div class="market-change positive">+5.46%</div>
 </div>
 <h3>Cripto</h3>
 <p>Mercado digital con alta volatilidad y oportunidades 24/7.</p>
+<div class="news-panel" id="news-crypto"></div>
 </div>
+
 </div>
-<div class="news-panel" id="newsPanel"></div>
 </section>
 
 <section class="slide">
@@ -461,7 +527,9 @@ html,body{overflow-x:hidden;}
 <p>Accede a mercados globales y aprende trading con tecnología moderna y soporte personalizado.</p>
 <div class="hero-buttons">
 <a href="https://registration.cfifinancial.com/mu/en/registration?promo=3569" target="_blank" class="btn btn-primary">Abrir Cuenta</a>
-<a href="https://registration.cfifinancial.com/mu/en/registration?promo=3569" target="_blank" class="btn btn-secondary">Hablar con un Asesor</a>
+<a href="https://wa.me/573058362590?text=Hola,%20me%20interesa%20conocer%20más%20sobre%20CFI%20Broker" target="_blank" class="btn btn-secondary">
+<i class="fa-brands fa-whatsapp"></i> Hablar con un Asesor
+</a>
 </div>
 </div>
 </section>
@@ -532,17 +600,69 @@ if(diffX>50)prevSlide();
 },false);
 
 const newsData={
-forex:["📉 La FED podría recortar tasas este trimestre","💵 El dólar gana fuerza frente al euro","📊 Datos de empleo generan volatilidad"],
-gold:["🥇 Tensiones geopolíticas impulsan el oro","🏦 Bancos centrales aumentan reservas","📉 Dólar fuerte presiona el XAU/USD"],
-indices:["📈 Nasdaq sube impulsado por inteligencia artificial","🏛️ Inflación impacta el S&P500","💻 Resultados tecnológicos superan expectativas"],
-stocks:["🚗 Tesla aumenta volatilidad tras earnings","🍎 Apple presenta nuevos productos","📦 Amazon supera expectativas de ingresos"],
-oil:["🛢️ OPEP evalúa reducción de producción","🌍 Tensiones globales afectan el petróleo","📉 Inventarios de crudo aumentan"],
-crypto:["₿ Bitcoin rompe resistencia clave","⚡ ETF de Bitcoin impulsa demanda","🚀 Ethereum incrementa actividad de red"]
+forex:[
+"📉 La FED podría recortar tasas este trimestre",
+"💵 El dólar gana fuerza frente al euro",
+"📊 Datos de empleo generan volatilidad"
+],
+gold:[
+"🥇 Tensiones geopolíticas impulsan el oro",
+"🏦 Bancos centrales aumentan reservas",
+"📉 Dólar fuerte presiona el XAU/USD"
+],
+indices:[
+"📈 Nasdaq sube impulsado por inteligencia artificial",
+"🏛️ Inflación impacta el S&P500",
+"💻 Resultados tecnológicos superan expectativas"
+],
+stocks:[
+"🚗 Tesla aumenta volatilidad tras earnings",
+"🍎 Apple presenta nuevos productos",
+"📦 Amazon supera expectativas de ingresos"
+],
+oil:[
+"🛢️ OPEP evalúa reducción de producción",
+"🌍 Tensiones globales afectan el petróleo",
+"📉 Inventarios de crudo aumentan"
+],
+crypto:[
+"₿ Bitcoin rompe resistencia clave",
+"⚡ ETF de Bitcoin impulsa demanda",
+"🚀 Ethereum incrementa actividad de red"
+]
 };
 
+let currentActiveAsset = null;
+
 function showNews(asset){
-const panel=document.getElementById('newsPanel');
-panel.innerHTML=`<h3 class="news-title">📰 Noticias relevantes</h3>${newsData[asset].map(item=>`<div class="news-card">${item}</div>`).join('')}`;
+// Ocultar todas las noticias primero
+document.querySelectorAll('.news-panel').forEach(panel=>{
+panel.classList.remove('active');
+});
+
+// Quitar clase active de todas las cards
+document.querySelectorAll('.market-card').forEach(card=>{
+card.classList.remove('active');
+});
+
+// Si se hace clic en el mismo activo, solo cerrar
+if(currentActiveAsset === asset){
+currentActiveAsset = null;
+return;
+}
+
+// Marcar nuevo activo como activo
+currentActiveAsset = asset;
+
+// Agregar clase active a la card seleccionada
+document.getElementById(`card-${asset}`).classList.add('active');
+
+// Mostrar noticias del activo seleccionado
+const panel = document.getElementById(`news-${asset}`);
+panel.innerHTML = `
+<h4 class="news-title">📰 Noticias Recientes</h4>
+${newsData[asset].map(item => `<div class="news-card">${item}</div>`).join('')}
+`;
 panel.classList.add('active');
 }
 
