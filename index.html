@@ -716,6 +716,37 @@ justify-content:center;
 font-weight:700;
 font-size:0.8rem;
 }
+// ============ COMMUNITY ============
+function handleChatEnter(event){
+if(event.key==='Enter'&&!event.shiftKey){
+event.preventDefault();
+sendMessage();
+}
+}
+
+function sendMessage(){
+const input=document.getElementById('chatInput');
+const message=input.value.trim();
+if(!message)return;
+
+const container=document.getElementById('chatMessages');
+const msgDiv=document.createElement('div');
+msgDiv.className='chat-message';
+msgDiv.innerHTML=`
+<div class="message-avatar">${currentUser.avatar}</div>
+<div class="message-content">
+<div class="message-header">
+<span class="message-author">${currentUser.username}</span>
+<span class="message-time">Ahora</span>
+</div>
+<div class="message-text">${message}</div>
+</div>
+`;
+container.appendChild(msgDiv);
+container.scrollTop=container.scrollHeight;
+
+input.value='';
+}
 
 /* ============ ACADEMY ============ */
 .academy-grid{
