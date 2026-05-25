@@ -3,13 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CFI Trading Experience</title>
+<title>CFI Trading - Aprende desde Cero</title>
 
 <!-- FONT AWESOME -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
-<!-- GOOGLE FONT -->
+<!-- GOOGLE FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
 <!-- CHART.JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -18,451 +22,1087 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
 
 <style>
-
 :root{
---bg:#050816;
---card:rgba(255,255,255,.08);
---border:rgba(255,255,255,.12);
---primary:#7c3aed;
---secondary:#2563eb;
---accent:#06b6d4;
---green:#10b981;
---red:#ef4444;
---text:#ffffff;
---muted:#9ca3af;
+--black:#0a0a0f;
+--dark:#131318;
+--card:#1a1a24;
+--border:rgba(255,255,255,.08);
+--electric:#00d4ff;
+--gold:#ffd700;
+--green:#00ff88;
+--red:#ff3366;
+--white:#ffffff;
+--gray:#8b8b9e;
+--glow:rgba(0,212,255,.3);
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
 
-html,body{
-height:100%;
-overflow:hidden;
+html{scroll-behavior:smooth;font-size:16px;}
+
+body{
 font-family:'Inter',sans-serif;
-background:radial-gradient(circle at top left,#1e3a8a 0%,transparent 30%),radial-gradient(circle at bottom right,#7c3aed 0%,transparent 30%),#050816;
-color:white;
+background:var(--black);
+color:var(--white);
+overflow-x:hidden;
 -webkit-font-smoothing:antialiased;
 -moz-osx-font-smoothing:grayscale;
 }
 
-body{position:relative;}
+/* ============ HERO SECTION ============ */
 
-.bg-blur{position:absolute;width:500px;height:500px;background:rgba(124,58,237,.18);filter:blur(120px);border-radius:50%;top:-100px;right:-100px;z-index:0;pointer-events:none;}
-
-.bg-blur-2{position:absolute;width:400px;height:400px;background:rgba(37,99,235,.18);filter:blur(120px);border-radius:50%;bottom:-100px;left:-100px;z-index:0;pointer-events:none;}
-
-.presentation{position:relative;z-index:2;height:100vh;width:100vw;overflow:hidden;}
-
-.slide{position:absolute;inset:0;display:none;padding:50px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-
-.slide.active{display:flex;flex-direction:column;justify-content:center;animation:fade .5s ease;}
-
-@keyframes fade{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-
-.hero{text-align:center;max-width:1100px;margin:auto;}
-
-.hero-badge{display:inline-flex;align-items:center;gap:10px;padding:10px 20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:999px;margin-bottom:30px;backdrop-filter:blur(10px);}
-
-.hero h1{font-size:90px;font-weight:900;line-height:1.1;margin-bottom:20px;background:linear-gradient(to right,#fff,#7dd3fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-
-.hero p{font-size:28px;color:var(--muted);line-height:1.5;margin-bottom:40px;}
-
-.hero-buttons{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
-
-.btn{padding:18px 35px;border:none;border-radius:18px;font-size:18px;font-weight:700;cursor:pointer;transition:all .3s ease;text-decoration:none;display:inline-block;-webkit-tap-highlight-color:transparent;}
-
-.btn-primary{background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;box-shadow:0 10px 40px rgba(124,58,237,.4);}
-
-.btn-primary:hover,.btn-primary:active{transform:translateY(-4px) scale(1.03);box-shadow:0 15px 50px rgba(124,58,237,.6);}
-
-.btn-secondary{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:white;backdrop-filter:blur(10px);}
-
-.btn-secondary:hover,.btn-secondary:active{background:rgba(255,255,255,.14);}
-
-.section-title{font-size:58px;font-weight:800;margin-bottom:20px;text-align:center;}
-
-.section-subtitle{font-size:22px;color:var(--muted);margin-bottom:50px;text-align:center;}
-
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:25px;max-width:1200px;margin:0 auto;}
-
-.card{background:var(--card);border:1px solid var(--border);backdrop-filter:blur(14px);padding:35px;border-radius:28px;transition:all .35s ease;}
-
-.card:hover{transform:translateY(-8px);box-shadow:0 0 40px rgba(124,58,237,.25);border-color:rgba(255,255,255,.2);}
-
-.card i{font-size:45px;margin-bottom:20px;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;}
-
-.card h3{font-size:28px;margin-bottom:15px;}
-
-.card p{font-size:17px;color:var(--muted);line-height:1.6;}
-
-.market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px;max-width:1200px;margin:0 auto;}
-
-.market-card{cursor:pointer;position:relative;overflow:hidden;}
-
-.market-card.active{
-border:2px solid var(--primary);
-box-shadow:0 0 30px rgba(124,58,237,.4);
+.hero{
+position:relative;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+padding:2rem;
 }
 
-.market-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.04));opacity:0;transition:opacity .3s ease;}
-
-.market-card:hover::before{opacity:1;}
-
-.market-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
-
-.market-icon{width:70px;height:70px;border-radius:18px;display:flex;justify-content:center;align-items:center;font-size:30px;background:rgba(255,255,255,.08);}
-
-.market-change{font-weight:700;font-size:18px;}
-
-.positive{color:var(--green);}
-.negative{color:var(--red);}
-
-.news-panel{
-margin-top:20px;
-background:rgba(124,58,237,.15);
-border:2px solid var(--primary);
-padding:20px;
-border-radius:20px;
-display:none;
-backdrop-filter:blur(14px);
-animation:slideDown .4s ease;
+.hero-bg{
+position:absolute;
+inset:0;
+z-index:0;
+overflow:hidden;
 }
 
-@keyframes slideDown{
-from{
+.particles{
+position:absolute;
+width:100%;
+height:100%;
+}
+
+.particle{
+position:absolute;
+width:3px;
+height:3px;
+background:var(--electric);
+border-radius:50%;
+opacity:0.6;
+animation:float linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh) translateX(0);}
+100%{transform:translateY(-100px) translateX(50px);}
+}
+
+.candle-bg{
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at 20% 30%,rgba(0,212,255,.1),transparent 40%),
+radial-gradient(circle at 80% 70%,rgba(255,215,0,.08),transparent 40%);
+}
+
+.grid-bg{
+position:absolute;
+inset:0;
+background-image:
+linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+background-size:50px 50px;
+opacity:0.3;
+}
+
+.hero-content{
+position:relative;
+z-index:10;
+text-align:center;
+max-width:1100px;
+}
+
+.hero-badge{
+display:inline-flex;
+align-items:center;
+gap:0.75rem;
+padding:0.75rem 1.5rem;
+background:rgba(255,255,255,.05);
+border:1px solid var(--border);
+border-radius:999px;
+backdrop-filter:blur(20px);
+margin-bottom:2rem;
+font-size:0.9rem;
+font-weight:600;
+letter-spacing:0.5px;
+animation:fadeInUp 0.8s ease;
+}
+
+.hero-badge i{
+color:var(--electric);
+font-size:1.2rem;
+}
+
+@keyframes fadeInUp{
+from{opacity:0;transform:translateY(30px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+.hero h1{
+font-size:clamp(2.5rem,8vw,5.5rem);
+font-weight:900;
+line-height:1.1;
+margin-bottom:1.5rem;
+background:linear-gradient(135deg,var(--white),var(--electric));
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+animation:fadeInUp 0.8s ease 0.2s both;
+}
+
+.hero-subtitle{
+font-size:clamp(1.1rem,3vw,1.5rem);
+color:var(--gray);
+line-height:1.6;
+margin-bottom:3rem;
+max-width:700px;
+margin-left:auto;
+margin-right:auto;
+animation:fadeInUp 0.8s ease 0.4s both;
+}
+
+.hero-cta{
+display:flex;
+gap:1.25rem;
+justify-content:center;
+flex-wrap:wrap;
+animation:fadeInUp 0.8s ease 0.6s both;
+}
+
+.btn{
+padding:1.2rem 2.5rem;
+border:none;
+border-radius:16px;
+font-size:1.1rem;
+font-weight:700;
+cursor:pointer;
+transition:all .4s cubic-bezier(.4,0,.2,1);
+text-decoration:none;
+display:inline-flex;
+align-items:center;
+gap:0.75rem;
+position:relative;
+overflow:hidden;
+}
+
+.btn-primary{
+background:linear-gradient(135deg,var(--electric),#0099ff);
+color:var(--black);
+box-shadow:0 20px 60px rgba(0,212,255,.3);
+}
+
+.btn-primary::before{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(135deg,#00ffff,var(--electric));
 opacity:0;
-transform:translateY(-10px);
+transition:opacity .4s;
 }
-to{
+
+.btn-primary:hover::before{
 opacity:1;
-transform:translateY(0);
-}
 }
 
-.news-panel.active{
+.btn-primary:hover{
+transform:translateY(-4px);
+box-shadow:0 30px 80px rgba(0,212,255,.5);
+}
+
+.btn-primary span{
+position:relative;
+z-index:1;
+}
+
+.btn-secondary{
+background:rgba(255,255,255,.05);
+border:1px solid var(--border);
+color:var(--white);
+backdrop-filter:blur(20px);
+}
+
+.btn-secondary:hover{
+background:rgba(255,255,255,.1);
+border-color:var(--electric);
+box-shadow:0 10px 40px rgba(0,212,255,.2);
+}
+
+/* ============ STATS BAR ============ */
+
+.stats-bar{
+background:var(--dark);
+padding:3rem 2rem;
+border-top:1px solid var(--border);
+border-bottom:1px solid var(--border);
+}
+
+.stats-container{
+max-width:1200px;
+margin:0 auto;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:2rem;
+text-align:center;
+}
+
+.stat-item{
+padding:1.5rem;
+background:var(--card);
+border-radius:20px;
+border:1px solid var(--border);
+transition:transform .3s ease;
+}
+
+.stat-item:hover{
+transform:translateY(-5px);
+}
+
+.stat-number{
+font-size:clamp(2rem,5vw,3rem);
+font-weight:900;
+background:linear-gradient(135deg,var(--electric),var(--green));
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+margin-bottom:0.5rem;
+}
+
+.stat-label{
+font-size:1rem;
+color:var(--gray);
+font-weight:500;
+}
+
+/* ============ LEARNING PATH ============ */
+
+.learning-path{
+padding:6rem 2rem;
+background:var(--black);
+position:relative;
+}
+
+.section-header{
+text-align:center;
+max-width:800px;
+margin:0 auto 4rem;
+}
+
+.section-badge{
+display:inline-block;
+padding:0.6rem 1.25rem;
+background:rgba(0,212,255,.1);
+border:1px solid rgba(0,212,255,.3);
+border-radius:999px;
+color:var(--electric);
+font-size:0.9rem;
+font-weight:700;
+letter-spacing:0.5px;
+margin-bottom:1.5rem;
+}
+
+.section-title{
+font-size:clamp(2rem,6vw,3.5rem);
+font-weight:900;
+line-height:1.2;
+margin-bottom:1.25rem;
+}
+
+.section-subtitle{
+font-size:clamp(1rem,3vw,1.3rem);
+color:var(--gray);
+line-height:1.6;
+}
+
+.path-container{
+max-width:1200px;
+margin:0 auto;
+display:grid;
+gap:2rem;
+}
+
+.path-level{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:24px;
+padding:2.5rem;
+display:grid;
+grid-template-columns:auto 1fr auto;
+gap:2rem;
+align-items:center;
+transition:all .4s cubic-bezier(.4,0,.2,1);
+position:relative;
+overflow:hidden;
+}
+
+.path-level::before{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(135deg,rgba(0,212,255,.05),transparent);
+opacity:0;
+transition:opacity .4s;
+}
+
+.path-level:hover::before{
+opacity:1;
+}
+
+.path-level:hover{
+transform:translateX(10px);
+border-color:var(--electric);
+box-shadow:0 10px 40px rgba(0,212,255,.2);
+}
+
+.level-number{
+width:clamp(60px,10vw,80px);
+height:clamp(60px,10vw,80px);
+border-radius:50%;
+background:linear-gradient(135deg,var(--electric),#0099ff);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:clamp(1.5rem,4vw,2rem);
+font-weight:900;
+color:var(--black);
+flex-shrink:0;
+}
+
+.level-content h3{
+font-size:clamp(1.3rem,3vw,1.8rem);
+font-weight:800;
+margin-bottom:0.75rem;
+}
+
+.level-content p{
+font-size:clamp(1rem,2vw,1.1rem);
+color:var(--gray);
+line-height:1.6;
+}
+
+.level-icon{
+font-size:clamp(2rem,5vw,3rem);
+color:var(--electric);
+flex-shrink:0;
+}
+
+/* ============ INTERACTIVE CONCEPTS ============ */
+
+.concepts{
+padding:6rem 2rem;
+background:var(--dark);
+}
+
+.concepts-grid{
+max-width:1200px;
+margin:0 auto;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));
+gap:2rem;
+}
+
+.concept-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:24px;
+padding:2.5rem;
+text-align:center;
+transition:all .4s cubic-bezier(.4,0,.2,1);
+cursor:pointer;
+position:relative;
+overflow:hidden;
+}
+
+.concept-card::before{
+content:'';
+position:absolute;
+inset:0;
+background:radial-gradient(circle at center,rgba(0,212,255,.1),transparent 70%);
+opacity:0;
+transition:opacity .4s;
+}
+
+.concept-card:hover::before{
+opacity:1;
+}
+
+.concept-card:hover{
+transform:translateY(-10px);
+border-color:var(--electric);
+box-shadow:0 20px 60px rgba(0,212,255,.3);
+}
+
+.concept-icon{
+width:clamp(80px,15vw,100px);
+height:clamp(80px,15vw,100px);
+margin:0 auto 1.5rem;
+background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(0,153,255,.1));
+border-radius:24px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:clamp(2.5rem,6vw,3.5rem);
+position:relative;
+}
+
+.concept-icon::after{
+content:'';
+position:absolute;
+inset:0;
+border-radius:24px;
+border:2px solid var(--electric);
+opacity:0;
+transform:scale(0.8);
+transition:all .4s;
+}
+
+.concept-card:hover .concept-icon::after{
+opacity:1;
+transform:scale(1);
+}
+
+.concept-card h3{
+font-size:clamp(1.3rem,3vw,1.6rem);
+font-weight:800;
+margin-bottom:1rem;
+}
+
+.concept-card p{
+font-size:clamp(0.95rem,2vw,1.05rem);
+color:var(--gray);
+line-height:1.6;
+}
+
+.concept-tag{
+display:inline-block;
+margin-top:1rem;
+padding:0.5rem 1rem;
+background:rgba(0,212,255,.1);
+border-radius:999px;
+font-size:0.85rem;
+font-weight:600;
+color:var(--electric);
+}
+
+/* ============ MINI SIMULATOR ============ */
+
+.simulator{
+padding:6rem 2rem;
+background:var(--black);
+}
+
+.simulator-container{
+max-width:1200px;
+margin:0 auto;
+background:var(--card);
+border:1px solid var(--border);
+border-radius:32px;
+padding:clamp(2rem,5vw,4rem);
+box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+
+.simulator-header{
+text-align:center;
+margin-bottom:3rem;
+}
+
+.simulator-header h2{
+font-size:clamp(2rem,5vw,3rem);
+font-weight:900;
+margin-bottom:1rem;
+}
+
+.simulator-header p{
+font-size:clamp(1rem,2vw,1.2rem);
+color:var(--gray);
+}
+
+.simulator-content{
+display:grid;
+grid-template-columns:1fr;
+gap:2rem;
+}
+
+.chart-panel{
+background:var(--dark);
+border:1px solid var(--border);
+border-radius:24px;
+padding:clamp(1.5rem,3vw,2.5rem);
+}
+
+.chart-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:1.5rem;
+flex-wrap:wrap;
+gap:1rem;
+}
+
+.pair-name{
+font-size:clamp(1.2rem,3vw,1.5rem);
+font-weight:700;
+color:var(--gray);
+}
+
+.price-display{
+display:flex;
+align-items:baseline;
+gap:1rem;
+flex-wrap:wrap;
+}
+
+.current-price{
+font-size:clamp(2rem,5vw,3rem);
+font-weight:900;
+}
+
+.price-change{
+font-size:clamp(1rem,2vw,1.3rem);
+font-weight:700;
+padding:0.4rem 0.8rem;
+border-radius:8px;
+}
+
+.price-change.up{
+color:var(--green);
+background:rgba(0,255,136,.1);
+}
+
+.price-change.down{
+color:var(--red);
+background:rgba(255,51,102,.1);
+}
+
+.chart-canvas{
+position:relative;
+height:clamp(250px,50vw,400px);
+margin-bottom:2rem;
+}
+
+.trade-controls{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));
+gap:1.5rem;
+}
+
+.trade-btn{
+padding:1.5rem;
+border:none;
+border-radius:16px;
+font-size:1.2rem;
+font-weight:800;
+cursor:pointer;
+transition:all .3s ease;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:0.75rem;
+min-height:60px;
+}
+
+.trade-btn.buy{
+background:linear-gradient(135deg,var(--green),#00cc70);
+color:var(--black);
+box-shadow:0 10px 30px rgba(0,255,136,.3);
+}
+
+.trade-btn.buy:hover{
+transform:translateY(-4px);
+box-shadow:0 15px 40px rgba(0,255,136,.5);
+}
+
+.trade-btn.sell{
+background:linear-gradient(135deg,var(--red),#cc0044);
+color:var(--white);
+box-shadow:0 10px 30px rgba(255,51,102,.3);
+}
+
+.trade-btn.sell:hover{
+transform:translateY(-4px);
+box-shadow:0 15px 40px rgba(255,51,102,.5);
+}
+
+.trade-btn:disabled{
+opacity:0.5;
+cursor:not-allowed;
+transform:none;
+}
+
+.sim-stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));
+gap:1.5rem;
+margin-top:2rem;
+}
+
+.sim-stat{
+background:var(--black);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+text-align:center;
+}
+
+.sim-stat-label{
+font-size:0.9rem;
+color:var(--gray);
+margin-bottom:0.5rem;
+text-transform:uppercase;
+letter-spacing:0.5px;
+font-weight:600;
+}
+
+.sim-stat-value{
+font-size:clamp(1.5rem,4vw,2rem);
+font-weight:900;
+}
+
+.position-panel{
+background:rgba(0,212,255,.05);
+border:2px solid var(--electric);
+border-radius:20px;
+padding:2rem;
+margin-top:2rem;
+display:none;
+}
+
+.position-panel.active{
 display:block;
+animation:slideIn .4s ease;
 }
 
-.news-title{
-font-size:20px;
-margin-bottom:15px;
-color:var(--primary);
+@keyframes slideIn{
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+.position-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:1.5rem;
+flex-wrap:wrap;
+gap:1rem;
+}
+
+.position-type{
+padding:0.6rem 1.2rem;
+border-radius:12px;
+font-weight:800;
+font-size:1rem;
+}
+
+.position-type.buy{
+background:var(--green);
+color:var(--black);
+}
+
+.position-type.sell{
+background:var(--red);
+color:var(--white);
+}
+
+.close-position-btn{
+padding:0.8rem 1.5rem;
+background:rgba(255,255,255,.1);
+border:1px solid var(--border);
+border-radius:12px;
+color:var(--white);
+font-weight:700;
+cursor:pointer;
+transition:all .3s;
+}
+
+.close-position-btn:hover{
+background:rgba(255,255,255,.2);
+}
+
+.position-details{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr));
+gap:1rem;
+}
+
+.position-detail{
+background:var(--dark);
+padding:1rem;
+border-radius:12px;
+}
+
+.position-detail-label{
+font-size:0.85rem;
+color:var(--gray);
+margin-bottom:0.5rem;
+}
+
+.position-detail-value{
+font-size:1.2rem;
 font-weight:800;
 }
 
-.news-card{
-background:rgba(255,255,255,.08);
-padding:12px 15px;
-border-radius:12px;
-margin-bottom:10px;
-border-left:4px solid var(--accent);
-transition:all .3s ease;
-font-size:15px;
+/* ============ CTA FINAL ============ */
+
+.final-cta{
+padding:6rem 2rem;
+background:var(--dark);
+position:relative;
+overflow:hidden;
 }
 
-.news-card:last-child{
-margin-bottom:0;
+.final-cta::before{
+content:'';
+position:absolute;
+inset:0;
+background:radial-gradient(circle at center,rgba(0,212,255,.1),transparent 70%);
 }
 
-.news-card:hover{
-transform:translateX(5px);
-background:rgba(255,255,255,.12);
+.final-cta-content{
+position:relative;
+max-width:900px;
+margin:0 auto;
+text-align:center;
 }
 
-.simulator{display:grid;grid-template-columns:1fr;gap:25px;max-width:1200px;margin:0 auto;}
-
-.chart-section{background:var(--card);border:1px solid var(--border);padding:25px;border-radius:30px;backdrop-filter:blur(14px);margin-bottom:25px;}
-
-.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
-
-.pair{font-size:24px;color:var(--muted);margin:0;}
-
-.chart-price{display:flex;align-items:baseline;gap:15px;}
-
-.big-price{font-size:48px;font-weight:900;line-height:1;}
-
-.price-change{font-size:20px;font-weight:700;}
-
-.chart-container{position:relative;height:350px;width:100%;}
-
-.trading-panel{display:grid;grid-template-columns:1fr 1fr;gap:25px;}
-
-.price-panel{background:var(--card);border:1px solid var(--border);padding:30px;border-radius:30px;backdrop-filter:blur(14px);}
-
-.trade-buttons{display:flex;gap:15px;margin-top:25px;}
-
-.trade-btn{flex:1;padding:20px;border:none;border-radius:20px;font-size:18px;font-weight:800;cursor:pointer;transition:all .3s ease;-webkit-tap-highlight-color:transparent;}
-
-.buy{background:linear-gradient(135deg,#10b981,#059669);color:white;}
-
-.sell{background:linear-gradient(135deg,#ef4444,#dc2626);color:white;}
-
-.trade-btn:hover,.trade-btn:active{transform:translateY(-5px);box-shadow:0 10px 30px rgba(0,0,0,.3);}
-
-.trade-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
-
-.stats{display:grid;gap:20px;}
-
-.stat{background:var(--card);border:1px solid var(--border);padding:25px;border-radius:25px;backdrop-filter:blur(14px);}
-
-.stat-label{font-size:13px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;}
-
-.stat-value{font-size:28px;font-weight:800;}
-
-.active-position{background:rgba(124,58,237,.15);border:2px solid var(--primary);padding:20px;border-radius:20px;margin-top:25px;display:none;}
-
-.active-position.show{display:block;animation:fade .3s ease;}
-
-.position-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
-
-.position-type{font-size:16px;font-weight:700;padding:8px 16px;border-radius:12px;}
-
-.position-type.buy{background:var(--green);color:white;}
-
-.position-type.sell{background:var(--red);color:white;}
-
-.close-btn{padding:10px 20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:white;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:.3s;}
-
-.close-btn:hover{background:rgba(255,255,255,.2);}
-
-.position-info{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;}
-
-.position-detail{background:rgba(255,255,255,.05);padding:12px;border-radius:12px;}
-
-.position-detail-label{font-size:11px;color:var(--muted);margin-bottom:5px;}
-
-.position-detail-value{font-size:18px;font-weight:800;}
-
-.navigation{position:fixed;bottom:25px;right:25px;display:flex;gap:15px;z-index:100;}
-
-.nav-btn{width:65px;height:65px;border:none;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:white;font-size:22px;cursor:pointer;backdrop-filter:blur(12px);transition:all .3s ease;-webkit-tap-highlight-color:transparent;}
-
-.nav-btn:hover,.nav-btn:active{background:rgba(255,255,255,.15);transform:translateY(-3px);}
-
-.slide-counter{position:fixed;left:25px;bottom:25px;padding:16px 24px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px);font-weight:700;z-index:100;}
-
-@media(max-width:950px){
-html,body{overflow-x:hidden;}
-.slide{padding:25px 20px;justify-content:flex-start;padding-top:100px;}
-.hero h1{font-size:48px;margin-top:40px;}
-.hero p{font-size:18px;}
-.hero-buttons{flex-direction:column;width:100%;max-width:300px;margin:0 auto;}
-.btn{width:100%;padding:16px 25px;font-size:16px;}
-.section-title{font-size:36px;margin-top:40px;}
-.section-subtitle{font-size:18px;margin-bottom:30px;}
-.grid,.market-grid{grid-template-columns:1fr;gap:20px;}
-.trading-panel{grid-template-columns:1fr;}
-.chart-container{height:250px;}
-.big-price{font-size:36px;}
-.price-change{font-size:16px;}
-.trade-btn{padding:18px;font-size:16px;}
-.market-card,.card,.stat,.price-panel,.chart-section{padding:20px;}
-.card h3{font-size:24px;}
-.card p{font-size:16px;}
-.navigation{right:15px;bottom:15px;gap:10px;}
-.nav-btn{width:55px;height:55px;font-size:18px;}
-.slide-counter{left:15px;bottom:15px;padding:12px 18px;font-size:14px;}
-.market-icon{width:60px;height:60px;font-size:26px;}
-.market-change{font-size:16px;}
-.news-panel{padding:15px;margin-top:15px;}
-.news-title{font-size:18px;margin-bottom:12px;}
-.news-card{font-size:14px;padding:10px 12px;}
-.bg-blur,.bg-blur-2{filter:blur(80px);}
-.position-info{grid-template-columns:1fr;}
-.stat-value{font-size:24px;}
+.final-cta h2{
+font-size:clamp(2rem,6vw,4rem);
+font-weight:900;
+line-height:1.2;
+margin-bottom:1.5rem;
 }
 
-@media(max-width:480px){
-.hero h1{font-size:36px;}
-.hero p{font-size:16px;}
-.section-title{font-size:28px;}
-.section-subtitle{font-size:16px;}
-.card{padding:20px;}
-.card i{font-size:36px;}
-.card h3{font-size:20px;}
-.big-price{font-size:32px;}
-.chart-container{height:220px;}
+.final-cta p{
+font-size:clamp(1.1rem,3vw,1.4rem);
+color:var(--gray);
+margin-bottom:3rem;
+line-height:1.6;
 }
 
-@media(max-height:500px) and (orientation:landscape){
-.slide{padding:20px;justify-content:flex-start;padding-top:20px;}
-.hero h1{font-size:32px;margin-top:20px;}
-.hero p{font-size:14px;margin-bottom:20px;}
-.section-title{font-size:28px;margin-top:20px;}
+.final-cta-buttons{
+display:flex;
+gap:1.5rem;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+/* ============ MOBILE OPTIMIZATIONS ============ */
+
+@media(max-width:768px){
+
+html{font-size:16px;}
+
+.hero{padding:4rem 1.5rem;min-height:90vh;}
+
+.hero h1{font-size:2.5rem;}
+
+.hero-subtitle{font-size:1.1rem;}
+
+.btn{
+padding:1rem 2rem;
+font-size:1rem;
+width:100%;
+justify-content:center;
+min-height:56px;
+}
+
+.stats-container{
+grid-template-columns:1fr;
+gap:1.5rem;
+}
+
+.learning-path{padding:4rem 1.5rem;}
+
+.path-level{
+grid-template-columns:1fr;
+text-align:center;
+padding:2rem 1.5rem;
+gap:1.5rem;
+}
+
+.level-content h3{font-size:1.5rem;}
+
+.level-content p{font-size:1rem;}
+
+.concepts{padding:4rem 1.5rem;}
+
+.concepts-grid{
+grid-template-columns:1fr;
+gap:1.5rem;
+}
+
+.simulator{padding:4rem 1.5rem;}
+
+.simulator-container{padding:2rem 1.5rem;}
+
+.chart-canvas{height:300px;}
+
+.trade-controls{
+grid-template-columns:1fr;
+}
+
+.sim-stats{
+grid-template-columns:1fr;
+}
+
+.final-cta{padding:4rem 1.5rem;}
+
+.position-details{
+grid-template-columns:1fr;
+}
+
+}
+
+/* ============ SCROLL ANIMATIONS ============ */
+
+.fade-in{
+opacity:0;
+transform:translateY(30px);
+}
+
+.fade-in.visible{
+opacity:1;
+transform:translateY(0);
+transition:all 0.8s cubic-bezier(.4,0,.2,1);
 }
 
 </style>
 </head>
 <body>
 
-<div class="bg-blur"></div>
-<div class="bg-blur-2"></div>
+<!-- HERO SECTION -->
+<section class="hero">
+<div class="hero-bg">
+<div class="candle-bg"></div>
+<div class="grid-bg"></div>
+<div class="particles" id="particles"></div>
+</div>
 
-<div class="presentation">
-
-<section class="slide active">
-<div class="hero">
+<div class="hero-content">
 <div class="hero-badge">
-<i class="fa-solid fa-chart-line"></i>
-<span>CFI BROKER EXPERIENCE</span>
+<i class="fa-solid fa-rocket"></i>
+<span>EXPERIENCIA INTERACTIVA CFI</span>
 </div>
-<h1>Trading Inteligente</h1>
-<p>Aprende cómo funcionan los mercados globales con una experiencia visual moderna, interactiva y diseñada para nuevos traders.</p>
-<div class="hero-buttons">
-<button class="btn btn-primary" onclick="nextSlide()">Comenzar</button>
-<button class="btn btn-secondary" onclick="goToSlide(2)">Ver Mercados</button>
+
+<h1>Aprende Trading desde Cero</h1>
+
+<p class="hero-subtitle">
+Descubre los mercados financieros de forma simple, visual e interactiva. Sin experiencia previa necesaria.
+</p>
+
+<div class="hero-cta">
+<a href="#simulator" class="btn btn-primary">
+<span>Probar Simulador</span>
+<i class="fa-solid fa-arrow-right"></i>
+</a>
+<a href="https://wa.me/573058362590?text=Hola,%20quiero%20aprender%20trading%20con%20CFI" target="_blank" class="btn btn-secondary">
+<i class="fa-brands fa-whatsapp"></i>
+<span>Hablar con Asesor</span>
+</a>
 </div>
 </div>
 </section>
 
-<section class="slide">
-<h2 class="section-title">¿Qué es el Trading?</h2>
-<p class="section-subtitle">Comprar y vender activos financieros buscando oportunidades en el mercado.</p>
-<div class="grid">
-<div class="card">
-<i class="fa-solid fa-arrow-trend-up"></i>
-<h3>Comprar (Buy/Long)</h3>
-<p>Abres una posición esperando que el precio <strong>suba</strong>. Si sube, ganas dinero. Si baja, pierdes.</p>
+<!-- STATS BAR -->
+<section class="stats-bar">
+<div class="stats-container">
+<div class="stat-item fade-in">
+<div class="stat-number">15K+</div>
+<div class="stat-label">Usuarios Aprendiendo</div>
 </div>
-<div class="card">
-<i class="fa-solid fa-arrow-trend-down"></i>
-<h3>Vender (Sell/Short)</h3>
-<p>Abres una posición esperando que el precio <strong>baje</strong>. Si baja, ganas dinero. Si sube, pierdes.</p>
+<div class="stat-item fade-in">
+<div class="stat-number">24/7</div>
+<div class="stat-label">Mercados Activos</div>
 </div>
-<div class="card">
-<i class="fa-solid fa-brain"></i>
-<h3>Análisis Inteligente</h3>
-<p>Utiliza gráficos, noticias y herramientas avanzadas para tomar decisiones informadas.</p>
+<div class="stat-item fade-in">
+<div class="stat-number">100%</div>
+<div class="stat-label">Gratis para Empezar</div>
 </div>
-<div class="card">
-<i class="fa-solid fa-shield-halved"></i>
+<div class="stat-item fade-in">
+<div class="stat-number">5min</div>
+<div class="stat-label">Primera Lección</div>
+</div>
+</div>
+</section>
+
+<!-- LEARNING PATH -->
+<section class="learning-path">
+<div class="section-header fade-in">
+<div class="section-badge">TU CAMINO DE APRENDIZAJE</div>
+<h2 class="section-title">Progresa Paso a Paso</h2>
+<p class="section-subtitle">
+Avanza por niveles diseñados para que entiendas todo desde cero, sin complicaciones.
+</p>
+</div>
+
+<div class="path-container">
+<div class="path-level fade-in">
+<div class="level-number">1</div>
+<div class="level-content">
+<h3>¿Qué es el Trading?</h3>
+<p>Comprende los conceptos básicos de forma simple y visual. Sin términos complicados.</p>
+</div>
+<i class="fa-solid fa-lightbulb level-icon"></i>
+</div>
+
+<div class="path-level fade-in">
+<div class="level-number">2</div>
+<div class="level-content">
+<h3>Comprar y Vender</h3>
+<p>Descubre cómo ganar dinero cuando los precios suben o bajan en el mercado.</p>
+</div>
+<i class="fa-solid fa-chart-line level-icon"></i>
+</div>
+
+<div class="path-level fade-in">
+<div class="level-number">3</div>
+<div class="level-content">
 <h3>Gestión de Riesgo</h3>
-<p>La protección del capital es una de las claves más importantes del trading exitoso.</p>
+<p>Aprende a proteger tu capital con estrategias profesionales y herramientas automáticas.</p>
+</div>
+<i class="fa-solid fa-shield-halved level-icon"></i>
+</div>
+
+<div class="path-level fade-in">
+<div class="level-number">4</div>
+<div class="level-content">
+<h3>Psicología del Trader</h3>
+<p>Controla tus emociones y toma decisiones inteligentes bajo presión.</p>
+</div>
+<i class="fa-solid fa-brain level-icon"></i>
+</div>
+
+<div class="path-level fade-in">
+<div class="level-number">5</div>
+<div class="level-content">
+<h3>Práctica Real</h3>
+<p>Opera en mercados reales con cuenta demo. Sin riesgo, máxima experiencia.</p>
+</div>
+<i class="fa-solid fa-gamepad level-icon"></i>
 </div>
 </div>
 </section>
 
-<section class="slide">
-<h2 class="section-title">Mercados Globales</h2>
-<p class="section-subtitle">Selecciona un activo para ver noticias relevantes que impactan el mercado.</p>
-<div class="market-grid">
+<!-- INTERACTIVE CONCEPTS -->
+<section class="concepts">
+<div class="section-header fade-in">
+<div class="section-badge">MERCADOS DISPONIBLES</div>
+<h2 class="section-title">Elige Tu Activo Favorito</h2>
+<p class="section-subtitle">
+Opera en los mercados más populares del mundo. Cada uno con su propia estrategia.
+</p>
+</div>
 
-<!-- FOREX -->
-<div class="card market-card" id="card-forex" onclick="showNews('forex')">
-<div class="market-top">
-<div class="market-icon"><i class="fa-solid fa-dollar-sign"></i></div>
-<div class="market-change positive">+1.25%</div>
+<div class="concepts-grid">
+<div class="concept-card fade-in">
+<div class="concept-icon">
+<i class="fa-solid fa-dollar-sign"></i>
 </div>
 <h3>Forex</h3>
-<p>Mercado global de divisas con alta liquidez y operación 24/5.</p>
-<div class="news-panel" id="news-forex"></div>
+<p>El mercado más líquido del mundo. Opera pares de divisas 24/5 con alta volatilidad.</p>
+<span class="concept-tag">Más Popular</span>
 </div>
 
-<!-- GOLD -->
-<div class="card market-card" id="card-gold" onclick="showNews('gold')">
-<div class="market-top">
-<div class="market-icon"><i class="fa-solid fa-medal"></i></div>
-<div class="market-change negative">-0.84%</div>
+<div class="concept-card fade-in">
+<div class="concept-icon">
+<i class="fa-solid fa-medal"></i>
 </div>
-<h3>Metales</h3>
-<p>Oro y plata reaccionan ante inflación y política monetaria.</p>
-<div class="news-panel" id="news-gold"></div>
+<h3>Oro y Metales</h3>
+<p>Activos refugio ideales en tiempos de incertidumbre económica global.</p>
+<span class="concept-tag">Estable</span>
 </div>
 
-<!-- INDICES -->
-<div class="card market-card" id="card-indices" onclick="showNews('indices')">
-<div class="market-top">
-<div class="market-icon"><i class="fa-solid fa-chart-column"></i></div>
-<div class="market-change positive">+2.11%</div>
+<div class="concept-card fade-in">
+<div class="concept-icon">
+<i class="fa-solid fa-chart-column"></i>
 </div>
 <h3>Índices</h3>
-<p>Opera los mercados bursátiles más importantes del mundo.</p>
-<div class="news-panel" id="news-indices"></div>
+<p>Opera los mercados bursátiles completos con un solo clic. S&P500, Nasdaq, DAX.</p>
+<span class="concept-tag">Diversificado</span>
 </div>
 
-<!-- STOCKS -->
-<div class="card market-card" id="card-stocks" onclick="showNews('stocks')">
-<div class="market-top">
-<div class="market-icon"><i class="fa-solid fa-building"></i></div>
-<div class="market-change positive">+3.18%</div>
+<div class="concept-card fade-in">
+<div class="concept-icon">
+<i class="fa-brands fa-bitcoin"></i>
+</div>
+<h3>Criptomonedas</h3>
+<p>Bitcoin, Ethereum y más. Mercado digital con alta volatilidad y oportunidades 24/7.</p>
+<span class="concept-tag">Alta Volatilidad</span>
+</div>
+
+<div class="concept-card fade-in">
+<div class="concept-icon">
+<i class="fa-solid fa-building"></i>
 </div>
 <h3>Acciones</h3>
-<p>Invierte en compañías líderes como Apple, Tesla y Amazon.</p>
-<div class="news-panel" id="news-stocks"></div>
+<p>Invierte en las mejores compañías: Apple, Tesla, Amazon, Google y más.</p>
+<span class="concept-tag">Crecimiento</span>
 </div>
 
-<!-- OIL -->
-<div class="card market-card" id="card-oil" onclick="showNews('oil')">
-<div class="market-top">
-<div class="market-icon"><i class="fa-solid fa-oil-can"></i></div>
-<div class="market-change negative">-1.09%</div>
+<div class="concept-card fade-in">
+<div class="concept-icon">
+<i class="fa-solid fa-oil-can"></i>
 </div>
 <h3>Commodities</h3>
-<p>Petróleo, gas y materias primas esenciales para la economía global.</p>
-<div class="news-panel" id="news-oil"></div>
+<p>Petróleo, gas natural y materias primas esenciales para la economía mundial.</p>
+<span class="concept-tag">Energía</span>
 </div>
-
-<!-- CRYPTO -->
-<div class="card market-card" id="card-crypto" onclick="showNews('crypto')">
-<div class="market-top">
-<div class="market-icon"><i class="fa-brands fa-bitcoin"></i></div>
-<div class="market-change positive">+5.46%</div>
-</div>
-<h3>Cripto</h3>
-<p>Mercado digital con alta volatilidad y oportunidades 24/7.</p>
-<div class="news-panel" id="news-crypto"></div>
-</div>
-
 </div>
 </section>
 
-<section class="slide">
-<h2 class="section-title">Simulador de Trading Demo</h2>
-<p class="section-subtitle">Experimenta cómo funciona una operación real con gráfico de velas en tiempo real.</p>
-<div class="simulator">
+<!-- MINI SIMULATOR -->
+<section class="simulator" id="simulator">
+<div class="section-header fade-in">
+<div class="section-badge">SIMULADOR INTERACTIVO</div>
+<h2 class="section-title">Prueba tu Primera Operación</h2>
+<p class="section-subtitle">
+Sin riesgo, sin dinero real. Experimenta cómo funciona el trading en tiempo real.
+</p>
+</div>
 
-<!-- GRÁFICO DE VELAS -->
-<div class="chart-section">
+<div class="simulator-container fade-in">
+<div class="simulator-content">
+<div class="chart-panel">
 <div class="chart-header">
-<div class="pair">EUR/USD</div>
-<div class="chart-price">
-<div class="big-price" id="price">1.0850</div>
-<div class="price-change positive" id="priceChange">▲ +0.15%</div>
-</div>
-</div>
-<div class="chart-container">
-<canvas id="candlestickChart"></canvas>
+<div class="pair-name">EUR/USD</div>
+<div class="price-display">
+<div class="current-price" id="simPrice">1.0850</div>
+<div class="price-change up" id="simChange">▲ +0.15%</div>
 </div>
 </div>
 
-<!-- PANEL DE TRADING -->
-<div class="trading-panel">
-<div class="price-panel">
-<div class="trade-buttons">
-<button class="trade-btn buy" id="buyBtn" onclick="openPosition('buy')">
-<i class="fa-solid fa-arrow-up"></i> COMPRAR
+<div class="chart-canvas">
+<canvas id="simChart"></canvas>
+</div>
+
+<div class="trade-controls">
+<button class="trade-btn buy" id="buyBtn" onclick="openTrade('buy')">
+<i class="fa-solid fa-arrow-up"></i>
+<span>COMPRAR</span>
 </button>
-<button class="trade-btn sell" id="sellBtn" onclick="openPosition('sell')">
-<i class="fa-solid fa-arrow-down"></i> VENDER
+<button class="trade-btn sell" id="sellBtn" onclick="openTrade('sell')">
+<i class="fa-solid fa-arrow-down"></i>
+<span>VENDER</span>
 </button>
 </div>
 
-<div class="active-position" id="activePosition">
+<div class="position-panel" id="positionPanel">
 <div class="position-header">
-<span class="position-type" id="positionType">COMPRA</span>
-<button class="close-btn" onclick="closePosition()">CERRAR</button>
+<div class="position-type buy" id="posType">COMPRA</div>
+<button class="close-position-btn" onclick="closeTrade()">Cerrar Operación</button>
 </div>
-<div class="position-info">
+<div class="position-details">
 <div class="position-detail">
-<div class="position-detail-label">Precio Entrada</div>
+<div class="position-detail-label">Entrada</div>
 <div class="position-detail-value" id="entryPrice">1.0850</div>
 </div>
 <div class="position-detail">
-<div class="position-detail-label">Precio Actual</div>
-<div class="position-detail-value" id="currentPrice">1.0850</div>
+<div class="position-detail-label">Actual</div>
+<div class="position-detail-value" id="currentPricePos">1.0850</div>
 </div>
 <div class="position-detail">
-<div class="position-detail-label">P&L</div>
-<div class="position-detail-value" id="pnlValue">$0.00</div>
+<div class="position-detail-label">Ganancia/Pérdida</div>
+<div class="position-detail-value" id="pnl">$0.00</div>
 </div>
 <div class="position-detail">
 <div class="position-detail-label">Duración</div>
@@ -470,219 +1110,87 @@ html,body{overflow-x:hidden;}
 </div>
 </div>
 </div>
-</div>
 
-<div class="stats">
-<div class="stat">
-<div class="stat-label">Balance</div>
-<div class="stat-value" id="balance">$10,000</div>
+<div class="sim-stats">
+<div class="sim-stat">
+<div class="sim-stat-label">Balance</div>
+<div class="sim-stat-value" id="balance">$10,000</div>
 </div>
-<div class="stat">
-<div class="stat-label">Ganancia / Pérdida Total</div>
-<div class="stat-value" id="profit">$0</div>
+<div class="sim-stat">
+<div class="sim-stat-label">P&L Total</div>
+<div class="sim-stat-value" id="totalPnl">$0</div>
 </div>
-<div class="stat">
-<div class="stat-label">Operaciones Cerradas</div>
-<div class="stat-value" id="trades">0</div>
+<div class="sim-stat">
+<div class="sim-stat-label">Operaciones</div>
+<div class="sim-stat-value" id="tradeCount">0</div>
 </div>
 </div>
 </div>
-
-</div>
-</section>
-
-<section class="slide">
-<h2 class="section-title">Gestión de Riesgo</h2>
-<div class="grid">
-<div class="card">
-<i class="fa-solid fa-octagon-xmark"></i>
-<h3>Stop Loss</h3>
-<p>Protege tu capital cerrando automáticamente una operación cuando el mercado va en contra.</p>
-</div>
-<div class="card">
-<i class="fa-solid fa-bullseye"></i>
-<h3>Take Profit</h3>
-<p>Asegura ganancias automáticamente cuando alcanzas tu objetivo.</p>
-</div>
-<div class="card">
-<i class="fa-solid fa-ruler"></i>
-<h3>Tamaño de Posición</h3>
-<p>Nunca arriesgues demasiado capital en una sola operación.</p>
-</div>
-<div class="card">
-<i class="fa-solid fa-robot"></i>
-<h3>IA & Análisis</h3>
-<p>Obtén soporte mediante análisis técnico y noticias económicas relevantes.</p>
 </div>
 </div>
 </section>
 
-<section class="slide">
-<div class="hero">
-<div class="hero-badge">
+<!-- FINAL CTA -->
+<section class="final-cta">
+<div class="final-cta-content fade-in">
+<h2>Ya Entiendes Cómo Funciona</h2>
+<p>
+Ahora da el siguiente paso. Abre tu cuenta y comienza tu camino en los mercados financieros con acompañamiento profesional.
+</p>
+<div class="final-cta-buttons">
+<a href="https://registration.cfifinancial.com/mu/en/registration?promo=3569" target="_blank" class="btn btn-primary">
+<span>Abrir Mi Cuenta</span>
 <i class="fa-solid fa-rocket"></i>
-<span>CFI BROKER</span>
-</div>
-<h1>Comienza Hoy</h1>
-<p>Accede a mercados globales y aprende trading con tecnología moderna y soporte personalizado.</p>
-<div class="hero-buttons">
-<a href="https://registration.cfifinancial.com/mu/en/registration?promo=3569" target="_blank" class="btn btn-primary">Abrir Cuenta</a>
-<a href="https://wa.me/573058362590?text=Hola,%20me%20interesa%20conocer%20más%20sobre%20CFI%20Broker" target="_blank" class="btn btn-secondary">
-<i class="fa-brands fa-whatsapp"></i> Hablar con un Asesor
+</a>
+<a href="https://wa.me/573058362590?text=Quiero%20empezar%20mi%20camino%20en%20trading" target="_blank" class="btn btn-secondary">
+<i class="fa-brands fa-whatsapp"></i>
+<span>Asesoría Personalizada</span>
 </a>
 </div>
 </div>
 </section>
 
-</div>
-
-<div class="navigation">
-<button class="nav-btn" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i></button>
-<button class="nav-btn" onclick="nextSlide()"><i class="fa-solid fa-chevron-right"></i></button>
-</div>
-
-<div class="slide-counter">
-<span id="slideNumber">1</span> / 6
-</div>
-
 <script>
-let currentSlide=0;
-const slides=document.querySelectorAll('.slide');
-const totalSlides=slides.length;
-
-function updateSlides(){
-slides.forEach(slide=>slide.classList.remove('active'));
-slides[currentSlide].classList.add('active');
-document.getElementById('slideNumber').innerText=currentSlide+1;
-slides[currentSlide].scrollTop=0;
+// ============ PARTICLES ANIMATION ============
+function createParticles(){
+const container=document.getElementById('particles');
+for(let i=0;i<30;i++){
+const particle=document.createElement('div');
+particle.className='particle';
+particle.style.left=Math.random()*100+'%';
+particle.style.animationDuration=(Math.random()*10+10)+'s';
+particle.style.animationDelay=Math.random()*5+'s';
+container.appendChild(particle);
 }
-
-function nextSlide(){
-currentSlide++;
-if(currentSlide>=totalSlides)currentSlide=0;
-updateSlides();
 }
+createParticles();
 
-function prevSlide(){
-currentSlide--;
-if(currentSlide<0)currentSlide=totalSlides-1;
-updateSlides();
+// ============ SCROLL ANIMATIONS ============
+const observerOptions={threshold:0.1,rootMargin:'0px 0px -100px 0px'};
+const observer=new IntersectionObserver((entries)=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add('visible');
 }
-
-function goToSlide(index){
-currentSlide=index;
-if(currentSlide>=totalSlides)currentSlide=totalSlides-1;
-if(currentSlide<0)currentSlide=0;
-updateSlides();
-}
-
-document.addEventListener('keydown',(e)=>{
-if(e.key==="ArrowRight"||e.key==="Right")nextSlide();
-if(e.key==="ArrowLeft"||e.key==="Left")prevSlide();
 });
+},observerOptions);
 
-let touchStartX=0,touchEndX=0,touchStartY=0,touchEndY=0;
+document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
 
-document.addEventListener('touchstart',(e)=>{
-touchStartX=e.changedTouches[0].screenX;
-touchStartY=e.changedTouches[0].screenY;
-},false);
+// ============ TRADING SIMULATOR ============
+let simBalance=10000;
+let simTotalPnl=0;
+let simTradeCount=0;
+let activePos=null;
+let posStartTime=null;
+let posDurationInterval=null;
+let simBasePrice=1.0850;
+let simCurrentPrice=simBasePrice;
+let candleData=[];
+let simChart=null;
 
-document.addEventListener('touchend',(e)=>{
-touchEndX=e.changedTouches[0].screenX;
-touchEndY=e.changedTouches[0].screenY;
-let diffX=touchEndX-touchStartX;
-let diffY=touchEndY-touchStartY;
-if(Math.abs(diffX)>Math.abs(diffY)){
-if(diffX<-50)nextSlide();
-if(diffX>50)prevSlide();
-}
-},false);
-
-const newsData={
-forex:[
-"📉 La FED podría recortar tasas este trimestre",
-"💵 El dólar gana fuerza frente al euro",
-"📊 Datos de empleo generan volatilidad"
-],
-gold:[
-"🥇 Tensiones geopolíticas impulsan el oro",
-"🏦 Bancos centrales aumentan reservas",
-"📉 Dólar fuerte presiona el XAU/USD"
-],
-indices:[
-"📈 Nasdaq sube impulsado por inteligencia artificial",
-"🏛️ Inflación impacta el S&P500",
-"💻 Resultados tecnológicos superan expectativas"
-],
-stocks:[
-"🚗 Tesla aumenta volatilidad tras earnings",
-"🍎 Apple presenta nuevos productos",
-"📦 Amazon supera expectativas de ingresos"
-],
-oil:[
-"🛢️ OPEP evalúa reducción de producción",
-"🌍 Tensiones globales afectan el petróleo",
-"📉 Inventarios de crudo aumentan"
-],
-crypto:[
-"₿ Bitcoin rompe resistencia clave",
-"⚡ ETF de Bitcoin impulsa demanda",
-"🚀 Ethereum incrementa actividad de red"
-]
-};
-
-let currentActiveAsset = null;
-
-function showNews(asset){
-// Ocultar todas las noticias primero
-document.querySelectorAll('.news-panel').forEach(panel=>{
-panel.classList.remove('active');
-});
-
-// Quitar clase active de todas las cards
-document.querySelectorAll('.market-card').forEach(card=>{
-card.classList.remove('active');
-});
-
-// Si se hace clic en el mismo activo, solo cerrar
-if(currentActiveAsset === asset){
-currentActiveAsset = null;
-return;
-}
-
-// Marcar nuevo activo como activo
-currentActiveAsset = asset;
-
-// Agregar clase active a la card seleccionada
-document.getElementById(`card-${asset}`).classList.add('active');
-
-// Mostrar noticias del activo seleccionado
-const panel = document.getElementById(`news-${asset}`);
-panel.innerHTML = `
-<h4 class="news-title">📰 Noticias Recientes</h4>
-${newsData[asset].map(item => `<div class="news-card">${item}</div>`).join('')}
-`;
-panel.classList.add('active');
-}
-
-// ============== SIMULADOR DE TRADING CON GRÁFICO DE VELAS ==============
-
-let balance=10000;
-let totalProfit=0;
-let totalTrades=0;
-let activePosition=null;
-let positionStartTime=null;
-let positionDurationInterval=null;
-let basePrice=1.0850;
-let currentPrice=basePrice;
-
-// Datos del gráfico
-let candlestickData=[];
-let chart=null;
-
-// Generar datos históricos iniciales
-function generateInitialData(){
+// Generate initial candle data
+function generateInitialCandles(){
 const now=Date.now();
 let price=1.0850;
 for(let i=30;i>=0;i--){
@@ -693,236 +1201,191 @@ price+=movement;
 const high=Math.max(open,price)+(Math.random()*0.0005);
 const low=Math.min(open,price)-(Math.random()*0.0005);
 const close=price;
-candlestickData.push({
-x:timestamp,
-o:open,
-h:high,
-l:low,
-c:close
-});
+candleData.push({x:timestamp,o:open,h:high,l:low,c:close});
 }
 }
 
-// Crear gráfico de velas
-function createChart(){
-const ctx=document.getElementById('candlestickChart').getContext('2d');
-chart=new Chart(ctx,{
+// Create chart
+function createSimChart(){
+const ctx=document.getElementById('simChart').getContext('2d');
+simChart=new Chart(ctx,{
 type:'candlestick',
 data:{
 datasets:[{
 label:'EUR/USD',
-data:candlestickData,
-borderColor:'rgba(124,58,237,1)',
-color:{
-up:'#10b981',
-down:'#ef4444',
-unchanged:'#9ca3af'
-}
+data:candleData,
+color:{up:'#00ff88',down:'#ff3366',unchanged:'#8b8b9e'}
 }]
 },
 options:{
 responsive:true,
 maintainAspectRatio:false,
-plugins:{
-legend:{display:false},
-tooltip:{
-enabled:true,
-mode:'index',
-intersect:false,
-backgroundColor:'rgba(0,0,0,0.8)',
-titleColor:'#fff',
-bodyColor:'#fff',
-borderColor:'rgba(124,58,237,0.5)',
-borderWidth:1
-}
-},
+plugins:{legend:{display:false},tooltip:{enabled:true}},
 scales:{
 x:{
 type:'time',
-time:{
-unit:'minute',
-displayFormats:{minute:'HH:mm'}
-},
+time:{unit:'minute',displayFormats:{minute:'HH:mm'}},
 grid:{color:'rgba(255,255,255,0.05)'},
-ticks:{color:'#9ca3af',maxTicksLimit:8}
+ticks:{color:'#8b8b9e'}
 },
 y:{
 position:'right',
 grid:{color:'rgba(255,255,255,0.05)'},
-ticks:{color:'#9ca3af',precision:4}
+ticks:{color:'#8b8b9e',precision:4}
 }
 }
 }
 });
 }
 
-// Actualizar precio y gráfico
-function updatePrice(){
-const priceElement=document.getElementById('price');
-const changeElement=document.getElementById('priceChange');
-
-let movement=(Math.random()-0.5)*0.0006;
-basePrice+=movement;
-if(basePrice<1.08)basePrice=1.08;
-if(basePrice>1.10)basePrice=1.10;
-
-currentPrice=basePrice;
-priceElement.innerText=currentPrice.toFixed(4);
-
-let percent=((currentPrice-1.0850)/1.0850*100).toFixed(2);
-
-if(percent>=0){
-changeElement.innerHTML=`▲ +${percent}%`;
-changeElement.className='price-change positive';
-}else{
-changeElement.innerHTML=`▼ ${percent}%`;
-changeElement.className='price-change negative';
-}
-
-// Actualizar gráfico cada 3 segundos
-updateCandlestick();
-
-if(activePosition){
-updateActivePnL();
-}
-}
-
-// Actualizar vela actual
+// Update price
 let currentCandle=null;
 let candleStartTime=Date.now();
 
-function updateCandlestick(){
-const now=Date.now();
+function updateSimPrice(){
+const priceEl=document.getElementById('simPrice');
+const changeEl=document.getElementById('simChange');
 
+let movement=(Math.random()-0.5)*0.0006;
+simBasePrice+=movement;
+if(simBasePrice<1.08)simBasePrice=1.08;
+if(simBasePrice>1.10)simBasePrice=1.10;
+
+simCurrentPrice=simBasePrice;
+priceEl.innerText=simCurrentPrice.toFixed(4);
+
+let percent=((simCurrentPrice-1.0850)/1.0850*100).toFixed(2);
+if(percent>=0){
+changeEl.innerHTML=`▲ +${percent}%`;
+changeEl.className='price-change up';
+}else{
+changeEl.innerHTML=`▼ ${percent}%`;
+changeEl.className='price-change down';
+}
+
+updateCandle();
+if(activePos)updatePositionPnl();
+}
+
+function updateCandle(){
+const now=Date.now();
 if(!currentCandle||now-candleStartTime>3000){
-// Nueva vela cada 3 segundos
 if(currentCandle){
-candlestickData.push(currentCandle);
-if(candlestickData.length>40){
-candlestickData.shift();
+candleData.push(currentCandle);
+if(candleData.length>40)candleData.shift();
 }
-}
-currentCandle={
-x:now,
-o:currentPrice,
-h:currentPrice,
-l:currentPrice,
-c:currentPrice
-};
+currentCandle={x:now,o:simCurrentPrice,h:simCurrentPrice,l:simCurrentPrice,c:simCurrentPrice};
 candleStartTime=now;
 }else{
-// Actualizar vela actual
-currentCandle.c=currentPrice;
-currentCandle.h=Math.max(currentCandle.h,currentPrice);
-currentCandle.l=Math.min(currentCandle.l,currentPrice);
+currentCandle.c=simCurrentPrice;
+currentCandle.h=Math.max(currentCandle.h,simCurrentPrice);
+currentCandle.l=Math.min(currentCandle.l,simCurrentPrice);
 }
-
-// Actualizar datos del gráfico
-if(chart){
-const tempData=[...candlestickData];
-if(currentCandle){
-tempData.push(currentCandle);
-}
-chart.data.datasets[0].data=tempData;
-chart.update('none');
+if(simChart){
+const tempData=[...candleData];
+if(currentCandle)tempData.push(currentCandle);
+simChart.data.datasets[0].data=tempData;
+simChart.update('none');
 }
 }
 
-function updateActivePnL(){
-if(!activePosition)return;
-const currentPriceDisplay=document.getElementById('currentPrice');
-const pnlDisplay=document.getElementById('pnlValue');
-currentPriceDisplay.innerText=currentPrice.toFixed(4);
-let priceDiff=0;
-let pnl=0;
-if(activePosition.type==='buy'){
-priceDiff=currentPrice-activePosition.entryPrice;
-}else{
-priceDiff=activePosition.entryPrice-currentPrice;
-}
-pnl=priceDiff*10000*10;
-pnlDisplay.innerText=`$${pnl.toFixed(2)}`;
-if(pnl>=0){
-pnlDisplay.style.color='#10b981';
-}else{
-pnlDisplay.style.color='#ef4444';
-}
-}
-
-function openPosition(type){
-if(activePosition){
-alert('⚠️ Ya tienes una posición abierta. Ciérrala primero.');
+function openTrade(type){
+if(activePos){
+alert('⚠️ Ya tienes una operación abierta');
 return;
 }
-activePosition={
-type:type,
-entryPrice:currentPrice,
-entryTime:Date.now()
-};
-positionStartTime=Date.now();
-const panel=document.getElementById('activePosition');
-const typeLabel=document.getElementById('positionType');
+activePos={type:type,entryPrice:simCurrentPrice,entryTime:Date.now()};
+posStartTime=Date.now();
+
+const panel=document.getElementById('positionPanel');
+const typeLabel=document.getElementById('posType');
 const entryPriceLabel=document.getElementById('entryPrice');
-panel.classList.add('show');
+
+panel.classList.add('active');
 typeLabel.innerText=type==='buy'?'COMPRA':'VENTA';
 typeLabel.className=`position-type ${type}`;
-entryPriceLabel.innerText=currentPrice.toFixed(4);
+entryPriceLabel.innerText=simCurrentPrice.toFixed(4);
+
 document.getElementById('buyBtn').disabled=true;
 document.getElementById('sellBtn').disabled=true;
-positionDurationInterval=setInterval(updateDuration,1000);
+
+posDurationInterval=setInterval(updateDuration,1000);
 }
 
-function closePosition(){
-if(!activePosition)return;
+function closeTrade(){
+if(!activePos)return;
+
 let priceDiff=0;
 let pnl=0;
-if(activePosition.type==='buy'){
-priceDiff=currentPrice-activePosition.entryPrice;
+if(activePos.type==='buy'){
+priceDiff=simCurrentPrice-activePos.entryPrice;
 }else{
-priceDiff=activePosition.entryPrice-currentPrice;
+priceDiff=activePos.entryPrice-simCurrentPrice;
 }
 pnl=priceDiff*10000*10;
-balance+=pnl;
-totalProfit+=pnl;
-totalTrades++;
-document.getElementById('balance').innerText=`$${balance.toFixed(2)}`;
-document.getElementById('profit').innerText=`$${totalProfit.toFixed(2)}`;
-document.getElementById('trades').innerText=totalTrades;
-document.getElementById('profit').style.color=totalProfit>=0?'#10b981':'#ef4444';
+
+simBalance+=pnl;
+simTotalPnl+=pnl;
+simTradeCount++;
+
+document.getElementById('balance').innerText=`$${simBalance.toFixed(2)}`;
+document.getElementById('totalPnl').innerText=`$${simTotalPnl.toFixed(2)}`;
+document.getElementById('tradeCount').innerText=simTradeCount;
+
 const resultMsg=pnl>=0?`✅ Ganancia: +$${pnl.toFixed(2)}`:`❌ Pérdida: $${pnl.toFixed(2)}`;
-const durationSec=Math.floor((Date.now()-activePosition.entryTime)/1000);
-alert(`Posición cerrada\n${resultMsg}\nDuración: ${durationSec}s\nNuevo balance: $${balance.toFixed(2)}`);
-activePosition=null;
-clearInterval(positionDurationInterval);
-document.getElementById('activePosition').classList.remove('show');
+const durationSec=Math.floor((Date.now()-activePos.entryTime)/1000);
+alert(`Operación cerrada\n${resultMsg}\nDuración: ${durationSec}s\nNuevo balance: $${simBalance.toFixed(2)}`);
+
+activePos=null;
+clearInterval(posDurationInterval);
+document.getElementById('positionPanel').classList.remove('active');
 document.getElementById('buyBtn').disabled=false;
 document.getElementById('sellBtn').disabled=false;
 }
 
+function updatePositionPnl(){
+if(!activePos)return;
+
+const currentPriceEl=document.getElementById('currentPricePos');
+const pnlEl=document.getElementById('pnl');
+
+currentPriceEl.innerText=simCurrentPrice.toFixed(4);
+
+let priceDiff=0;
+let pnl=0;
+if(activePos.type==='buy'){
+priceDiff=simCurrentPrice-activePos.entryPrice;
+}else{
+priceDiff=activePos.entryPrice-simCurrentPrice;
+}
+pnl=priceDiff*10000*10;
+
+pnlEl.innerText=`$${pnl.toFixed(2)}`;
+pnlEl.style.color=pnl>=0?'#00ff88':'#ff3366';
+}
+
 function updateDuration(){
-if(!positionStartTime)return;
-const elapsed=Math.floor((Date.now()-positionStartTime)/1000);
+if(!posStartTime)return;
+const elapsed=Math.floor((Date.now()-posStartTime)/1000);
 const mins=Math.floor(elapsed/60);
 const secs=elapsed%60;
-const durationDisplay=document.getElementById('duration');
-if(mins>0){
-durationDisplay.innerText=`${mins}m ${secs}s`;
-}else{
-durationDisplay.innerText=`${secs}s`;
-}
+document.getElementById('duration').innerText=mins>0?`${mins}m ${secs}s`:`${secs}s`;
 }
 
-// Inicializar
-generateInitialData();
-createChart();
-setInterval(updatePrice,1500);
+// Initialize
+generateInitialCandles();
+createSimChart();
+setInterval(updateSimPrice,1500);
 
-let lastTouchEnd=0;
-document.addEventListener('touchend',function(event){
-const now=(new Date()).getTime();
-if(now-lastTouchEnd<=300)event.preventDefault();
-lastTouchEnd=now;
-},false);
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+anchor.addEventListener('click',function(e){
+e.preventDefault();
+document.querySelector(this.getAttribute('href')).scrollIntoView({
+behavior:'smooth'
+});
+});
+});
 </script>
 
 </body>
