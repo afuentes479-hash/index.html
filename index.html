@@ -2536,6 +2536,625 @@ tbody.appendChild(tr);
 }
 
 </script>
+/* ============ ADMIN PANEL ============ */
+.admin-panel{
+position:fixed;
+inset:0;
+z-index:10000;
+display:none;
+}
+
+.admin-panel.active{
+display:block;
+}
+
+.admin-container{
+padding:2rem;
+max-width:1400px;
+margin:0 auto;
+}
+
+.admin-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:2rem;
+padding-bottom:1.5rem;
+border-bottom:2px solid var(--border);
+}
+
+.admin-title{
+font-size:2.5rem;
+font-weight:900;
+background:linear-gradient(135deg,var(--gold),var(--accent));
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.admin-stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:1.5rem;
+margin-bottom:2rem;
+}
+
+.stat-card{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+}
+
+.stat-label{
+color:var(--text-secondary);
+font-size:0.85rem;
+margin-bottom:0.5rem;
+}
+
+.stat-value{
+font-size:2.5rem;
+font-weight:900;
+}
+
+.users-table{
+background:var(--bg-card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:1.5rem;
+overflow-x:auto;
+}
+
+.table-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:1.5rem;
+}
+
+.search-input{
+padding:0.75rem 1rem;
+background:var(--bg-secondary);
+border:1px solid var(--border);
+border-radius:12px;
+color:var(--text-primary);
+width:300px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+text-align:left;
+padding:1rem;
+border-bottom:1px solid var(--border);
+color:var(--text-secondary);
+font-size:0.85rem;
+text-transform:uppercase;
+letter-spacing:0.5px;
+}
+
+td{
+padding:1rem;
+border-bottom:1px solid var(--border);
+}
+
+.user-cell{
+display:flex;
+align-items:center;
+gap:1rem;
+}
+
+.user-avatar-small{
+width:35px;
+height:35px;
+border-radius:50%;
+background:linear-gradient(135deg,var(--accent),var(--purple));
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+font-size:0.8rem;
+}
+
+.status-badge{
+padding:0.25rem 0.75rem;
+border-radius:999px;
+font-size:0.75rem;
+font-weight:700;
+}
+
+.status-online{
+background:rgba(0,255,136,0.2);
+color:var(--green);
+}
+
+.status-offline{
+background:rgba(139,139,158,0.2);
+color:var(--text-secondary);
+}
+
+.btn-action{
+padding:0.5rem 1rem;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:600;
+transition:all 0.3s;
+}
+
+.btn-view{
+background:rgba(0,212,255,0.1);
+color:var(--accent);
+}
+
+.btn-view:hover{
+background:rgba(0,212,255,0.2);
+}
+
+/* ============ NOTIFICATION TOAST ============ */
+.toast-notification{
+position:fixed;
+top:90px;
+right:30px;
+background:var(--bg-card);
+border:2px solid var(--green);
+border-radius:16px;
+padding:1.5rem;
+min-width:350px;
+box-shadow:0 10px 40px rgba(0,0,0,0.5);
+z-index:10001;
+transform:translateX(500px);
+transition:transform 0.3s;
+}
+
+.toast-notification.show{
+transform:translateX(0);
+}
+
+.toast-header{
+display:flex;
+align-items:center;
+gap:1rem;
+margin-bottom:0.75rem;
+}
+
+.toast-icon{
+width:40px;
+height:40px;
+border-radius:50%;
+background:var(--green);
+display:flex;
+align-items:center;
+justify-content:center;
+color:var(--bg-primary);
+font-size:1.2rem;
+}
+
+.toast-title{
+font-weight:700;
+font-size:1.1rem;
+}
+
+.toast-message{
+color:var(--text-secondary);
+line-height:1.5;
+}
+
+/* ============ WHATSAPP ============ */
+.whatsapp-float{
+position:fixed;
+bottom:30px;
+right:30px;
+width:60px;
+height:60px;
+background:#25d366;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:2rem;
+color:white;
+box-shadow:0 5px 20px rgba(37,211,102,0.5);
+cursor:pointer;
+z-index:1000;
+animation:pulse-whatsapp 2s infinite;
+text-decoration:none;
+}
+
+@keyframes pulse-whatsapp{
+0%,100%{transform:scale(1);}
+50%{transform:scale(1.1);}
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div class="login-screen" id="loginScreen">
+<div class="login-container">
+<div class="login-logo">
+<div class="login-title">
+<i class="fa-solid fa-rocket"></i><br>
+AI Trading Room Pro
+</div>
+<p class="login-subtitle">Únete a la comunidad de traders</p>
+</div>
+
+<form class="login-form" onsubmit="handleLogin(event)">
+<div class="form-group">
+<label class="form-label">Nombre de usuario</label>
+<input type="text" class="form-input" id="loginUsername" placeholder="TraderPro123" required>
+</div>
+
+<div class="form-group">
+<label class="form-label">Email</label>
+<input type="email" class="form-input" id="loginEmail" placeholder="tu@email.com" required>
+</div>
+
+<div class="form-group">
+<label class="form-label">WhatsApp (opcional)</label>
+<input type="tel" class="form-input" id="loginPhone" placeholder="+57 300 123 4567">
+</div>
+
+<button type="submit" class="btn-login">
+<i class="fa-solid fa-rocket"></i> Crear Cuenta y Entrar
+</button>
+</form>
+
+<div class="admin-link">
+<a href="#" onclick="showAdminLogin(event)">
+<i class="fa-solid fa-shield-halved"></i> Acceso Admin
+</a>
+</div>
+</div>
+</div>
+
+<!-- ============ ADMIN LOGIN ============ -->
+<div class="login-screen hidden" id="adminLoginScreen">
+<div class="login-container">
+<div class="login-logo">
+<div class="login-title">
+<i class="fa-solid fa-shield-halved"></i><br>
+Panel Admin
+</div>
+<p class="login-subtitle">Acceso solo para administradores</p>
+</div>
+
+<form class="login-form" onsubmit="handleAdminLogin(event)">
+<div class="form-group">
+<label class="form-label">Contraseña de Admin</label>
+<input type="password" class="form-input" id="adminPassword" placeholder="Ingresa la contraseña" required>
+</div>
+
+<button type="submit" class="btn-login">
+<i class="fa-solid fa-lock-open"></i> Acceder
+</button>
+</form>
+
+<div class="admin-link">
+<a href="#" onclick="backToLogin(event)">
+<i class="fa-solid fa-arrow-left"></i> Volver al login
+</a>
+</div>
+</div>
+</div>
+
+<!-- ============ ADMIN PANEL ============ -->
+<div class="admin-panel" id="adminPanel">
+<div class="admin-container">
+<div class="admin-header">
+<div>
+<div class="admin-title">
+<i class="fa-solid fa-shield-halved"></i> Panel de Administración
+</div>
+<p style="color:var(--text-secondary);margin-top:0.5rem;">Gestión completa de usuarios y plataforma</p>
+</div>
+<button class="btn-logout" onclick="logoutAdmin()">
+<i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+</button>
+</div>
+
+<div class="admin-stats">
+<div class="stat-card">
+<div class="stat-label">Total Usuarios</div>
+<div class="stat-value" style="color:var(--accent)" id="adminTotalUsers">0</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">Registros Hoy</div>
+<div class="stat-value" style="color:var(--green)" id="adminTodayUsers">0</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">Usuarios Activos</div>
+<div class="stat-value" style="color:var(--purple)" id="adminActiveUsers">0</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">Total Operaciones</div>
+<div class="stat-value" style="color:var(--gold)" id="adminTotalTrades">0</div>
+</div>
+</div>
+
+<div class="users-table">
+<div class="table-header">
+<h2>Lista de Usuarios Registrados</h2>
+<input type="text" class="search-input" placeholder="Buscar usuario..." id="searchInput" onkeyup="searchUsers()">
+</div>
+
+<table id="usersTable">
+<thead>
+<tr>
+<th>Usuario</th>
+<th>Email</th>
+<th>WhatsApp</th>
+<th>Fecha Registro</th>
+<th>Nivel</th>
+<th>Balance</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody id="usersTableBody">
+<!-- Populated by JavaScript -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- ============ NOTIFICATION TOAST ============ -->
+<div class="toast-notification" id="toast">
+<div class="toast-header">
+<div class="toast-icon">
+<i class="fa-solid fa-user-plus"></i>
+</div>
+<div class="toast-title">Nuevo Registro</div>
+</div>
+<div class="toast-message" id="toastMessage">
+Un nuevo usuario se ha registrado en la plataforma
+</div>
+</div>
+
+<!-- ============ WHATSAPP ============ -->
+<a href="https://wa.me/573058362590?text=Hola,%20quiero%20unirme%20a%20AI%20Trading%20Room%20Pro" target="_blank" class="whatsapp-float">
+<i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<script>
+// ============ CONFIGURATION ============
+const ADMIN_PASSWORD='CFI2024Admin'; // ⚠️ CAMBIA ESTA CONTRASEÑA
+const ADMIN_WHATSAPP='573058362590'; // ⚠️ TU NÚMERO DE WHATSAPP
+const ADMIN_EMAIL='admin@tradingroom.com'; // ⚠️ TU EMAIL
+
+// ============ STATE ============
+let allUsers=[];
+let isAdminMode=false;
+
+// ============ STORAGE ============
+function saveToStorage(key,value){
+localStorage.setItem(key,JSON.stringify(value));
+}
+
+function getFromStorage(key){
+const data=localStorage.getItem(key);
+return data?JSON.parse(data):null;
+}
+
+function getAllUsers(){
+return getFromStorage('allUsers')||[];
+}
+
+function saveAllUsers(users){
+saveToStorage('allUsers',users);
+}
+
+// ============ INITIALIZE ============
+window.addEventListener('load',()=>{
+allUsers=getAllUsers();
+});
+
+// ============ USER LOGIN ============
+function handleLogin(event){
+event.preventDefault();
+
+const username=document.getElementById('loginUsername').value;
+const email=document.getElementById('loginEmail').value;
+const phone=document.getElementById('loginPhone').value;
+
+const user={
+id:`user-${Date.now()}`,
+username:username,
+email:email,
+phone:phone,
+avatar:username.substring(0,2).toUpperCase(),
+level:1,
+xp:0,
+balance:10000,
+pnl:0,
+trades:0,
+registeredAt:new Date().toISOString(),
+lastActive:new Date().toISOString(),
+isOnline:true
+};
+
+// Guardar usuario
+allUsers.push(user);
+saveAllUsers(allUsers);
+
+// Enviar notificación al admin
+sendAdminNotification(user);
+
+// Mostrar mensaje de éxito
+alert(`¡Bienvenido ${username}!\n\nTu cuenta ha sido creada exitosamente.\nEl administrador ha sido notificado.`);
+
+// Redirigir (en producción aquí cargarías la app)
+window.location.reload();
+}
+
+// ============ ADMIN NOTIFICATION ============
+function sendAdminNotification(user){
+// 1. Notificación por WhatsApp (abre WhatsApp Web)
+const message=`🔔 *NUEVO REGISTRO - AI Trading Room Pro*\n\n` +
+`👤 Usuario: ${user.username}\n` +
+`📧 Email: ${user.email}\n` +
+`📱 WhatsApp: ${user.phone||'No proporcionado'}\n` +
+`📅 Fecha: ${new Date().toLocaleString('es-ES')}\n` +
+`🆔 ID: ${user.id}`;
+
+const whatsappURL=`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+// Abrir WhatsApp en nueva pestaña (opcional - puedes comentar esta línea)
+// window.open(whatsappURL,'_blank');
+
+// 2. Guardar notificación para el panel admin
+const notifications=getFromStorage('adminNotifications')||[];
+notifications.unshift({
+type:'new_user',
+user:user,
+timestamp:Date.now(),
+read:false
+});
+saveToStorage('adminNotifications',notifications);
+
+// 3. Mostrar toast si el admin está mirando
+showToast(`Nuevo usuario: ${user.username}`);
+
+console.log('📧 Notificación enviada al admin');
+console.log('📱 WhatsApp URL:',whatsappURL);
+}
+
+// ============ TOAST NOTIFICATION ============
+function showToast(message){
+const toast=document.getElementById('toast');
+document.getElementById('toastMessage').innerText=message;
+toast.classList.add('show');
+
+// Auto-hide después de 5 segundos
+setTimeout(()=>{
+toast.classList.remove('show');
+},5000);
+}
+
+// ============ ADMIN LOGIN ============
+function showAdminLogin(e){
+e.preventDefault();
+document.getElementById('loginScreen').classList.add('hidden');
+document.getElementById('adminLoginScreen').classList.remove('hidden');
+}
+
+function backToLogin(e){
+e.preventDefault();
+document.getElementById('adminLoginScreen').classList.add('hidden');
+document.getElementById('loginScreen').classList.remove('hidden');
+}
+
+function handleAdminLogin(event){
+event.preventDefault();
+
+const password=document.getElementById('adminPassword').value;
+
+if(password===ADMIN_PASSWORD){
+isAdminMode=true;
+document.getElementById('adminLoginScreen').classList.add('hidden');
+document.getElementById('adminPanel').classList.add('active');
+loadAdminPanel();
+} else{
+alert('❌ Contraseña incorrecta');
+}
+}
+
+function logoutAdmin(){
+isAdminMode=false;
+document.getElementById('adminPanel').classList.remove('active');
+document.getElementById('loginScreen').classList.remove('hidden');
+}
+
+// ============ ADMIN PANEL ============
+function loadAdminPanel(){
+allUsers=getAllUsers();
+
+// Calcular estadísticas
+const today=new Date().toDateString();
+const todayUsers=allUsers.filter(u=>new Date(u.registeredAt).toDateString()===today);
+const activeUsers=allUsers.filter(u=>u.isOnline);
+const totalTrades=allUsers.reduce((sum,u)=>sum+u.trades,0);
+
+document.getElementById('adminTotalUsers').innerText=allUsers.length;
+document.getElementById('adminTodayUsers').innerText=todayUsers.length;
+document.getElementById('adminActiveUsers').innerText=activeUsers.length;
+document.getElementById('adminTotalTrades').innerText=totalTrades;
+
+// Renderizar tabla
+renderUsersTable(allUsers);
+}
+
+function renderUsersTable(users){
+const tbody=document.getElementById('usersTableBody');
+tbody.innerHTML='';
+
+users.forEach(user=>{
+const tr=document.createElement('tr');
+tr.innerHTML=`
+<td>
+<div class="user-cell">
+<div class="user-avatar-small">${user.avatar}</div>
+<strong>${user.username}</strong>
+</div>
+</td>
+<td>${user.email}</td>
+<td>${user.phone||'N/A'}</td>
+<td>${new Date(user.registeredAt).toLocaleString('es-ES')}</td>
+<td>Nivel ${user.level}</td>
+<td style="font-family:JetBrains Mono;">$${user.balance.toFixed(2)}</td>
+<td>
+<span class="status-badge ${user.isOnline?'status-online':'status-offline'}">
+${user.isOnline?'● Online':'○ Offline'}
+</span>
+</td>
+<td>
+<button class="btn-action btn-view" onclick="viewUser('${user.id}')">
+<i class="fa-solid fa-eye"></i> Ver
+</button>
+</td>
+`;
+tbody.appendChild(tr);
+});
+}
+
+function searchUsers(){
+const query=document.getElementById('searchInput').value.toLowerCase();
+const filtered=allUsers.filter(u=>
+u.username.toLowerCase().includes(query)||
+u.email.toLowerCase().includes(query)
+);
+renderUsersTable(filtered);
+}
+
+function viewUser(userId){
+const user=allUsers.find(u=>u.id===userId);
+if(user){
+alert(`Usuario: ${user.username}\nEmail: ${user.email}\nWhatsApp: ${user.phone||'N/A'}\nBalance: $${user.balance}\nNivel: ${user.level}`);
+}
+}
+
+// ============ EXPORT DATA ============
+function exportUsersToCSV(){
+let csv='Username,Email,WhatsApp,Registration Date,Level,Balance,Trades\n';
+
+allUsers.forEach(user=>{
+csv+=`${user.username},${user.email},${user.phone||'N/A'},${user.registeredAt},${user.level},${user.balance},${user.trades}\n`;
+});
+
+const blob=new Blob([csv],{type:'text/csv'});
+const url=window.URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=url;
+a.download=`usuarios-${Date.now()}.csv`;
+a.click();
+}
+
+</script>
 
 </body>
 </html>
