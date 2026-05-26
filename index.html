@@ -1942,31 +1942,23 @@ const ADMIN_PASSWORD='CFI2024Admin';
 const ADMIN_USERNAME='admin';
 
 // ============ ASSETS ============
-// ANTES (Podía repetir símbolos)
-const symbol = symbols[Math.floor(Math.random() * symbols.length)=[
+const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+// AHORA (Mezcla y usa cada símbolo una vez)
+const shuffledSymbols = symbols.sort(() => Math.random() - 0.5);
+const symbol = shuffledSymbols[i]; // Cada uno único
 
-// Forex
-{symbol:'EURUSD',name:'EUR/USD',category:'forex',basePrice:1.0850},
-{symbol:'GBPUSD',name:'GBP/USD',category:'forex',basePrice:1.2645},
-{symbol:'USDJPY',name:'USD/JPY',category:'forex',basePrice:149.85},
-{symbol:'USDCHF',name:'USD/CHF',category:'forex',basePrice:0.8765},
-{symbol:'AUDUSD',name:'AUD/USD',category:'forex',basePrice:0.6540},
-{symbol:'USDCAD',name:'USD/CAD',category:'forex',basePrice:1.3580},
-// Índices
-{symbol:'NAS100',name:'NASDAQ 100',category:'indices',basePrice:18250},
-{symbol:'SPX500',name:'S&P 500',category:'indices',basePrice:5120},
-{symbol:'US30',name:'DOW JONES',category:'indices',basePrice:38950},
-{symbol:'DAX40',name:'DAX 40',category:'indices',basePrice:17850},
-// Commodities
-{symbol:'XAUUSD',name:'ORO',category:'commodities',basePrice:2315},
-{symbol:'XAGUSD',name:'PLATA',category:'commodities',basePrice:28.50},
-{symbol:'USOIL',name:'PETRÓLEO WTI',category:'commodities',basePrice:78.20},
-{symbol:'UKOIL',name:'PETRÓLEO BRENT',category:'commodities',basePrice:82.40},
-// Cripto
-{symbol:'BTCUSD',name:'BITCOIN',category:'crypto',basePrice:64500},
-{symbol:'ETHUSD',name:'ETHEREUM',category:'crypto',basePrice:3150}
-];
+  // FOREX (10)
+'XAUUSD', 'EURUSD', 'GBPUSD', 'USDJPY', 'AUDUSD', 
+'USDCAD', 'NZDUSD', 'EURGBP', 'EURJPY', 'GBPJPY'
 
+// CRYPTO (2)
+'BTCUSD', 'ETHUSD'
+
+// ÍNDICES (5)
+'NAS100', 'US30', 'SPX500', 'UK100', 'GER40'
+
+// COMMODITIES (3)
+'USOIL', 'UKOIL', 'NATGAS'
 // ============ STATE ============
 let currentUser=null;
 let allUsers=[];
