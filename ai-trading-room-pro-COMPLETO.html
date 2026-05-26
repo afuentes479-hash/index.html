@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Trading Room Pro - Plataforma Profesional</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<!-- TradingView -->
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+<style>
+:root {
+  --bg-primary: #0a0e17;
+  --bg-secondary: #121825;
+  --bg-card: #1a1f2e;
+  --bg-elevated: #222936;
+  --border: #2a3142;
+  --text-primary: #ffffff;
+  --text-secondary: #8b92a8;
+  --accent: #00d4ff;
+  --success: #00ff88;
+  --danger: #ff3366;
+  --warning: #ffc107;
+  --gold: #ffd700;
+  --purple: #a78bfa;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.6); }
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(26, 31, 46, 0.5);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+}
+
+/* Auth Screen */
+.auth-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(167, 139, 250, 0.05));
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.5s;
+}
+
+.auth-screen.hidden {
+  display: none;
+}
+
+.auth-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 3rem;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.auth-logo-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+}
+
+.auth-title {
+  font-size: 2rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.form-input {
+  padding: 1rem 1.25rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--bg-elevated);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+.btn-auth {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border: none;
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 0.5rem;
+}
+
+.btn-auth:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.auth-switch a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.error-message {
+  background: rgba(255, 51, 102, 0.1);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: none;
+  margin-bottom: 1rem;
+}
+
+.error-message.show {
+  display: block;
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: rgba(26, 31, 46, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  z-index: 1000;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-logo {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.nav-title {
+  font-size: 1.3rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-card);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.btn-logout {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 51, 102, 0.1);
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  color: var(--danger);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 70px;
+  bottom: 0;
+  width: 280px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.sidebar-section {
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.menu-item:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.menu-item.active {
+  background: var(--bg-card);
+  color: var(--accent);
+  border-left: 3px solid var(--accent);
+}
+
+.menu-icon {
+  font-size: 1.2rem;
+  width: 24px;
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 280px;
+  margin-top: 70px;
+  padding: 2rem;
+  min-height: calc(100vh - 70px);
+}
+
+.page-section {
+  display: none;
+  animation: fadeIn 0.5s;
+}
+
+.page-section.active {
+  display: block;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 5px 20px rgba(0, 212, 255, 0.1);
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
+  border-color: var(--accent);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 900;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  opacity: 0.3;
+}
+
+/* Signals */
+.signals-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.signal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.signal-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+}
+
+.signal-card.buy::before {
+  background: var(--success);
+}
+
+.signal-card.sell::before {
+  background: var(--danger);
+}
+
+.signal-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.signal-card.buy .signal-icon {
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--success);
+}
+
+.signal-card.sell .signal-icon {
+  background: rgba(255, 51, 102, 0.1);
+  color: var(--danger);
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-success {
+  background: rgba(0, 255, 136, 0.2);
+  color: var(--success);
+}
+
+.badge-danger {
+  background: rgba(255, 51, 102, 0.2);
+  color: var(--danger);
+}
+
+/* Buttons */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+}
+
+.btn-success {
+  background: var(--success);
+  color: var(--bg-primary);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+/* WhatsApp Float */
+.whatsapp-float {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: #25d366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+  box-shadow: 0 5px 20px rgba(37, 211, 102, 0.5);
+  z-index: 1000;
+  text-decoration: none;
+  animation: pulse 2s infinite;
+}
+
+/* Trading */
+.trading-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.chart-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  height: 500px;
+}
+
+.trade-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.trade-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Chat */
+.chat-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 170px);
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.chat-message {
+  display: flex;
+  gap: 1rem;
+}
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.chat-input-container {
+  padding: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.chat-input {
+  width: 100%;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  resize: none;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+  
+  .trading-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 1rem;
+  }
+  
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- REGISTER SCREEN -->
+<div class="auth-screen" id="registerScreen">
+  <div class="auth-container">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">
+        <i class="fa-solid fa-rocket"></i>
+      </div>
+      <h1 class="auth-title">AI Trading Room Pro</h1>
+      <p class="auth-subtitle">Únete a la comunidad de traders profesionales</p>
+    </div>
+    
+    <div class="error-message" id="registerError"></div>
+    
+    <form class="auth-form" onsubmit="handleRegister(event)">
+      <div class="form-group">
+        <label class="form-label">Usuario</label>
+        <input type="text" class="form-input" id="regUsername" placeholder="trader_pro" required minlength="3">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="regEmail" placeholder="tu@email.com" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-input" id="regPassword" placeholder="Mínimo 6 caracteres" required minlength="6">
+      </div>
+      
+      <button type="submit" class="btn-auth">
+        <i class="fa-solid fa-rocket"></i> Crear Cuenta
+      </button>
+    </form>
+    
+    <div class="auth-switch">
+      ¿Ya tienes cuenta? <a onclick="switchToLogin()">Inicia sesión</a>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div class="auth-screen hidden" id="loginScreen">
+  <div class="auth-container">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">
+        <i class="fa-solid fa-rocket"></i>
+      </div>
+      <h1 class="auth-title">Bienvenido</h1>
+      <p class="auth-subtitle">Inicia sesión en tu cuenta</p>
+    </div>
+    
+    <div class="error-message" id="loginError"></div>
+    
+    <form class="auth-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label">Usuario o Email</label>
+        <input type="text" class="form-input" id="loginUser" placeholder="trader_pro" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-input" id="loginPassword" placeholder="Tu contraseña" required>
+      </div>
+      
+      <button type="submit" class="btn-auth">
+        <i class="fa-solid fa-sign-in-alt"></i> Iniciar Sesión
+      </button>
+    </form>
+    
+    <div class="auth-switch">
+      ¿No tienes cuenta? <a onclick="switchToRegister()">Regístrate</a>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" style="display:none;" id="navbar">
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <i class="fa-solid fa-rocket"></i>
+    </div>
+    <div class="nav-title">AI Trading Room Pro</div>
+  </div>
+  
+  <div class="nav-actions">
+    <div class="nav-user">
+      <div class="user-avatar" id="navAvatar">TP</div>
+      <div>
+        <div style="font-weight:700;font-size:0.9rem;" id="navUsername">Usuario</div>
+        <div style="font-size:0.75rem;color:var(--text-secondary);" id="navBalance">$10,000</div>
+      </div>
+    </div>
+    
+    <button class="btn-logout" onclick="logout()">
+      <i class="fa-solid fa-right-from-bracket"></i> Salir
+    </button>
+  </div>
+</nav>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar" style="display:none;">
+  <div class="sidebar-section">
+    <div class="sidebar-title">Trading</div>
+    <div class="menu-item active" onclick="navigateTo('dashboard')">
+      <i class="fa-solid fa-chart-line menu-icon"></i>
+      <span>Dashboard</span>
+    </div>
+    <div class="menu-item" onclick="navigateTo('trading')">
+      <i class="fa-solid fa-chart-candlestick menu-icon"></i>
+      <span>Simulador</span>
+    </div>
+    <div class="menu-item" onclick="navigateTo('signals')">
+      <i class="fa-solid fa-signal menu-icon"></i>
+      <span>Señales Live</span>
+    </div>
+  </div>
+  
+  <div class="sidebar-section">
+    <div class="sidebar-title">Comunidad</div>
+    <div class="menu-item" onclick="navigateTo('community')">
+      <i class="fa-solid fa-users menu-icon"></i>
+      <span>Chat Live</span>
+    </div>
+    <div class="menu-item" onclick="navigateTo('ranking')">
+      <i class="fa-solid fa-ranking-star menu-icon"></i>
+      <span>Ranking</span>
+    </div>
+  </div>
+  
+  <div class="sidebar-section">
+    <div class="sidebar-title">Educación</div>
+    <div class="menu-item" onclick="navigateTo('education')">
+      <i class="fa-solid fa-graduation-cap menu-icon"></i>
+      <span>Academia</span>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main-content" id="mainContent" style="display:none;">
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="page-section active">
+    <div class="page-header">
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Resumen de tu actividad de trading</p>
+    </div>
+    
+    <div class="dashboard-grid">
+      <div class="stat-card">
+        <div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.5rem;text-transform:uppercase;">Balance</div>
+          <div class="stat-value" style="color:var(--accent)" id="statBalance">$10,000</div>
+        </div>
+        <i class="fa-solid fa-wallet stat-icon"></i>
+      </div>
+      
+      <div class="stat-card">
+        <div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.5rem;text-transform:uppercase;">P&L</div>
+          <div class="stat-value" style="color:var(--success)" id="statPnl">$0.00</div>
+        </div>
+        <i class="fa-solid fa-chart-line stat-icon"></i>
+      </div>
+      
+      <div class="stat-card">
+        <div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.5rem;text-transform:uppercase;">Trades</div>
+          <div class="stat-value" style="color:var(--purple)" id="statTrades">0</div>
+        </div>
+        <i class="fa-solid fa-chart-simple stat-icon"></i>
+      </div>
+      
+      <div class="stat-card">
+        <div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.5rem;text-transform:uppercase;">Win Rate</div>
+          <div class="stat-value" style="color:var(--gold)" id="statWinrate">0%</div>
+        </div>
+        <i class="fa-solid fa-percent stat-icon"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRADING -->
+  <section id="trading" class="page-section">
+    <div class="page-header">
+      <h1 class="page-title">Simulador de Trading</h1>
+      <p class="page-subtitle">Opera en tiempo real con balance demo</p>
+    </div>
+    
+    <div class="trading-container">
+      <div class="chart-container" id="tradingviewChart">
+        <!-- TradingView widget will be inserted here -->
+      </div>
+      
+      <div class="trade-panel">
+        <h3>Panel de Trading</h3>
+        
+        <div style="background:var(--bg-secondary);padding:1rem;border-radius:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div>
+              <div style="font-size:0.85rem;color:var(--text-secondary);">Balance</div>
+              <div style="font-weight:700;font-family:JetBrains Mono;font-size:1.2rem;" id="tradeBalance">$10,000</div>
+            </div>
+            <div>
+              <div style="font-size:0.85rem;color:var(--text-secondary);">P&L</div>
+              <div style="font-weight:700;font-family:JetBrains Mono;font-size:1.2rem;" id="tradePnl">$0.00</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="trade-buttons">
+          <button class="btn btn-success" onclick="openTrade('buy')">
+            <i class="fa-solid fa-arrow-up"></i> COMPRAR
+          </button>
+          <button class="btn btn-danger" onclick="openTrade('sell')">
+            <i class="fa-solid fa-arrow-down"></i> VENDER
+          </button>
+        </div>
+        
+        <div id="currentPosition" style="display:none;" class="card">
+          <h4 style="margin-bottom:1rem;">Posición Abierta</h4>
+          <div style="display:grid;gap:0.5rem;font-size:0.9rem;">
+            <div><strong>Tipo:</strong> <span id="posType"></span></div>
+            <div><strong>Entrada:</strong> <span id="posEntry"></span></div>
+            <div><strong>P&L:</strong> <span id="posPnl"></span></div>
+          </div>
+          <button class="btn btn-danger" style="margin-top:1rem;width:100%;" onclick="closeTrade()">Cerrar Posición</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNALS -->
+  <section id="signals" class="page-section">
+    <div class="page-header">
+      <h1 class="page-title">Señales de Trading</h1>
+      <p class="page-subtitle">Señales en tiempo real basadas en indicadores técnicos</p>
+    </div>
+    
+    <div class="signals-grid" id="signalsContainer">
+      <!-- Signals will be populated here -->
+    </div>
+  </section>
+
+  <!-- COMMUNITY -->
+  <section id="community" class="page-section">
+    <div class="page-header">
+      <h1 class="page-title">Comunidad</h1>
+      <p class="page-subtitle">Chat en vivo con la comunidad de traders</p>
+    </div>
+    
+    <div class="chat-container">
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-message">
+          <div class="message-avatar">AI</div>
+          <div>
+            <div style="font-weight:700;margin-bottom:0.5rem;">AI Bot</div>
+            <div style="color:var(--text-secondary);">¡Bienvenido al chat de AI Trading Room Pro!</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chat-input-container">
+        <textarea class="chat-input" id="chatInput" placeholder="Escribe un mensaje..." rows="2" onkeypress="handleChatEnter(event)"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- RANKING -->
+  <section id="ranking" class="page-section">
+    <div class="page-header">
+      <h1 class="page-title">Ranking de Traders</h1>
+      <p class="page-subtitle">Los mejores traders de la plataforma</p>
+    </div>
+    
+    <div class="card">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="text-align:left;border-bottom:1px solid var(--border);">
+            <th style="padding:1rem;">Posición</th>
+            <th style="padding:1rem;">Usuario</th>
+            <th style="padding:1rem;">P&L</th>
+            <th style="padding:1rem;">Win Rate</th>
+            <th style="padding:1rem;">Trades</th>
+          </tr>
+        </thead>
+        <tbody id="rankingTable">
+          <tr>
+            <td colspan="5" style="padding:2rem;text-align:center;color:var(--text-secondary);">Cargando ranking...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" class="page-section">
+    <div class="page-header">
+      <h1 class="page-title">Academia de Trading</h1>
+      <p class="page-subtitle">Aprende trading desde cero</p>
+    </div>
+    
+    <div class="dashboard-grid">
+      <div class="card">
+        <div style="width:60px;height:60px;border-radius:12px;background:rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:1rem;">
+          <i class="fa-solid fa-book"></i>
+        </div>
+        <h3 style="margin-bottom:0.75rem;">Fundamentos del Trading</h3>
+        <p style="color:var(--text-secondary);margin-bottom:1rem;">Aprende los conceptos básicos del trading</p>
+        <button class="btn btn-primary">Comenzar</button>
+      </div>
+      
+      <div class="card">
+        <div style="width:60px;height:60px;border-radius:12px;background:rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:1rem;">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <h3 style="margin-bottom:0.75rem;">Análisis Técnico</h3>
+        <p style="color:var(--text-secondary);margin-bottom:1rem;">Domina los indicadores y patrones</p>
+        <button class="btn btn-primary">Comenzar</button>
+      </div>
+      
+      <div class="card">
+        <div style="width:60px;height:60px;border-radius:12px;background:rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:1rem;">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h3 style="margin-bottom:0.75rem;">Gestión de Riesgo</h3>
+        <p style="color:var(--text-secondary);margin-bottom:1rem;">Protege tu capital</p>
+        <button class="btn btn-primary">Comenzar</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/573058362590?text=Hola,%20quiero%20información%20sobre%20AI%20Trading%20Room%20Pro" target="_blank" class="whatsapp-float">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<script>
+// ============ ESTADO GLOBAL ============
+let currentUser = null;
+let allUsers = [];
+let currentTrade = null;
+let allTrades = [];
+
+// ============ STORAGE ============
+function saveToStorage(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function getFromStorage(key) {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
+}
+
+// ============ AUTH FUNCTIONS ============
+function switchToLogin() {
+  document.getElementById('registerScreen').classList.add('hidden');
+  document.getElementById('loginScreen').classList.remove('hidden');
+}
+
+function switchToRegister() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('registerScreen').classList.remove('hidden');
+}
+
+function showError(elementId, message) {
+  const errorEl = document.getElementById(elementId);
+  errorEl.innerText = message;
+  errorEl.classList.add('show');
+  setTimeout(() => errorEl.classList.remove('show'), 5000);
+}
+
+function handleRegister(event) {
+  event.preventDefault();
+  
+  const username = document.getElementById('regUsername').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  
+  allUsers = getFromStorage('allUsers') || [];
+  
+  if (allUsers.find(u => u.username.toLowerCase() === username.toLowerCase())) {
+    showError('registerError', '❌ Este usuario ya existe');
+    return;
+  }
+  
+  if (allUsers.find(u => u.email.toLowerCase() === email.toLowerCase())) {
+    showError('registerError', '❌ Este email ya está registrado');
+    return;
+  }
+  
+  const user = {
+    id: `user-${Date.now()}`,
+    username: username,
+    email: email,
+    password: btoa(password),
+    avatar: username.substring(0, 2).toUpperCase(),
+    balance: 10000,
+    pnl: 0,
+    trades: 0,
+    wins: 0,
+    losses: 0,
+    role: 'user',
+    createdAt: new Date().toISOString()
+  };
+  
+  allUsers.push(user);
+  saveToStorage('allUsers', allUsers);
+  
+  alert(`✅ Cuenta creada: ${username}!`);
+  
+  currentUser = user;
+  saveToStorage('currentUser', user);
+  startApp();
+}
+
+function handleLogin(event) {
+  event.preventDefault();
+  
+  const userInput = document.getElementById('loginUser').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  
+  allUsers = getFromStorage('allUsers') || [];
+  
+  const user = allUsers.find(u =>
+    (u.username.toLowerCase() === userInput.toLowerCase() ||
+     u.email.toLowerCase() === userInput.toLowerCase()) &&
+    u.password === btoa(password)
+  );
+  
+  if (!user) {
+    showError('loginError', '❌ Usuario o contraseña incorrectos');
+    return;
+  }
+  
+  currentUser = user;
+  saveToStorage('currentUser', user);
+  startApp();
+}
+
+function logout() {
+  if (confirm('¿Cerrar sesión?')) {
+    localStorage.removeItem('currentUser');
+    location.reload();
+  }
+}
+
+// ============ START APP ============
+function startApp() {
+  document.getElementById('registerScreen').classList.add('hidden');
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('navbar').style.display = 'flex';
+  document.getElementById('sidebar').style.display = 'block';
+  document.getElementById('mainContent').style.display = 'block';
+  
+  updateUI();
+  generateSignals();
+  initTradingView();
+}
+
+function updateUI() {
+  const u = currentUser;
+  
+  document.getElementById('navAvatar').innerText = u.avatar;
+  document.getElementById('navUsername').innerText = u.username;
+  document.getElementById('navBalance').innerText = `$${u.balance.toFixed(2)}`;
+  
+  document.getElementById('statBalance').innerText = `$${u.balance.toFixed(2)}`;
+  document.getElementById('statPnl').innerText = `$${u.pnl.toFixed(2)}`;
+  document.getElementById('statTrades').innerText = u.trades;
+  document.getElementById('statWinrate').innerText = u.trades > 0 ? `${Math.round(u.wins / u.trades * 100)}%` : '0%';
+  
+  document.getElementById('tradeBalance').innerText = `$${u.balance.toFixed(2)}`;
+  document.getElementById('tradePnl').innerText = `$${u.pnl.toFixed(2)}`;
+}
+
+// ============ NAVIGATION ============
+function navigateTo(page) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+  event.target.closest('.menu-item')?.classList.add('active');
+}
+
+// ============ SIGNALS ============
+function generateSignals() {
+  const symbols = ['XAUUSD', 'EURUSD', 'BTCUSD', 'NAS100', 'US30'];
+  const types = ['BUY', 'SELL', 'STRONG_BUY', 'STRONG_SELL'];
+  const container = document.getElementById('signalsContainer');
+  
+  container.innerHTML = '';
+  
+  for (let i = 0; i < 6; i++) {
+    const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+    const type = types[Math.floor(Math.random() * types.length)];
+    const confidence = Math.floor(Math.random() * 30) + 70;
+    const direction = type.includes('BUY') ? 'buy' : 'sell';
+    
+    const card = document.createElement('div');
+    card.className = `signal-card ${direction}`;
+    card.innerHTML = `
+      <div class="signal-icon">${direction === 'buy' ? '↑' : '↓'}</div>
+      <div>
+        <div style="font-size:1.2rem;font-weight:800;margin-bottom:0.5rem;">${symbol}</div>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <span class="badge badge-${direction === 'buy' ? 'success' : 'danger'}">${type}</span>
+          <span class="badge" style="background:rgba(0,212,255,0.2);color:var(--accent);">${confidence}% confianza</span>
+        </div>
+      </div>
+      <button class="btn btn-primary">Operar</button>
+    `;
+    
+    container.appendChild(card);
+  }
+  
+  setTimeout(generateSignals, 30000);
+}
+
+// ============ TRADING ============
+function initTradingView() {
+  if (typeof TradingView !== 'undefined') {
+    new TradingView.widget({
+      "width": "100%",
+      "height": "100%",
+      "symbol": "FX:EURUSD",
+      "interval": "15",
+      "timezone": "Etc/UTC",
+      "theme": "dark",
+      "style": "1",
+      "locale": "es",
+      "toolbar_bg": "#1a1f2e",
+      "enable_publishing": false,
+      "hide_side_toolbar": false,
+      "allow_symbol_change": true,
+      "container_id": "tradingviewChart"
+    });
+  }
+}
+
+function openTrade(type) {
+  if (currentTrade) {
+    alert('Ya tienes una posición abierta');
+    return;
+  }
+  
+  const price = 1.0850 + (Math.random() - 0.5) * 0.01;
+  
+  currentTrade = {
+    type: type,
+    entry: price,
+    startTime: Date.now()
+  };
+  
+  document.getElementById('currentPosition').style.display = 'block';
+  document.getElementById('posType').innerText = type === 'buy' ? 'COMPRA' : 'VENTA';
+  document.getElementById('posEntry').innerText = price.toFixed(4);
+  
+  updateTradeP();
+}
+
+function updateTradePosition() {
+  if (!currentTrade) return;
+  
+  const currentPrice = currentTrade.entry + (Math.random() - 0.5) * 0.001;
+  const priceDiff = currentTrade.type === 'buy' 
+    ? (currentPrice - currentTrade.entry)
+    : (currentTrade.entry - currentPrice);
+  
+  const pnl = priceDiff * 10000;
+  
+  document.getElementById('posPnl').innerText = `$${pnl.toFixed(2)}`;
+  document.getElementById('posPnl').style.color = pnl >= 0 ? 'var(--success)' : 'var(--danger)';
+}
+
+function closeTrade() {
+  if (!currentTrade) return;
+  
+  const pnlText = document.getElementById('posPnl').innerText;
+  const pnl = parseFloat(pnlText.replace('$', ''));
+  
+  currentUser.balance += pnl;
+  currentUser.pnl += pnl;
+  currentUser.trades++;
+  
+  if (pnl >= 0) {
+    currentUser.wins++;
+  } else {
+    currentUser.losses++;
+  }
+  
+  saveUserData();
+  updateUI();
+  
+  alert(`Operación cerrada: ${pnl >= 0 ? 'Ganancia' : 'Pérdida'} de $${pnl.toFixed(2)}`);
+  
+  currentTrade = null;
+  document.getElementById('currentPosition').style.display = 'none';
+}
+
+function saveUserData() {
+  allUsers = getFromStorage('allUsers') || [];
+  const index = allUsers.findIndex(u => u.id === currentUser.id);
+  if (index !== -1) {
+    allUsers[index] = currentUser;
+    saveToStorage('allUsers', allUsers);
+  }
+  saveToStorage('currentUser', currentUser);
+}
+
+// ============ CHAT ============
+function handleChatEnter(event) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
+}
+
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const message = input.value.trim();
+  if (!message) return;
+  
+  const container = document.getElementById('chatMessages');
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'chat-message';
+  msgDiv.innerHTML = `
+    <div class="message-avatar">${currentUser.avatar}</div>
+    <div>
+      <div style="font-weight:700;margin-bottom:0.5rem;">${currentUser.username}</div>
+      <div style="color:var(--text-secondary);">${message}</div>
+    </div>
+  `;
+  
+  container.appendChild(msgDiv);
+  container.scrollTop = container.scrollHeight;
+  
+  input.value = '';
+}
+
+// ============ AUTO LOGIN ============
+window.addEventListener('load', () => {
+  const user = getFromStorage('currentUser');
+  if (user) {
+    currentUser = user;
+    allUsers = getFromStorage('allUsers') || [];
+    startApp();
+  }
+});
+
+// Update trade position every second
+setInterval(updateTradePosition, 1000);
+</script>
+
+</body>
+</html>
