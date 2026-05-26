@@ -1352,10 +1352,13 @@
                 <div class="admin-panel">
                     <div class="admin-header">
                         <span style="font-size: 32px;">👑</span>
-                        <div>
+                        <div style="flex: 1;">
                             <h3 style="margin: 0; font-size: 20px;">Panel de Control</h3>
                             <div class="admin-badge">Administrador</div>
                         </div>
+                        <button onclick="renderAdminPanel()" style="background: linear-gradient(135deg, var(--accent-blue), #0099cc); color: white; padding: 10px 20px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s ease;">
+                            🔄 Refrescar Datos
+                        </button>
                     </div>
 
                     <div class="admin-stats">
@@ -1371,6 +1374,11 @@
                             <div class="admin-stat-label">Total Trades</div>
                             <div class="admin-stat-value" id="adminTotalTrades">0</div>
                         </div>
+                    </div>
+
+                    <div id="adminDebugInfo" style="background: rgba(0, 212, 255, 0.05); border: 1px solid var(--accent-blue); border-radius: 10px; padding: 15px; margin-bottom: 20px; font-size: 12px; font-family: monospace;">
+                        <div style="font-weight: 700; margin-bottom: 10px; color: var(--accent-blue);">🔍 Debug Info:</div>
+                        <div id="adminDebugContent">Cargando...</div>
                     </div>
 
                     <h3 style="margin: 25px 0 15px; font-size: 18px;">Gestión de Usuarios</h3>
@@ -1390,7 +1398,11 @@
                                 </tr>
                             </thead>
                             <tbody id="adminUsersList">
-                                <!-- Users will be inserted here -->
+                                <tr>
+                                    <td colspan="8" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                                        Cargando usuarios...
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -1652,15 +1664,27 @@
             } else if (tabName === 'simulator') {
                 renderOpenPositions();
             } else if (tabName === 'admin') {
-                console.log('Cambiando a pestaña Admin');
+                console.log('=== Cambiando a pestaña Admin ===');
                 const currentUser = getCurrentUser();
                 console.log('Usuario actual:', currentUser);
-                if (currentUser && currentUser.isAdmin) {
-                    console.log('Usuario es admin, renderizando panel');
-                    renderAdminPanel();
-                } else {
-                    console.log('Usuario NO es admin o no hay usuario');
+                
+                if (!currentUser) {
+                    console.error('❌ No hay usuario logueado');
+                    return;
                 }
+                
+                if (!currentUser.isAdmin) {
+                    console.error('❌ Usuario NO es admin');
+                    alert('⚠️ No tienes permisos de administrador');
+                    return;
+                }
+                
+                console.log('✅ Usuario es admin, renderizando panel');
+                
+                // Forzar render inmediato
+                setTimeout(() => {
+                    renderAdminPanel();
+                }, 100);
             }
         }
 
@@ -2284,66 +2308,129 @@
 
         function renderAdminPanel() {
             console.log('=== Renderizando Panel Admin ===');
-            const users = getUsers();
-            console.log('Usuarios encontrados:', users.length);
-            console.log('Lista de usuarios:', users);
             
-            const totalUsers = users.length;
-            const activeUsers = users.filter(u => {
-                const lastActive = new Date(u.createdAt);
-                const today = new Date();
-                return lastActive.toDateString() === today.toDateString();
-            }).length;
-            const totalTrades = users.reduce((sum, u) => sum + u.trades, 0);
+            try {
+                const users = getUsers();
+                console.log('Usuarios encontrados:', users.length);
+                console.log('Lista de usuarios:', users);
+                
+                // Update debug info
+                const debugDiv = document.getElementById('adminDebugContent');
+                if (debugDiv) {
+                    const debugInfo = `
+                        <div>✅ localStorage Key: aiTradingUsers</div>
+                        <div>✅ Total usuarios en BD: ${users.length}</div>
+                        <div>✅ Última actualización: ${new Date().toLocaleTimeString()}</div>
+                        <div style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 5px; max-height: 150px; overflow-y: auto;">
+                            <strong>Usuarios registrados:</strong><br>
+                            ${users.map(u => `- ${u.username} (${u.email}) [${u.isAdmin ? 'Admin' : 'Usuario'}]`).join('<br>')}
+                        </div>
+                    `;
+                    debugDiv.innerHTML = debugInfo;
+                }
+                
+                const totalUsers = users.length;
+                const activeUsers = users.filter(u => {
+                    const lastActive = new Date(u.createdAt);
+                    const today = new Date();
+                    return lastActive.toDateString() === today.toDateString();
+                }).length;
+                const totalTrades = users.reduce((sum, u) => sum + (u.trades || 0), 0);
 
-            console.log('Stats - Total:', totalUsers, 'Activos:', activeUsers, 'Trades:', totalTrades);
+                console.log('Stats - Total:', totalUsers, 'Activos:', activeUsers, 'Trades:', totalTrades);
 
-            // Update stats
-            document.getElementById('adminTotalUsers').textContent = totalUsers;
-            document.getElementById('adminActiveUsers').textContent = activeUsers;
-            document.getElementById('adminTotalTrades').textContent = totalTrades;
+                // Update stats
+                const totalUsersEl = document.getElementById('adminTotalUsers');
+                const activeUsersEl = document.getElementById('adminActiveUsers');
+                const totalTradesEl = document.getElementById('adminTotalTrades');
+                
+                if (totalUsersEl) totalUsersEl.textContent = totalUsers;
+                if (activeUsersEl) activeUsersEl.textContent = activeUsers;
+                if (totalTradesEl) totalTradesEl.textContent = totalTrades;
 
-            // Render users list
-            const usersList = document.getElementById('adminUsersList');
-            const currentUser = getCurrentUser();
+                // Render users list
+                const usersList = document.getElementById('adminUsersList');
+                const currentUser = getCurrentUser();
 
-            if (!usersList) {
-                console.error('ERROR: No se encontró el elemento adminUsersList');
-                return;
+                if (!usersList) {
+                    console.error('ERROR: No se encontró el elemento adminUsersList');
+                    return;
+                }
+
+                console.log('Generando HTML para', users.length, 'usuarios');
+
+                if (users.length === 0) {
+                    usersList.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 40px; color: var(--accent-red);">
+                                ⚠️ No hay usuarios registrados. Esto no debería pasar porque el admin debe existir.
+                                <br><br>
+                                <button onclick="resetDatabase()" style="background: var(--accent-red); color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700;">
+                                    Resetear Base de Datos
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                usersList.innerHTML = users.map(user => `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td style="font-weight: 700;">${user.username}</td>
+                        <td>${user.email}</td>
+                        <td style="font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--accent-gold);">
+                            $${(user.balance || 0).toFixed(2)}
+                        </td>
+                        <td>${user.trades || 0}</td>
+                        <td>
+                            <span class="user-role-badge ${user.isAdmin ? 'admin' : 'user'}">
+                                ${user.isAdmin ? 'Admin' : 'Usuario'}
+                            </span>
+                        </td>
+                        <td style="font-size: 12px; color: var(--text-secondary);">
+                            ${new Date(user.createdAt).toLocaleDateString('es-ES')}
+                        </td>
+                        <td>
+                            <button 
+                                class="btn-delete-user" 
+                                onclick="deleteUser(${user.id})"
+                                ${user.isAdmin ? 'disabled' : ''}
+                            >
+                                ${user.isAdmin ? '🔒 Protegido' : '🗑️ Eliminar'}
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                console.log('✅ Panel admin renderizado correctamente');
+                showNotification('✅ Datos del admin actualizados');
+                
+            } catch (error) {
+                console.error('❌ ERROR en renderAdminPanel:', error);
+                const debugDiv = document.getElementById('adminDebugContent');
+                if (debugDiv) {
+                    debugDiv.innerHTML = `
+                        <div style="color: var(--accent-red);">❌ ERROR: ${error.message}</div>
+                        <div>Stack: ${error.stack}</div>
+                    `;
+                }
+                
+                const usersList = document.getElementById('adminUsersList');
+                if (usersList) {
+                    usersList.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 40px; color: var(--accent-red);">
+                                ❌ Error cargando usuarios: ${error.message}
+                                <br><br>
+                                <button onclick="resetDatabase()" style="background: var(--accent-red); color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700;">
+                                    Resetear Base de Datos
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
             }
-
-            console.log('Generando HTML para', users.length, 'usuarios');
-
-            usersList.innerHTML = users.map(user => `
-                <tr>
-                    <td>${user.id}</td>
-                    <td style="font-weight: 700;">${user.username}</td>
-                    <td>${user.email}</td>
-                    <td style="font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--accent-gold);">
-                        $${user.balance.toFixed(2)}
-                    </td>
-                    <td>${user.trades}</td>
-                    <td>
-                        <span class="user-role-badge ${user.isAdmin ? 'admin' : 'user'}">
-                            ${user.isAdmin ? 'Admin' : 'Usuario'}
-                        </span>
-                    </td>
-                    <td style="font-size: 12px; color: var(--text-secondary);">
-                        ${new Date(user.createdAt).toLocaleDateString('es-ES')}
-                    </td>
-                    <td>
-                        <button 
-                            class="btn-delete-user" 
-                            onclick="deleteUser(${user.id})"
-                            ${user.isAdmin ? 'disabled' : ''}
-                        >
-                            ${user.isAdmin ? '🔒 Protegido' : '🗑️ Eliminar'}
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-            
-            console.log('Panel admin renderizado correctamente');
         }
 
         function renderRanking() {
