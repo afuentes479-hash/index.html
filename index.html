@@ -883,6 +883,160 @@
             font-size: 16px;
         }
 
+        /* Admin Panel */
+        .admin-panel {
+            background: var(--bg-card);
+            border-radius: 15px;
+            border: 2px solid var(--accent-red);
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 0 30px rgba(255, 51, 102, 0.2);
+        }
+
+        .admin-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, var(--accent-red), #cc0033);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .users-table thead {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .users-table th {
+            padding: 15px;
+            text-align: left;
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .users-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .users-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .users-table tbody tr:hover {
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .btn-delete-user {
+            background: linear-gradient(135deg, var(--accent-red), #cc0033);
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-delete-user:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+        }
+
+        .btn-delete-user:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .admin-stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .admin-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .admin-stat-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--accent-red);
+        }
+
+        .user-role-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .user-role-badge.admin {
+            background: rgba(255, 51, 102, 0.2);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+
+        .user-role-badge.user {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+        }
+
+        @media (max-width: 768px) {
+            .users-table {
+                font-size: 12px;
+            }
+
+            .users-table th,
+            .users-table td {
+                padding: 10px 5px;
+            }
+
+            .btn-delete-user {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
@@ -1022,7 +1176,7 @@
                     <div class="user-name" id="userName">Usuario</div>
                     <div class="balance" id="userBalance">$10,000.00</div>
                     <a href="https://wa.me/573058362590?text=Hola,%20quiero%20información%20sobre%20AI%20Trading%20Room%20Pro" 
-                       class="whatsapp-btn" target="_blank">📱 Ayuda</a>
+                       class="whatsapp-btn" target="_blank">📱 VIP</a>
                     <button class="btn-logout" onclick="handleLogout()">Salir</button>
                 </div>
             </div>
@@ -1036,6 +1190,7 @@
                 <button class="nav-tab" onclick="switchTab('simulator')">💹 Simulador</button>
                 <button class="nav-tab" onclick="switchTab('community')">💬 Comunidad</button>
                 <button class="nav-tab" onclick="switchTab('ranking')">🏆 Ranking</button>
+                <button class="nav-tab" id="adminTab" onclick="switchTab('admin')" style="display: none;">⚙️ Admin</button>
             </div>
 
             <!-- Dashboard Tab -->
@@ -1057,6 +1212,40 @@
                     <div class="stat-card">
                         <div class="stat-label">Win Rate</div>
                         <div class="stat-value" id="statWinRate">0%</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h3 style="font-size: 20px; margin-bottom: 15px; color: var(--text-secondary);">
+                        📈 Activos Disponibles para Trading
+                    </h3>
+                    <div class="trading-panel">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 15px;">
+                            <div style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; border-left: 4px solid var(--accent-blue);">
+                                <div style="font-weight: 700; margin-bottom: 8px; color: var(--accent-blue);">💰 Criptomonedas</div>
+                                <div style="font-size: 13px; line-height: 1.8; color: var(--text-secondary);">
+                                    BTC, ETH, BNB, XRP, ADA, SOL, DOGE, MATIC, DOT, AVAX, LINK
+                                </div>
+                            </div>
+                            <div style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; border-left: 4px solid var(--accent-gold);">
+                                <div style="font-weight: 700; margin-bottom: 8px; color: var(--accent-gold);">🏆 Commodities</div>
+                                <div style="font-size: 13px; line-height: 1.8; color: var(--text-secondary);">
+                                    XAU/USD (Oro), WTI/USD (Petróleo), XAG/USD (Plata)
+                                </div>
+                            </div>
+                            <div style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; border-left: 4px solid var(--accent-green);">
+                                <div style="font-weight: 700; margin-bottom: 8px; color: var(--accent-green);">💵 Forex</div>
+                                <div style="font-size: 13px; line-height: 1.8; color: var(--text-secondary);">
+                                    EUR/USD, GBP/USD, USD/JPY
+                                </div>
+                            </div>
+                            <div style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; border-left: 4px solid var(--accent-red);">
+                                <div style="font-weight: 700; margin-bottom: 8px; color: var(--accent-red);">📊 Índices</div>
+                                <div style="font-size: 13px; line-height: 1.8; color: var(--text-secondary);">
+                                    NASDAQ 100, S&P 500
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1130,6 +1319,58 @@
                     <div id="rankingList"></div>
                 </div>
             </div>
+
+            <!-- Admin Tab -->
+            <div id="adminTab" class="tab-content">
+                <h2 class="section-title">⚙️ Panel de Administración</h2>
+                
+                <div class="admin-panel">
+                    <div class="admin-header">
+                        <span style="font-size: 32px;">👑</span>
+                        <div>
+                            <h3 style="margin: 0; font-size: 20px;">Panel de Control</h3>
+                            <div class="admin-badge">Administrador</div>
+                        </div>
+                    </div>
+
+                    <div class="admin-stats">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-label">Total Usuarios</div>
+                            <div class="admin-stat-value" id="adminTotalUsers">0</div>
+                        </div>
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-label">Usuarios Activos Hoy</div>
+                            <div class="admin-stat-value" id="adminActiveUsers">0</div>
+                        </div>
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-label">Total Trades</div>
+                            <div class="admin-stat-value" id="adminTotalTrades">0</div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 25px 0 15px; font-size: 18px;">Gestión de Usuarios</h3>
+                    
+                    <div style="overflow-x: auto;">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Usuario</th>
+                                    <th>Email</th>
+                                    <th>Balance</th>
+                                    <th>Trades</th>
+                                    <th>Rol</th>
+                                    <th>Fecha Registro</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUsersList">
+                                <!-- Users will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <footer>
@@ -1144,11 +1385,26 @@
         // LocalStorage key
         const USERS_KEY = 'aiTradingUsers';
         const CURRENT_USER_KEY = 'aiTradingCurrentUser';
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'admin123';
 
         // Initialize users database
         function initUsersDB() {
             if (!localStorage.getItem(USERS_KEY)) {
-                localStorage.setItem(USERS_KEY, JSON.stringify([]));
+                // Create default admin user
+                const adminUser = {
+                    id: 1,
+                    username: ADMIN_USERNAME,
+                    email: 'admin@aitrading.pro',
+                    password: ADMIN_PASSWORD,
+                    balance: 100000,
+                    pnl: 0,
+                    trades: 0,
+                    wins: 0,
+                    isAdmin: true,
+                    createdAt: new Date().toISOString()
+                };
+                localStorage.setItem(USERS_KEY, JSON.stringify([adminUser]));
             }
         }
 
@@ -1187,6 +1443,13 @@
             errorDiv.style.display = 'none';
             successDiv.style.display = 'none';
             
+            // Prevent registering as admin
+            if (username.toLowerCase() === 'admin') {
+                errorDiv.textContent = 'No puedes usar este nombre de usuario';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
             // Validations
             if (password !== confirmPassword) {
                 errorDiv.textContent = 'Las contraseñas no coinciden';
@@ -1220,6 +1483,7 @@
                 pnl: 0,
                 trades: 0,
                 wins: 0,
+                isAdmin: false,
                 createdAt: new Date().toISOString()
             };
             
@@ -1289,6 +1553,13 @@
             document.getElementById('userAvatar').textContent = user.username.substring(0, 2).toUpperCase();
             document.getElementById('userBalance').textContent = '$' + user.balance.toFixed(2);
             
+            // Show admin tab if user is admin
+            if (user.isAdmin) {
+                document.getElementById('adminTab').style.display = 'block';
+            } else {
+                document.getElementById('adminTab').style.display = 'none';
+            }
+            
             // Update dashboard
             document.getElementById('statBalance').textContent = '$' + user.balance.toFixed(0);
             document.getElementById('statPnL').textContent = (user.pnl >= 0 ? '+' : '') + '$' + user.pnl.toFixed(2);
@@ -1334,18 +1605,56 @@
                 }
             } else if (tabName === 'simulator') {
                 renderOpenPositions();
+            } else if (tabName === 'admin') {
+                const currentUser = getCurrentUser();
+                if (currentUser && currentUser.isAdmin) {
+                    renderAdminPanel();
+                }
             }
         }
 
         // Trading functionality
-        const tradingPairs = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'XRP/USDT', 'ADA/USDT', 'SOL/USDT', 'DOGE/USDT', 'MATIC/USDT'];
+        const tradingPairs = [
+            'BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'XRP/USDT', 'ADA/USDT', 'SOL/USDT', 
+            'DOGE/USDT', 'MATIC/USDT', 'DOT/USDT', 'AVAX/USDT', 'LINK/USDT',
+            'XAU/USD', // Oro
+            'WTI/USD', // Petróleo WTI
+            'XAG/USD', // Plata
+            'EUR/USD', // Euro
+            'GBP/USD', // Libra
+            'USD/JPY', // Yen
+            'NQ100',   // NASDAQ
+            'SP500'    // S&P 500
+        ];
         let openPositions = [];
         let chatMessages = [];
 
         function generateSignal() {
             const pair = tradingPairs[Math.floor(Math.random() * tradingPairs.length)];
             const type = Math.random() > 0.5 ? 'buy' : 'sell';
-            const basePrice = Math.random() * 50000 + 100;
+            
+            // Precio base según el tipo de activo
+            let basePrice;
+            if (pair.includes('BTC')) {
+                basePrice = Math.random() * 10000 + 40000; // BTC: 40k-50k
+            } else if (pair.includes('ETH')) {
+                basePrice = Math.random() * 500 + 2000; // ETH: 2k-2.5k
+            } else if (pair.includes('XAU')) {
+                basePrice = Math.random() * 100 + 2000; // ORO: 2000-2100
+            } else if (pair.includes('WTI')) {
+                basePrice = Math.random() * 20 + 70; // PETROLEO: 70-90
+            } else if (pair.includes('XAG')) {
+                basePrice = Math.random() * 5 + 23; // PLATA: 23-28
+            } else if (pair.includes('EUR') || pair.includes('GBP')) {
+                basePrice = Math.random() * 0.1 + 1.1; // FOREX: 1.1-1.2
+            } else if (pair.includes('JPY')) {
+                basePrice = Math.random() * 10 + 140; // YEN: 140-150
+            } else if (pair.includes('NQ100') || pair.includes('SP500')) {
+                basePrice = Math.random() * 500 + 15000; // INDICES: 15k-15.5k
+            } else {
+                basePrice = Math.random() * 10 + 1; // CRYPTO ALT: 1-11
+            }
+            
             const entry = basePrice.toFixed(2);
             const stopLoss = type === 'buy' 
                 ? (basePrice * 0.97).toFixed(2) 
@@ -1638,6 +1947,80 @@
                 });
             }
         });
+
+        // Admin functions
+        function deleteUser(userId) {
+            const currentUser = getCurrentUser();
+            if (!currentUser || !currentUser.isAdmin) {
+                showNotification('❌ No tienes permisos de administrador');
+                return;
+            }
+
+            // Prevent deleting admin
+            const users = getUsers();
+            const userToDelete = users.find(u => u.id === userId);
+            
+            if (userToDelete && userToDelete.isAdmin) {
+                showNotification('❌ No puedes eliminar la cuenta de administrador');
+                return;
+            }
+
+            if (confirm(`¿Estás seguro de eliminar al usuario "${userToDelete.username}"?`)) {
+                const updatedUsers = users.filter(u => u.id !== userId);
+                saveUsers(updatedUsers);
+                renderAdminPanel();
+                showNotification('✅ Usuario eliminado correctamente');
+            }
+        }
+
+        function renderAdminPanel() {
+            const users = getUsers();
+            const totalUsers = users.length;
+            const activeUsers = users.filter(u => {
+                const lastActive = new Date(u.createdAt);
+                const today = new Date();
+                return lastActive.toDateString() === today.toDateString();
+            }).length;
+            const totalTrades = users.reduce((sum, u) => sum + u.trades, 0);
+
+            // Update stats
+            document.getElementById('adminTotalUsers').textContent = totalUsers;
+            document.getElementById('adminActiveUsers').textContent = activeUsers;
+            document.getElementById('adminTotalTrades').textContent = totalTrades;
+
+            // Render users list
+            const usersList = document.getElementById('adminUsersList');
+            const currentUser = getCurrentUser();
+
+            usersList.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td style="font-weight: 700;">${user.username}</td>
+                    <td>${user.email}</td>
+                    <td style="font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--accent-gold);">
+                        $${user.balance.toFixed(2)}
+                    </td>
+                    <td>${user.trades}</td>
+                    <td>
+                        <span class="user-role-badge ${user.isAdmin ? 'admin' : 'user'}">
+                            ${user.isAdmin ? 'Admin' : 'Usuario'}
+                        </span>
+                    </td>
+                    <td style="font-size: 12px; color: var(--text-secondary);">
+                        ${new Date(user.createdAt).toLocaleDateString('es-ES')}
+                    </td>
+                    <td>
+                        <button 
+                            class="btn-delete-user" 
+                            onclick="deleteUser(${user.id})"
+                            ${user.isAdmin ? 'disabled' : ''}
+                        >
+                            ${user.isAdmin ? '🔒 Protegido' : '🗑️ Eliminar'}
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
 
         function renderRanking() {
             const users = getUsers().sort((a, b) => b.balance - a.balance).slice(0, 10);
