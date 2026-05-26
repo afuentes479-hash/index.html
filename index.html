@@ -1252,6 +1252,22 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div style="margin-top: 20px; padding: 20px; background: rgba(0, 212, 255, 0.05); border-radius: 10px; border: 1px solid var(--accent-blue);">
+                            <h4 style="margin: 0 0 10px 0; color: var(--accent-blue); font-size: 16px;">ℹ️ Información sobre Señales en Tiempo Real</h4>
+                            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: var(--text-secondary);">
+                                Las señales actuales son simuladas con algoritmos educativos. Para integrar señales reales de TradingView o conectar con el broker CFI Markets, se requiere:
+                            </p>
+                            <ul style="margin: 10px 0 0 20px; font-size: 13px; line-height: 1.8; color: var(--text-secondary);">
+                                <li>API Key de TradingView (servicio premium de pago)</li>
+                                <li>Cuenta y credenciales API del broker CFI Markets</li>
+                                <li>Servidor backend para procesar las señales de forma segura</li>
+                                <li>Cumplimiento de regulaciones financieras</li>
+                            </ul>
+                            <p style="margin: 10px 0 0 0; font-size: 12px; color: var(--text-secondary); font-style: italic;">
+                                Esta plataforma es solo para fines educativos y demostración. No ejecuta operaciones reales.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1633,9 +1649,14 @@
             } else if (tabName === 'simulator') {
                 renderOpenPositions();
             } else if (tabName === 'admin') {
+                console.log('Cambiando a pestaña Admin');
                 const currentUser = getCurrentUser();
+                console.log('Usuario actual:', currentUser);
                 if (currentUser && currentUser.isAdmin) {
+                    console.log('Usuario es admin, renderizando panel');
                     renderAdminPanel();
+                } else {
+                    console.log('Usuario NO es admin o no hay usuario');
                 }
             }
         }
@@ -2001,7 +2022,11 @@
         }
 
         function renderAdminPanel() {
+            console.log('=== Renderizando Panel Admin ===');
             const users = getUsers();
+            console.log('Usuarios encontrados:', users.length);
+            console.log('Lista de usuarios:', users);
+            
             const totalUsers = users.length;
             const activeUsers = users.filter(u => {
                 const lastActive = new Date(u.createdAt);
@@ -2009,6 +2034,8 @@
                 return lastActive.toDateString() === today.toDateString();
             }).length;
             const totalTrades = users.reduce((sum, u) => sum + u.trades, 0);
+
+            console.log('Stats - Total:', totalUsers, 'Activos:', activeUsers, 'Trades:', totalTrades);
 
             // Update stats
             document.getElementById('adminTotalUsers').textContent = totalUsers;
@@ -2018,6 +2045,13 @@
             // Render users list
             const usersList = document.getElementById('adminUsersList');
             const currentUser = getCurrentUser();
+
+            if (!usersList) {
+                console.error('ERROR: No se encontró el elemento adminUsersList');
+                return;
+            }
+
+            console.log('Generando HTML para', users.length, 'usuarios');
 
             usersList.innerHTML = users.map(user => `
                 <tr>
@@ -2047,6 +2081,8 @@
                     </td>
                 </tr>
             `).join('');
+            
+            console.log('Panel admin renderizado correctamente');
         }
 
         function renderRanking() {
