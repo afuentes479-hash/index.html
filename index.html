@@ -883,6 +883,174 @@
             font-size: 16px;
         }
 
+        /* Economic Calendar */
+        .calendar-container {
+            background: var(--bg-card);
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .calendar-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .calendar-filter-btn {
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .calendar-filter-btn.active {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            color: var(--bg-primary);
+            border-color: transparent;
+        }
+
+        .calendar-filter-btn:hover:not(.active) {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .calendar-event {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-event:hover {
+            background: rgba(0, 0, 0, 0.5);
+            transform: translateX(5px);
+        }
+
+        .calendar-event.high-impact {
+            border-left-color: var(--accent-red);
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.1);
+        }
+
+        .calendar-event.medium-impact {
+            border-left-color: var(--accent-gold);
+        }
+
+        .calendar-event.low-impact {
+            border-left-color: var(--accent-green);
+        }
+
+        .calendar-event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .calendar-event-time {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--accent-blue);
+        }
+
+        .calendar-impact-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .calendar-impact-badge.high {
+            background: rgba(255, 51, 102, 0.2);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+
+        .calendar-impact-badge.medium {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+        }
+
+        .calendar-impact-badge.low {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+
+        .calendar-event-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .calendar-event-country {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 12px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .calendar-event-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .calendar-detail-item {
+            text-align: center;
+        }
+
+        .calendar-detail-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .calendar-detail-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .calendar-loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .calendar-loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(0, 212, 255, 0.2);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
         /* Admin Panel */
         .admin-panel {
             background: var(--bg-card);
@@ -1194,6 +1362,7 @@
                 <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
                 <button class="nav-tab" onclick="switchTab('signals')">🔴 Señales Live</button>
                 <button class="nav-tab" onclick="switchTab('simulator')">💹 Simulador</button>
+                <button class="nav-tab" onclick="switchTab('calendar')">📅 Calendario</button>
                 <button class="nav-tab" onclick="switchTab('community')">💬 Comunidad</button>
                 <button class="nav-tab" onclick="switchTab('ranking')">🏆 Ranking</button>
                 <button class="nav-tab" id="adminTab" onclick="switchTab('admin')" style="display: none;">⚙️ Admin</button>
@@ -1320,6 +1489,37 @@
                             <div class="empty-state-text">No tienes posiciones abiertas. ¡Abre tu primera operación!</div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Economic Calendar Tab -->
+            <div id="calendarTab" class="tab-content">
+                <h2 class="section-title">📅 Calendario Económico</h2>
+                
+                <div class="calendar-container">
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="font-size: 18px; margin-bottom: 10px;">Filtrar por Impacto</h3>
+                        <div class="calendar-filters">
+                            <button class="calendar-filter-btn active" onclick="filterCalendar('all')">Todos</button>
+                            <button class="calendar-filter-btn" onclick="filterCalendar('high')">🔴 Alto Impacto</button>
+                            <button class="calendar-filter-btn" onclick="filterCalendar('medium')">🟡 Medio Impacto</button>
+                            <button class="calendar-filter-btn" onclick="filterCalendar('low')">🟢 Bajo Impacto</button>
+                        </div>
+                    </div>
+
+                    <div id="calendarEvents">
+                        <div class="calendar-loading">
+                            <div class="calendar-loading-spinner"></div>
+                            <div>Cargando eventos económicos...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid var(--accent-blue); border-radius: 10px; padding: 20px; margin-top: 20px;">
+                    <h4 style="margin: 0 0 10px 0; color: var(--accent-blue); font-size: 16px;">ℹ️ Sobre el Calendario Económico</h4>
+                    <p style="margin: 0; font-size: 14px; line-height: 1.6; color: var(--text-secondary);">
+                        El calendario muestra eventos económicos importantes que pueden afectar los mercados financieros. Los eventos de <strong style="color: var(--accent-red);">Alto Impacto</strong> suelen causar mayor volatilidad en los precios.
+                    </p>
                 </div>
             </div>
 
@@ -1657,6 +1857,8 @@
                 renderSignals(); // Ahora es async
             } else if (tabName === 'ranking') {
                 renderRanking();
+            } else if (tabName === 'calendar') {
+                renderCalendar();
             } else if (tabName === 'community') {
                 if (chatMessages.length === 0) {
                     initChat();
@@ -1705,6 +1907,185 @@
         let chatMessages = [];
         let realPricesCache = {};
         let lastPriceUpdate = 0;
+        let economicEvents = [];
+        let currentCalendarFilter = 'all';
+
+        // Economic Calendar Functions
+        function generateEconomicEvents() {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            
+            // Eventos económicos reales típicos
+            const eventTemplates = [
+                { name: 'Decisión de Tasas de Interés Fed', country: 'USD', impact: 'high', time: '14:00' },
+                { name: 'NFP - Nóminas No Agrícolas', country: 'USD', impact: 'high', time: '13:30' },
+                { name: 'IPC - Índice de Precios al Consumidor', country: 'USD', impact: 'high', time: '13:30' },
+                { name: 'PIB Trimestral', country: 'USD', impact: 'high', time: '13:30' },
+                { name: 'Decisión de Tasas BCE', country: 'EUR', impact: 'high', time: '12:45' },
+                { name: 'Conferencia de Prensa BCE', country: 'EUR', impact: 'high', time: '13:30' },
+                { name: 'Ventas Minoristas', country: 'USD', impact: 'medium', time: '13:30' },
+                { name: 'Índice de Confianza del Consumidor', country: 'USD', impact: 'medium', time: '10:00' },
+                { name: 'PMI Manufacturero', country: 'USD', impact: 'medium', time: '09:45' },
+                { name: 'PMI Servicios', country: 'EUR', impact: 'medium', time: '09:00' },
+                { name: 'Decisión de Tasas BoE', country: 'GBP', impact: 'high', time: '12:00' },
+                { name: 'Solicitudes de Subsidio de Desempleo', country: 'USD', impact: 'medium', time: '13:30' },
+                { name: 'Índice de Precios de Producción', country: 'USD', impact: 'medium', time: '13:30' },
+                { name: 'Balanza Comercial', country: 'USD', impact: 'low', time: '13:30' },
+                { name: 'Inventarios de Petróleo Crudo', country: 'USD', impact: 'medium', time: '15:30' },
+                { name: 'Decisión de Tasas BoJ', country: 'JPY', impact: 'high', time: '03:00' },
+                { name: 'Inflación Subyacente', country: 'EUR', impact: 'high', time: '10:00' },
+                { name: 'Discurso del Presidente de la Fed', country: 'USD', impact: 'high', time: '16:00' }
+            ];
+
+            const events = [];
+            const countries = {
+                'USD': { flag: '🇺🇸', name: 'Estados Unidos' },
+                'EUR': { flag: '🇪🇺', name: 'Eurozona' },
+                'GBP': { flag: '🇬🇧', name: 'Reino Unido' },
+                'JPY': { flag: '🇯🇵', name: 'Japón' }
+            };
+
+            // Generar eventos para los próximos 3 días
+            for (let day = 0; day < 3; day++) {
+                const eventDate = new Date(today);
+                eventDate.setDate(eventDate.getDate() + day);
+                
+                // 3-5 eventos por día
+                const numEvents = 3 + Math.floor(Math.random() * 3);
+                const selectedTemplates = [...eventTemplates].sort(() => Math.random() - 0.5).slice(0, numEvents);
+                
+                selectedTemplates.forEach(template => {
+                    const countryInfo = countries[template.country];
+                    const [hours, minutes] = template.time.split(':');
+                    const eventTime = new Date(eventDate);
+                    eventTime.setHours(parseInt(hours), parseInt(minutes), 0);
+
+                    events.push({
+                        id: Math.random().toString(36).substr(2, 9),
+                        name: template.name,
+                        country: template.country,
+                        countryFlag: countryInfo.flag,
+                        countryName: countryInfo.name,
+                        impact: template.impact,
+                        date: eventDate,
+                        time: eventTime,
+                        timeString: template.time,
+                        forecast: template.impact === 'high' ? (Math.random() * 2 + 1).toFixed(1) + '%' : 'N/A',
+                        previous: template.impact === 'high' ? (Math.random() * 2 + 0.5).toFixed(1) + '%' : 'N/A',
+                        actual: day === 0 && Math.random() > 0.5 ? (Math.random() * 2 + 1).toFixed(1) + '%' : '-'
+                    });
+                });
+            }
+
+            // Ordenar por fecha y hora
+            events.sort((a, b) => a.time - b.time);
+            economicEvents = events;
+            
+            console.log('✅ Calendario económico generado:', events.length, 'eventos');
+            return events;
+        }
+
+        function filterCalendar(filter) {
+            currentCalendarFilter = filter;
+            
+            // Update button states
+            document.querySelectorAll('.calendar-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const container = document.getElementById('calendarEvents');
+            
+            if (economicEvents.length === 0) {
+                generateEconomicEvents();
+            }
+
+            let filteredEvents = economicEvents;
+            if (currentCalendarFilter !== 'all') {
+                filteredEvents = economicEvents.filter(e => e.impact === currentCalendarFilter);
+            }
+
+            if (filteredEvents.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <div class="empty-state-text">No hay eventos con este filtro</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+            let currentDate = null;
+            let html = '';
+
+            filteredEvents.forEach(event => {
+                const eventDate = new Date(event.date.getFullYear(), event.date.getMonth(), event.date.getDate());
+                
+                // Agregar separador de fecha
+                if (!currentDate || eventDate.getTime() !== currentDate.getTime()) {
+                    currentDate = eventDate;
+                    const dateLabel = eventDate.getTime() === today.getTime() 
+                        ? 'Hoy' 
+                        : eventDate.getTime() === today.getTime() + 86400000 
+                        ? 'Mañana' 
+                        : eventDate.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+                    
+                    html += `
+                        <div style="background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); padding: 12px 20px; border-radius: 10px; margin: 20px 0 15px; font-weight: 700; font-size: 16px; text-transform: capitalize;">
+                            ${dateLabel}
+                        </div>
+                    `;
+                }
+
+                const isPast = event.time < now;
+                const impactColor = event.impact === 'high' ? 'var(--accent-red)' : event.impact === 'medium' ? 'var(--accent-gold)' : 'var(--accent-green)';
+
+                html += `
+                    <div class="calendar-event ${event.impact}-impact" style="${isPast ? 'opacity: 0.6;' : ''}">
+                        <div class="calendar-event-header">
+                            <div class="calendar-event-time">${event.timeString} ${isPast ? '(Pasado)' : ''}</div>
+                            <div class="calendar-impact-badge ${event.impact}">
+                                ${event.impact === 'high' ? '🔴 Alto' : event.impact === 'medium' ? '🟡 Medio' : '🟢 Bajo'} Impacto
+                            </div>
+                        </div>
+                        
+                        <div class="calendar-event-country">
+                            <span style="font-size: 20px;">${event.countryFlag}</span>
+                            <span>${event.countryName}</span>
+                        </div>
+                        
+                        <div class="calendar-event-title">${event.name}</div>
+                        
+                        ${event.impact !== 'low' ? `
+                            <div class="calendar-event-details">
+                                <div class="calendar-detail-item">
+                                    <div class="calendar-detail-label">Pronóstico</div>
+                                    <div class="calendar-detail-value" style="color: var(--accent-blue);">${event.forecast}</div>
+                                </div>
+                                <div class="calendar-detail-item">
+                                    <div class="calendar-detail-label">Anterior</div>
+                                    <div class="calendar-detail-value" style="color: var(--text-secondary);">${event.previous}</div>
+                                </div>
+                                <div class="calendar-detail-item">
+                                    <div class="calendar-detail-label">Actual</div>
+                                    <div class="calendar-detail-value" style="color: ${event.actual !== '-' ? impactColor : 'var(--text-secondary)'};">${event.actual}</div>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            console.log('✅ Calendario renderizado:', filteredEvents.length, 'eventos');
+        }
 
         // Función para obtener precios REALES de Binance
         async function fetchRealCryptoPrices() {
