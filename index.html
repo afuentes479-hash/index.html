@@ -1188,90 +1188,36 @@ function navigateTo(page) {
 
 // ============ SIGNALS ============
 function generateSignals() {
-  // Más símbolos disponibles
-  const symbols = [
-    'XAUUSD', 'EURUSD', 'GBPUSD', 'USDJPY', 'AUDUSD', 
-    'USDCAD', 'NZDUSD', 'EURGBP', 'EURJPY', 'GBPJPY',
-    'BTCUSD', 'ETHUSD', 'NAS100', 'US30', 'SPX500',
-    'UK100', 'GER40', 'USOIL', 'UKOIL', 'NATGAS'
-  ];
-  
+  const symbols = ['XAUUSD', 'EURUSD', 'BTCUSD', 'NAS100', 'US30'];
   const types = ['BUY', 'SELL', 'STRONG_BUY', 'STRONG_SELL'];
   const container = document.getElementById('signalsContainer');
   
   container.innerHTML = '';
   
-  // Mezclar símbolos para evitar duplicados
-  const shuffledSymbols = symbols.sort(() => Math.random() - 0.5);
-  
-  // Generar 15 señales únicas
-  const numSignals = Math.min(15, shuffledSymbols.length);
-  
-  for (let i = 0; i < numSignals; i++) {
-    const symbol = shuffledSymbols[i]; // Cada símbolo es único
+  for (let i = 0; i < 6; i++) {
+    const symbol = symbols[Math.floor(Math.random() * symbols.length)];
     const type = types[Math.floor(Math.random() * types.length)];
     const confidence = Math.floor(Math.random() * 30) + 70;
     const direction = type.includes('BUY') ? 'buy' : 'sell';
-    
-    // Generar precio de entrada simulado
-    const basePrice = getBasePrice(symbol);
-    const entryPrice = basePrice + (Math.random() - 0.5) * (basePrice * 0.001);
     
     const card = document.createElement('div');
     card.className = `signal-card ${direction}`;
     card.innerHTML = `
       <div class="signal-icon">${direction === 'buy' ? '↑' : '↓'}</div>
-      <div style="flex:1;">
+      <div>
         <div style="font-size:1.2rem;font-weight:800;margin-bottom:0.5rem;">${symbol}</div>
-        <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.5rem;">
-          Entrada: ${entryPrice.toFixed(getDecimals(symbol))}
-        </div>
         <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
           <span class="badge badge-${direction === 'buy' ? 'success' : 'danger'}">${type}</span>
           <span class="badge" style="background:rgba(0,212,255,0.2);color:var(--accent);">${confidence}% confianza</span>
         </div>
       </div>
-      <button class="btn btn-primary" onclick="copySignal('${symbol}', '${type}', ${entryPrice.toFixed(getDecimals(symbol))})">
-        Copiar
-      </button>
+      <button class="btn btn-primary">Operar</button>
     `;
     
     container.appendChild(card);
   }
   
-  // Renovar cada 30 segundos
   setTimeout(generateSignals, 30000);
-}
-
-// Obtener precio base por símbolo
-function getBasePrice(symbol) {
-  const prices = {
-    'XAUUSD': 2650, 'EURUSD': 1.08, 'GBPUSD': 1.26, 'USDJPY': 149.50,
-    'AUDUSD': 0.65, 'USDCAD': 1.39, 'NZDUSD': 0.59, 'EURGBP': 0.85,
-    'EURJPY': 161, 'GBPJPY': 188, 'BTCUSD': 98500, 'ETHUSD': 3850,
-    'NAS100': 21500, 'US30': 44800, 'SPX500': 6050, 'UK100': 8400,
-    'GER40': 22100, 'USOIL': 68.50, 'UKOIL': 72.30, 'NATGAS': 3.25
-  };
-  return prices[symbol] || 1.0000;
-}
-
-// Obtener decimales por tipo de símbolo
-function getDecimals(symbol) {
-  if (symbol.includes('JPY')) return 2;
-  if (symbol.includes('XAU') || symbol.includes('BTC') || symbol.includes('ETH')) return 0;
-  if (symbol.includes('100') || symbol.includes('30') || symbol.includes('500')) return 0;
-  if (symbol.includes('OIL') || symbol.includes('GAS')) return 2;
-  return 4;
-}
-
-// Copiar señal al portapapeles
-function copySignal(symbol, type, entry) {
-  const text = `🎯 SEÑAL ${type}\n${symbol}\n📍 Entrada: ${entry}`;
-  navigator.clipboard.writeText(text).then(() => {
-    alert('✅ Señal copiada al portapapeles');
-  }).catch(() => {
-    alert('❌ Error al copiar');
-  });
 }
 
 // ============ TRADING ============
