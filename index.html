@@ -43,73 +43,7 @@ margin:0;
 padding:0;
 box-sizing:border-box;
 }
-<!-- ============ ADMIN PANEL ============ -->
-<div class="admin-panel" id="adminPanel" style="display:none;">
-<div class="admin-container">
-<div class="admin-header">
-<div>
-<h1 style="font-size:2.5rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
-<i class="fa-solid fa-shield-halved"></i> Panel de Administración
-</h1>
-<p style="color:var(--text-secondary);margin-top:0.5rem;">Gestión completa de usuarios - AI Trading Room Pro</p>
-</div>
-<button class="btn-logout" onclick="closeAdminPanel()">
-<i class="fa-solid fa-xmark"></i> Cerrar Panel
-</button>
-</div>
 
-<div class="dashboard-grid" style="margin-bottom:2rem;">
-<div class="stat-card">
-<div class="stat-info">
-<h3>Total Usuarios</h3>
-<div class="stat-value" style="color:var(--accent)" id="adminTotalUsers">0</div>
-</div>
-<i class="fa-solid fa-users stat-icon"></i>
-</div>
-
-<div class="stat-card">
-<div class="stat-info">
-<h3>Usuarios Hoy</h3>
-<div class="stat-value" style="color:var(--green)" id="adminTodayUsers">0</div>
-</div>
-<i class="fa-solid fa-user-plus stat-icon"></i>
-</div>
-
-<div class="stat-card">
-<div class="stat-info">
-<h3>Total Operaciones</h3>
-<div class="stat-value" style="color:var(--purple)" id="adminTotalTrades">0</div>
-</div>
-<i class="fa-solid fa-chart-simple stat-icon"></i>
-</div>
-
-<div class="stat-card">
-<div class="stat-info">
-<h3>Balance Total</h3>
-<div class="stat-value" style="color:var(--gold)" id="adminTotalBalance">$0</div>
-</div>
-<i class="fa-solid fa-wallet stat-icon"></i>
-</div>
-</div>
-
-<div class="card">
-<div class="card-header">
-<h2 class="card-title">Lista de Usuarios Registrados</h2>
-<div style="display:flex;gap:1rem;">
-<input type="text" placeholder="Buscar usuario..." style="padding:0.75rem 1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;color:var(--text-primary);width:250px;" id="adminSearch" onkeyup="searchAdminUsers()">
-<button class="btn btn-success btn-sm" onclick="exportUsersCSV()">
-<i class="fa-solid fa-download"></i> Exportar CSV
-</button>
-</div>
-</div>
-
-<div style="overflow-x:auto;">
-<table style="width:100%;border-collapse:collapse;">
-<thead>
-<tr style="background:var(--bg-elevated);">
-<th style="padding:1rem;text-align:left;font-size:0.85rem;color:var(--text-secondary);text-transform:uppercase;">Usuario</th>
-<th style="padding:1rem;text-align:left;font-size:0.85rem;color:var(--text-secondary);text-transform:uppercase;">Email</th>
-<th style="padding:1rem;text-align:left;font-size:0.85rem;color:var(
 body{
 font-family:'Inter',sans-serif;
 background:var(--bg-primary);
@@ -2005,6 +1939,7 @@ Todo sobre contratos por diferencia, apalancamiento, margen y derivados financie
 <script>
 // ============ CONFIGURATION ============
 const ADMIN_PASSWORD='CFI2024Admin';
+const ADMIN_USERNAME='admin';
 
 // ============ ASSETS ============
 const ASSETS=[
