@@ -1051,6 +1051,248 @@
             margin: 0 auto 20px;
         }
 
+        /* Copy Trading Styles */
+        .mt5-connection-card {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));
+            border: 2px solid var(--accent-blue);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .mt5-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+
+        .mt5-status.connected {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            border: 2px solid var(--accent-green);
+        }
+
+        .mt5-status.disconnected {
+            background: rgba(255, 51, 102, 0.2);
+            color: var(--accent-red);
+            border: 2px solid var(--accent-red);
+        }
+
+        .mt5-form {
+            max-width: 500px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        .mt5-input-group {
+            margin-bottom: 20px;
+        }
+
+        .mt5-input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .mt5-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .mt5-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+
+        .trader-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trader-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+        }
+
+        .trader-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-blue);
+        }
+
+        .trader-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .trader-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            font-size: 32px;
+            color: var(--bg-primary);
+            flex-shrink: 0;
+        }
+
+        .trader-info {
+            flex: 1;
+        }
+
+        .trader-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .trader-bio {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .trader-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .trader-stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .trader-stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .trader-stat-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .trader-stat-value.positive {
+            color: var(--accent-green);
+        }
+
+        .trader-stat-value.negative {
+            color: var(--accent-red);
+        }
+
+        .btn-copy {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            border: none;
+            border-radius: 10px;
+            color: var(--bg-primary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-copy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-copy.copying {
+            background: linear-gradient(135deg, var(--accent-gold), #cc9900);
+        }
+
+        .btn-stop-copy {
+            background: linear-gradient(135deg, var(--accent-red), #cc0033);
+        }
+
+        .copy-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-left: 10px;
+        }
+
+        .copy-badge.active {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+
+        .copy-settings {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .copy-setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .copy-setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .copy-input {
+            width: 120px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
         /* Admin Panel */
         .admin-panel {
             background: var(--bg-card);
@@ -1362,6 +1604,7 @@
                 <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
                 <button class="nav-tab" onclick="switchTab('signals')">🔴 Señales Live</button>
                 <button class="nav-tab" onclick="switchTab('simulator')">💹 Simulador</button>
+                <button class="nav-tab" onclick="switchTab('copytrading')">👥 Copy Trading</button>
                 <button class="nav-tab" onclick="switchTab('calendar')">📅 Calendario</button>
                 <button class="nav-tab" onclick="switchTab('community')">💬 Comunidad</button>
                 <button class="nav-tab" onclick="switchTab('ranking')">🏆 Ranking</button>
@@ -1492,6 +1735,98 @@
                 </div>
             </div>
 
+            <!-- Copy Trading Tab -->
+            <div id="copytradingTab" class="tab-content">
+                <h2 class="section-title">👥 Copy Trading</h2>
+
+                <!-- MT5 Connection Card -->
+                <div class="mt5-connection-card">
+                    <h3 style="font-size: 24px; margin-bottom: 15px;">Conecta tu Cuenta MT5</h3>
+                    
+                    <div id="mt5StatusIndicator">
+                        <div class="mt5-status disconnected" id="mt5Status">
+                            <span>⚠️</span>
+                            <span>Cuenta MT5 No Conectada</span>
+                        </div>
+                    </div>
+
+                    <div id="mt5ConnectionForm" style="display: block;">
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            Conecta tu cuenta de MetaTrader 5 para copiar operaciones automáticamente
+                        </p>
+                        
+                        <form class="mt5-form" onsubmit="connectMT5(event)">
+                            <div class="mt5-input-group">
+                                <label class="mt5-input-label">Número de Cuenta MT5</label>
+                                <input type="text" class="mt5-input" id="mt5Account" placeholder="Ej: 12345678" required>
+                            </div>
+                            
+                            <div class="mt5-input-group">
+                                <label class="mt5-input-label">Servidor</label>
+                                <select class="mt5-input" id="mt5Server" required>
+                                    <option value="">Selecciona tu broker</option>
+                                    <option value="ICMarkets-Demo">IC Markets - Demo</option>
+                                    <option value="ICMarkets-Live">IC Markets - Live</option>
+                                    <option value="XM-Demo">XM - Demo</option>
+                                    <option value="XM-Real">XM - Real</option>
+                                    <option value="Pepperstone-Demo">Pepperstone - Demo</option>
+                                    <option value="Pepperstone-Live">Pepperstone - Live</option>
+                                    <option value="FXTM-Demo">FXTM - Demo</option>
+                                    <option value="FXTM-Live">FXTM - Live</option>
+                                    <option value="Exness-Demo">Exness - Demo</option>
+                                    <option value="Exness-Real">Exness - Real</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mt5-input-group">
+                                <label class="mt5-input-label">Contraseña de Inversionista (solo lectura)</label>
+                                <input type="password" class="mt5-input" id="mt5Password" placeholder="Contraseña de solo lectura" required>
+                            </div>
+                            
+                            <button type="submit" class="btn-primary">
+                                🔗 Conectar Cuenta MT5
+                            </button>
+                        </form>
+                    </div>
+
+                    <div id="mt5ConnectedInfo" style="display: none;">
+                        <p style="color: var(--accent-green); font-weight: 700; margin: 15px 0;">
+                            ✅ Cuenta conectada exitosamente
+                        </p>
+                        <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px; margin: 15px auto; max-width: 400px; text-align: left;">
+                            <div style="margin-bottom: 10px;"><strong>Cuenta:</strong> <span id="connectedAccount">-</span></div>
+                            <div style="margin-bottom: 10px;"><strong>Servidor:</strong> <span id="connectedServer">-</span></div>
+                            <div><strong>Estado:</strong> <span style="color: var(--accent-green);">Activo</span></div>
+                        </div>
+                        <button onclick="disconnectMT5()" style="background: linear-gradient(135deg, var(--accent-red), #cc0033); color: white; padding: 10px 25px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">
+                            Desconectar Cuenta
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Traders Disponibles -->
+                <h3 style="font-size: 22px; margin: 30px 0 20px;">📈 Traders Profesionales Disponibles</h3>
+
+                <div id="tradersGrid">
+                    <!-- Los traders se cargarán aquí -->
+                </div>
+
+                <!-- Info Section -->
+                <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid var(--accent-blue); border-radius: 10px; padding: 20px; margin-top: 30px;">
+                    <h4 style="margin: 0 0 10px 0; color: var(--accent-blue); font-size: 16px;">ℹ️ Cómo Funciona el Copy Trading</h4>
+                    <ol style="margin: 10px 0 0 20px; font-size: 14px; line-height: 1.8; color: var(--text-secondary);">
+                        <li><strong>Conecta tu cuenta MT5</strong> usando la contraseña de inversionista (solo lectura)</li>
+                        <li><strong>Elige un trader</strong> con buen historial y estrategia que te guste</li>
+                        <li><strong>Configura el monto</strong> o porcentaje de tu capital a copiar</li>
+                        <li><strong>Copia automática:</strong> Todas las operaciones del trader se replicarán en tu cuenta</li>
+                        <li><strong>Detén cuando quieras:</strong> Puedes pausar o detener la copia en cualquier momento</li>
+                    </ol>
+                    <p style="margin: 15px 0 0 0; font-size: 12px; color: var(--text-secondary); font-style: italic;">
+                        ⚠️ <strong>Importante:</strong> Esta es una demostración educativa. Para copy trading real, necesitarías una integración completa con la API de MT5 y tu broker.
+                    </p>
+                </div>
+            </div>
+
             <!-- Economic Calendar Tab -->
             <div id="calendarTab" class="tab-content">
                 <h2 class="section-title">📅 Calendario Económico en Tiempo Real</h2>
@@ -1500,35 +1835,35 @@
                     <div style="background: rgba(0, 255, 136, 0.05); border: 1px solid var(--accent-green); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
                         <h4 style="margin: 0 0 8px 0; color: var(--accent-green); font-size: 16px;">✅ Datos en Tiempo Real</h4>
                         <p style="margin: 0; font-size: 13px; color: var(--text-secondary);">
-                            Calendario económico actualizado automáticamente con eventos reales de <strong>Investing.com</strong>
+                            Calendario económico actualizado automáticamente con eventos reales de <strong>TradingView</strong>
                         </p>
                     </div>
 
-                    <!-- Investing.com Economic Calendar Widget -->
-                    <div style="background: white; border-radius: 10px; overflow: hidden; min-height: 600px;">
-                        <iframe 
-                            src="https://sslecal2.investing.com?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&features=datepicker,timezone&countries=5,32,6,37,72,22,17,39,14,10,35,43,56,36,110,11,26,12,4,5&calType=day&timeZone=55&lang=1" 
-                            width="100%" 
-                            height="600" 
-                            frameborder="0" 
-                            allowtransparency="true" 
-                            marginwidth="0" 
-                            marginheight="0"
-                            style="border: none; display: block;">
-                        </iframe>
-                        <div style="width:100%; text-align:center; padding: 10px; background: #f0f0f0; font-size: 11px; color: #666;">
-                            Datos en tiempo real de <a href="https://es.investing.com/economic-calendar/" target="_blank" style="color: #0066cc; text-decoration: none; font-weight: 600;">Investing.com</a>
-                        </div>
+                    <!-- TradingView Economic Calendar Widget BEGIN -->
+                    <div class="tradingview-widget-container" style="height: 100%; width: 100%;">
+                        <div class="tradingview-widget-container__widget" style="height: calc(100% - 32px); width: 100%;"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+                        {
+                            "colorTheme": "dark",
+                            "isTransparent": false,
+                            "width": "100%",
+                            "height": "600",
+                            "locale": "es",
+                            "importanceFilter": "-1,0,1",
+                            "countryFilter": "ar,au,br,ca,cn,fr,de,in,id,it,jp,kr,mx,ru,sa,za,tr,gb,us,eu"
+                        }
+                        </script>
                     </div>
+                    <!-- TradingView Economic Calendar Widget END -->
                 </div>
 
                 <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid var(--accent-blue); border-radius: 10px; padding: 20px; margin-top: 20px;">
                     <h4 style="margin: 0 0 10px 0; color: var(--accent-blue); font-size: 16px;">ℹ️ Cómo Usar el Calendario</h4>
                     <ul style="margin: 10px 0 0 20px; font-size: 14px; line-height: 1.8; color: var(--text-secondary);">
-                        <li><strong style="color: var(--accent-red);">🔴 Rojo (3 toros):</strong> Alto impacto - Mayor volatilidad esperada</li>
-                        <li><strong style="color: var(--accent-gold);">🟠 Naranja (2 toros):</strong> Impacto medio - Volatilidad moderada</li>
-                        <li><strong style="color: var(--accent-green);">🟡 Amarillo (1 toro):</strong> Bajo impacto - Movimientos menores</li>
-                        <li><strong>Actual:</strong> Dato publicado en tiempo real</li>
+                        <li><strong style="color: var(--accent-red);">🔴 Rojo (Alta):</strong> Alto impacto - Mayor volatilidad esperada</li>
+                        <li><strong style="color: var(--accent-gold);">🟠 Naranja (Media):</strong> Impacto medio - Volatilidad moderada</li>
+                        <li><strong style="color: var(--accent-green);">🟡 Amarillo (Baja):</strong> Bajo impacto - Movimientos menores</li>
+                        <li><strong>Real:</strong> Dato publicado en tiempo real</li>
                         <li><strong>Pronóstico:</strong> Lo que esperan los analistas</li>
                         <li><strong>Anterior:</strong> Dato del periodo anterior</li>
                     </ul>
@@ -1878,6 +2213,9 @@
                 renderSignals(); // Ahora es async
             } else if (tabName === 'ranking') {
                 renderRanking();
+            } else if (tabName === 'copytrading') {
+                loadMT5Status();
+                renderCopyTradingTraders();
             } else if (tabName === 'community') {
                 if (chatMessages.length === 0) {
                     initChat();
@@ -1910,6 +2248,25 @@
             // El calendario se carga automáticamente via iframe, no necesita función
         }
 
+        // Load MT5 status from user data
+        function loadMT5Status() {
+            const user = getCurrentUser();
+            if (user && user.mt5Connected) {
+                mt5Connected = true;
+                mt5AccountInfo = {
+                    account: user.mt5Account,
+                    server: user.mt5Server
+                };
+                
+                document.getElementById('mt5Status').className = 'mt5-status connected';
+                document.getElementById('mt5Status').innerHTML = '<span>✅</span><span>Cuenta MT5 Conectada</span>';
+                document.getElementById('mt5ConnectionForm').style.display = 'none';
+                document.getElementById('mt5ConnectedInfo').style.display = 'block';
+                document.getElementById('connectedAccount').textContent = user.mt5Account;
+                document.getElementById('connectedServer').textContent = user.mt5Server;
+            }
+        }
+
         // Trading functionality with REAL DATA
         const tradingPairs = [
             'BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'XRP/USDT', 'ADA/USDT', 'SOL/USDT', 
@@ -1927,6 +2284,258 @@
         let chatMessages = [];
         let realPricesCache = {};
         let lastPriceUpdate = 0;
+        let mt5Connected = false;
+        let mt5AccountInfo = null;
+        let copyingTraders = [];
+
+        // Copy Trading - Professional Traders Database
+        const professionalTraders = [
+            {
+                id: 1,
+                name: 'Carlos Martínez',
+                username: 'ProTrader_Carlos',
+                bio: 'Especialista en Forex con 8 años de experiencia. Estrategia basada en análisis técnico y price action.',
+                avatar: 'CM',
+                winRate: 78,
+                totalTrades: 1247,
+                followers: 543,
+                profit: 156.7,
+                profitPercent: '+156.7%',
+                monthlyReturn: 12.3,
+                maxDrawdown: 15.2,
+                avgTrade: 2.4,
+                riskLevel: 'Medio'
+            },
+            {
+                id: 2,
+                name: 'María González',
+                username: 'ForexQueen_MG',
+                bio: 'Trading conservador enfocado en pares mayores. Gestión de riesgo estricta.',
+                avatar: 'MG',
+                winRate: 82,
+                totalTrades: 892,
+                followers: 721,
+                profit: 94.3,
+                profitPercent: '+94.3%',
+                monthlyReturn: 8.7,
+                maxDrawdown: 8.5,
+                avgTrade: 1.8,
+                riskLevel: 'Bajo'
+            },
+            {
+                id: 3,
+                name: 'Pedro Silva',
+                username: 'CryptoKing_PS',
+                bio: 'Experto en criptomonedas y scalping. Operaciones de corto plazo con alto volumen.',
+                avatar: 'PS',
+                winRate: 71,
+                totalTrades: 2156,
+                followers: 389,
+                profit: 245.8,
+                profitPercent: '+245.8%',
+                monthlyReturn: 18.9,
+                maxDrawdown: 22.4,
+                avgTrade: 3.1,
+                riskLevel: 'Alto'
+            },
+            {
+                id: 4,
+                name: 'Ana Rodríguez',
+                username: 'SwingMaster_AR',
+                bio: 'Swing trading en índices y commodities. Análisis fundamental y técnico combinado.',
+                avatar: 'AR',
+                winRate: 75,
+                totalTrades: 634,
+                followers: 456,
+                profit: 112.5,
+                profitPercent: '+112.5%',
+                monthlyReturn: 10.1,
+                maxDrawdown: 12.3,
+                avgTrade: 2.9,
+                riskLevel: 'Medio'
+            }
+        ];
+
+        // MT5 Connection Functions
+        function connectMT5(event) {
+            event.preventDefault();
+            
+            const account = document.getElementById('mt5Account').value;
+            const server = document.getElementById('mt5Server').value;
+            const password = document.getElementById('mt5Password').value;
+            
+            if (!account || !server || !password) {
+                showNotification('❌ Por favor completa todos los campos');
+                return;
+            }
+            
+            // Simular conexión (en producción esto haría una llamada API real)
+            showNotification('⏳ Conectando con MT5...');
+            
+            setTimeout(() => {
+                mt5Connected = true;
+                mt5AccountInfo = { account, server, password };
+                
+                // Update UI
+                document.getElementById('mt5Status').className = 'mt5-status connected';
+                document.getElementById('mt5Status').innerHTML = '<span>✅</span><span>Cuenta MT5 Conectada</span>';
+                document.getElementById('mt5ConnectionForm').style.display = 'none';
+                document.getElementById('mt5ConnectedInfo').style.display = 'block';
+                document.getElementById('connectedAccount').textContent = account;
+                document.getElementById('connectedServer').textContent = server;
+                
+                // Save to user
+                const user = getCurrentUser();
+                if (user) {
+                    user.mt5Connected = true;
+                    user.mt5Account = account;
+                    user.mt5Server = server;
+                    saveCurrentUser(user);
+                    
+                    const users = getUsers();
+                    const index = users.findIndex(u => u.id === user.id);
+                    users[index] = user;
+                    saveUsers(users);
+                }
+                
+                showNotification('✅ Cuenta MT5 conectada exitosamente');
+            }, 2000);
+        }
+
+        function disconnectMT5() {
+            if (confirm('¿Estás seguro de desconectar tu cuenta MT5? Esto detendrá todas las copias activas.')) {
+                mt5Connected = false;
+                mt5AccountInfo = null;
+                copyingTraders = [];
+                
+                // Update UI
+                document.getElementById('mt5Status').className = 'mt5-status disconnected';
+                document.getElementById('mt5Status').innerHTML = '<span>⚠️</span><span>Cuenta MT5 No Conectada</span>';
+                document.getElementById('mt5ConnectionForm').style.display = 'block';
+                document.getElementById('mt5ConnectedInfo').style.display = 'none';
+                
+                // Clear form
+                document.getElementById('mt5Account').value = '';
+                document.getElementById('mt5Server').value = '';
+                document.getElementById('mt5Password').value = '';
+                
+                // Update user
+                const user = getCurrentUser();
+                if (user) {
+                    user.mt5Connected = false;
+                    delete user.mt5Account;
+                    delete user.mt5Server;
+                    saveCurrentUser(user);
+                    
+                    const users = getUsers();
+                    const index = users.findIndex(u => u.id === user.id);
+                    users[index] = user;
+                    saveUsers(users);
+                }
+                
+                renderCopyTradingTraders();
+                showNotification('✅ Cuenta MT5 desconectada');
+            }
+        }
+
+        function toggleCopyTrader(traderId) {
+            if (!mt5Connected) {
+                showNotification('⚠️ Debes conectar tu cuenta MT5 primero');
+                return;
+            }
+            
+            const trader = professionalTraders.find(t => t.id === traderId);
+            const isCopying = copyingTraders.includes(traderId);
+            
+            if (isCopying) {
+                // Stop copying
+                copyingTraders = copyingTraders.filter(id => id !== traderId);
+                showNotification(`✅ Dejaste de copiar a ${trader.name}`);
+            } else {
+                // Start copying
+                copyingTraders.push(traderId);
+                showNotification(`✅ Ahora estás copiando a ${trader.name}`);
+            }
+            
+            renderCopyTradingTraders();
+        }
+
+        function renderCopyTradingTraders() {
+            const container = document.getElementById('tradersGrid');
+            
+            container.innerHTML = professionalTraders.map(trader => {
+                const isCopying = copyingTraders.includes(trader.id);
+                
+                return `
+                    <div class="trader-card">
+                        <div class="trader-header">
+                            <div class="trader-avatar">${trader.avatar}</div>
+                            <div class="trader-info">
+                                <div class="trader-name">
+                                    ${trader.name}
+                                    ${isCopying ? '<span class="copy-badge active">COPIANDO</span>' : ''}
+                                </div>
+                                <div class="trader-bio">${trader.bio}</div>
+                                <div style="margin-top: 8px; color: var(--text-secondary); font-size: 13px;">
+                                    @${trader.username} • ${trader.followers} seguidores
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="trader-stats">
+                            <div class="trader-stat">
+                                <div class="trader-stat-label">Win Rate</div>
+                                <div class="trader-stat-value positive">${trader.winRate}%</div>
+                            </div>
+                            <div class="trader-stat">
+                                <div class="trader-stat-label">Ganancia Total</div>
+                                <div class="trader-stat-value positive">${trader.profitPercent}</div>
+                            </div>
+                            <div class="trader-stat">
+                                <div class="trader-stat-label">Retorno Mensual</div>
+                                <div class="trader-stat-value positive">+${trader.monthlyReturn}%</div>
+                            </div>
+                            <div class="trader-stat">
+                                <div class="trader-stat-label">Max Drawdown</div>
+                                <div class="trader-stat-value negative">${trader.maxDrawdown}%</div>
+                            </div>
+                            <div class="trader-stat">
+                                <div class="trader-stat-label">Total Trades</div>
+                                <div class="trader-stat-value">${trader.totalTrades}</div>
+                            </div>
+                            <div class="trader-stat">
+                                <div class="trader-stat-label">Riesgo</div>
+                                <div class="trader-stat-value" style="color: ${trader.riskLevel === 'Bajo' ? 'var(--accent-green)' : trader.riskLevel === 'Medio' ? 'var(--accent-gold)' : 'var(--accent-red)'}">
+                                    ${trader.riskLevel}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        ${isCopying ? `
+                            <div class="copy-settings">
+                                <h4 style="margin: 0 0 15px 0; font-size: 16px;">⚙️ Configuración de Copia</h4>
+                                <div class="copy-setting-row">
+                                    <span>Monto por operación:</span>
+                                    <input type="number" class="copy-input" value="100" min="10" step="10" placeholder="$100">
+                                </div>
+                                <div class="copy-setting-row">
+                                    <span>Stop Loss automático:</span>
+                                    <input type="number" class="copy-input" value="50" min="10" step="10" placeholder="$50">
+                                </div>
+                                <div class="copy-setting-row">
+                                    <span>Take Profit automático:</span>
+                                    <input type="number" class="copy-input" value="150" min="10" step="10" placeholder="$150">
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <button class="btn-copy ${isCopying ? 'btn-stop-copy' : ''}" onclick="toggleCopyTrader(${trader.id})">
+                            ${isCopying ? '⏹️ Dejar de Copiar' : '📋 Copiar Trader'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
 
         // Función para obtener precios REALES de Binance
         async function fetchRealCryptoPrices() {
