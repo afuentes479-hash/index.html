@@ -2014,7 +2014,7 @@
             }
 
             // Check if username exists
-            const { data: existing } = await supabase
+            const { data: existing } = await sbClient
                 .from('usuarios')
                 .select('id')
                 .eq('usuario', username)
@@ -2027,7 +2027,7 @@
             }
 
             // Check if email exists
-            const { data: existingEmail } = await supabase
+            const { data: existingEmail } = await sbClient
                 .from('usuarios')
                 .select('id')
                 .eq('email', email)
@@ -2040,7 +2040,7 @@
             }
 
             // Insert new user
-            const { data: newUser, error } = await supabase
+            const { data: newUser, error } = await sbClient
                 .from('usuarios')
                 .insert([{
                     usuario: username,
@@ -2080,7 +2080,7 @@
             // Check if admin credentials (works even if not in DB yet)
             if ((username === ADMIN_USERNAME || username === 'admin@aitrading.pro') && password === ADMIN_PASSWORD) {
                 // Try to get admin from DB
-                let { data: adminUser } = await supabase
+                let { data: adminUser } = await sbClient
                     .from('usuarios')
                     .select('*')
                     .eq('usuario', ADMIN_USERNAME)
@@ -2088,7 +2088,7 @@
 
                 // If admin doesn't exist in DB, create it
                 if (!adminUser) {
-                    const { data: created } = await supabase
+                    const { data: created } = await sbClient
                         .from('usuarios')
                         .insert([{
                             usuario: ADMIN_USERNAME,
@@ -2128,7 +2128,7 @@
             // Normal user login via Supabase
             // Fetch by username first, then by email, then verify password in JS
             let user = null;
-            const { data: byName } = await supabase
+            const { data: byName } = await sbClient
                 .from('usuarios')
                 .select('*')
                 .eq('usuario', username)
@@ -2137,7 +2137,7 @@
             if (byName) {
                 user = byName;
             } else {
-                const { data: byEmail } = await supabase
+                const { data: byEmail } = await sbClient
                     .from('usuarios')
                     .select('*')
                     .eq('email', username)
@@ -2275,7 +2275,7 @@
             if (!user) return;
 
             // Load last 50 messages
-            const { data: messages } = await supabase
+            const { data: messages } = await sbClient
                 .from('mensajes')
                 .select('*')
                 .order('created_at', { ascending: true })
@@ -2350,7 +2350,7 @@
 
             input.value = '';
 
-            const { error } = await supabase
+            const { error } = await sbClient
                 .from('mensajes')
                 .insert([{
                     usuario: user.usuario,
@@ -2374,7 +2374,7 @@
         // =============================================
 
         async function renderRanking() {
-            const { data: users, error } = await supabase
+            const { data: users, error } = await sbClient
                 .from('usuarios')
                 .select('usuario, balance, trades')
                 .order('balance', { ascending: false })
@@ -2428,7 +2428,7 @@
         // =============================================
 
         async function renderAdminPanel() {
-            const { data: users, error } = await supabase
+            const { data: users, error } = await sbClient
                 .from('usuarios')
                 .select('*')
                 .order('created_at', { ascending: true });
@@ -2507,7 +2507,7 @@
             }
 
             if (confirm('¿Estás seguro de eliminar este usuario?')) {
-                const { error } = await supabase
+                const { error } = await sbClient
                     .from('usuarios')
                     .delete()
                     .eq('id', userId);
@@ -2547,7 +2547,7 @@
             const newWins = parseInt(user.wins || 0) + (position.pnl > 0 ? 1 : 0);
 
             // Update in Supabase (only columns that exist)
-            const { error } = await supabase
+            const { error } = await sbClient
                 .from('usuarios')
                 .update({ balance: newBalance })
                 .eq('id', user.id);
