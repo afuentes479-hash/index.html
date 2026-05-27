@@ -2752,18 +2752,14 @@
                 document.getElementById('connectedAccount').textContent = account;
                 document.getElementById('connectedServer').textContent = server;
                 
-                // Save to user
+                // Save to sessionStorage
                 const user = getCurrentUser();
                 if (user) {
                     user.mt5Connected = true;
                     user.mt5Account = account;
                     user.mt5Server = server;
-                    saveCurrentUser(user);
-                    
-                    const users = getUsers();
-                    const index = users.findIndex(u => u.id === user.id);
-                    users[index] = user;
-                    saveUsers(users);
+                    currentUser = user;
+                    sessionStorage.setItem('currentUser', JSON.stringify(user));
                 }
                 
                 showNotification('✅ Cuenta MT5 conectada exitosamente');
@@ -2787,18 +2783,14 @@
                 document.getElementById('mt5Server').value = '';
                 document.getElementById('mt5Password').value = '';
                 
-                // Update user
+                // Update sessionStorage
                 const user = getCurrentUser();
                 if (user) {
                     user.mt5Connected = false;
                     delete user.mt5Account;
                     delete user.mt5Server;
-                    saveCurrentUser(user);
-                    
-                    const users = getUsers();
-                    const index = users.findIndex(u => u.id === user.id);
-                    users[index] = user;
-                    saveUsers(users);
+                    currentUser = user;
+                    sessionStorage.setItem('currentUser', JSON.stringify(user));
                 }
                 
                 renderCopyTradingTraders();
