@@ -1974,7 +1974,7 @@
         // =============================================
         const SUPABASE_URL = 'https://dlcnqcyjdspltiwzvnoj.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_dBkVMHISRQcgYlwxrXJy6g_lhrf6pu0';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const ADMIN_USERNAME = 'admin';
         const ADMIN_PASSWORD = 'admin123';
@@ -2170,7 +2170,7 @@
             sessionStorage.removeItem('currentUser');
             stopUpdates();
             if (chatSubscription) {
-                supabase.removeChannel(chatSubscription);
+                sbClient.removeChannel(chatSubscription);
                 chatSubscription = null;
             }
             showView('loginView');
@@ -2522,8 +2522,8 @@
 
         async function resetDatabase() {
             if (confirm('⚠️ ADVERTENCIA: Esto eliminará TODOS los usuarios (excepto admin). ¿Estás seguro?')) {
-                await supabase.from('usuarios').delete().neq('usuario', 'admin');
-                await supabase.from('mensajes').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+                await sbClient.from('usuarios').delete().neq('usuario', 'admin');
+                await sbClient.from('mensajes').delete().neq('id', '00000000-0000-0000-0000-000000000000');
                 alert('✅ Base de datos reseteada.');
                 location.reload();
             }
@@ -2559,7 +2559,7 @@
                 sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
 
                 // Save trade to trades table
-                await supabase.from('trades').insert([{
+                await sbClient.from('trades').insert([{
                     usuario_id: user.id,
                     activo: position.pair,
                     tipo: position.type,
