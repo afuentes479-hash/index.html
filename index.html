@@ -1885,7 +1885,7 @@
             </div>
 
             <!-- Admin Tab -->
-            <div id="adminTab" class="tab-content">
+            <div id="adminTabContent" class="tab-content">
                 <h2 class="section-title">⚙️ Panel de Administración</h2>
                 
                 <div class="admin-panel">
@@ -2229,7 +2229,7 @@
             document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
             event.target.classList.add('active');
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(tabName + 'Tab').classList.add('active');
+            document.getElementById(tabName === "admin" ? "adminTabContent" : tabName + "Tab").classList.add('active');
 
             if (tabName === 'signals') {
                 renderSignals();
