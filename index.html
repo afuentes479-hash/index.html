@@ -1969,6 +1969,7 @@
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+    (function() {
         // =============================================
         // SUPABASE CONFIG
         // =============================================
@@ -3332,7 +3333,21 @@
         // Handle Enter key in chat (already handled above in supabase script)
         // Admin refresh button
         function refreshAdmin() { renderAdminPanel(); }
-
+    window.handleLogin = handleLogin;
+    window.handleRegister = handleRegister;
+    window.handleLogout = handleLogout;
+    window.switchTab = switchTab;
+    window.showView = showView;
+    window.sendMessage = sendMessage;
+    window.executeTrade = executeTrade;
+    window.closePosition = closePosition;
+    window.connectMT5 = connectMT5;
+    window.disconnectMT5 = disconnectMT5;
+    window.toggleCopyTrader = toggleCopyTrader;
+    window.deleteUser = deleteUser;
+    window.resetDatabase = resetDatabase;
+    window.renderAdminPanel = renderAdminPanel;
+    })();
     </script>
 </body>
 </html>
