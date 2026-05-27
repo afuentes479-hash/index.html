@@ -2812,7 +2812,21 @@
             renderCopyTradingTraders();
         }
 
-        function renderCopyTradingTraders() {
+        function loadMT5Status() {
+            const user = getCurrentUser();
+            if (user && user.mt5Connected) {
+                mt5Connected = true;
+                mt5AccountInfo = { account: user.mt5Account, server: user.mt5Server };
+                document.getElementById('mt5Status').className = 'mt5-status connected';
+                document.getElementById('mt5Status').innerHTML = '<span>✅</span><span>Cuenta MT5 Conectada</span>';
+                document.getElementById('mt5ConnectionForm').style.display = 'none';
+                document.getElementById('mt5ConnectedInfo').style.display = 'block';
+                document.getElementById('connectedAccount').textContent = user.mt5Account;
+                document.getElementById('connectedServer').textContent = user.mt5Server;
+            }
+        }
+
+                function renderCopyTradingTraders() {
             const container = document.getElementById('tradersGrid');
             
             container.innerHTML = professionalTraders.map(trader => {
