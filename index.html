@@ -2072,6 +2072,55 @@
             const errorDiv = document.getElementById('loginError');
             errorDiv.style.display = 'none';
 
+            // Check if admin credentials (works even if not in DB yet)
+            if ((username === ADMIN_USERNAME || username === 'admin@aitrading.pro') && password === ADMIN_PASSWORD) {
+                // Try to get admin from DB
+                let { data: adminUser } = await supabase
+                    .from('usuarios')
+                    .select('*')
+                    .eq('usuario', ADMIN_USERNAME)
+                    .maybeSingle();
+
+                // If admin doesn't exist in DB, create it
+                if (!adminUser) {
+                    const { data: created } = await supabase
+                        .from('usuarios')
+                        .insert([{
+                            usuario: ADMIN_USERNAME,
+                            email: 'admin@aitrading.pro',
+                            password: ADMIN_PASSWORD,
+                            balance: 100000,
+                            rol: 'admin'
+                        }])
+                        .select()
+                        .single();
+                    adminUser = created;
+                }
+
+                // Fallback if DB insert failed
+                if (!adminUser) {
+                    adminUser = {
+                        id: 'admin-local',
+                        usuario: ADMIN_USERNAME,
+                        email: 'admin@aitrading.pro',
+                        balance: 100000,
+                        rol: 'admin',
+                        trades: 0,
+                        pnl: 0,
+                        wins: 0
+                    };
+                }
+
+                currentUser = adminUser;
+                sessionStorage.setItem('currentUser', JSON.stringify(adminUser));
+                loadUserData();
+                showView('appView');
+                startUpdates();
+                showNotification('¡Bienvenido, Admin!');
+                return;
+            }
+
+            // Normal user login via Supabase
             const { data: user, error } = await supabase
                 .from('usuarios')
                 .select('*')
@@ -2474,13 +2523,10 @@
             const newTrades = parseInt(user.trades || 0) + 1;
             const newWins = parseInt(user.wins || 0) + (position.pnl > 0 ? 1 : 0);
 
-            // Update in Supabase
+            // Update in Supabase (only columns that exist)
             const { error } = await supabase
                 .from('usuarios')
-                .update({
-                    balance: newBalance,
-                    trades: newTrades
-                })
+                .update({ balance: newBalance })
                 .eq('id', user.id);
 
             if (!error) {
