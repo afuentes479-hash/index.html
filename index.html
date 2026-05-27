@@ -2046,13 +2046,17 @@
                     email: email,
                     password: password,
                     balance: 10000,
+                    trades: 0,
+                    wins: 0,
+                    pnl: 0,
                     rol: 'user'
                 }])
                 .select()
                 .single();
 
             if (error) {
-                errorDiv.textContent = 'Error al crear cuenta: ' + error.message;
+                console.error('Register error:', error);
+                errorDiv.textContent = 'Error al crear cuenta: ' + error.message + ' (Verifica que el RLS esté desactivado en Supabase)';
                 errorDiv.style.display = 'block';
                 return;
             }
@@ -2121,15 +2125,33 @@
             }
 
             // Normal user login via Supabase
-            const { data: user, error } = await supabase
+            // Fetch by username first, then by email, then verify password in JS
+            let user = null;
+            const { data: byName } = await supabase
                 .from('usuarios')
                 .select('*')
-                .or(`usuario.eq.${username},email.eq.${username}`)
-                .eq('password', password)
+                .eq('usuario', username)
                 .maybeSingle();
+            
+            if (byName) {
+                user = byName;
+            } else {
+                const { data: byEmail } = await supabase
+                    .from('usuarios')
+                    .select('*')
+                    .eq('email', username)
+                    .maybeSingle();
+                user = byEmail;
+            }
 
-            if (!user || error) {
-                errorDiv.textContent = 'Usuario o contraseña incorrectos';
+            if (!user) {
+                errorDiv.textContent = 'Usuario no encontrado. Verifica tu usuario o email.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (user.password !== password) {
+                errorDiv.textContent = 'Contraseña incorrecta';
                 errorDiv.style.display = 'block';
                 return;
             }
