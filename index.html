@@ -1918,7 +1918,7 @@
                         <!-- Messages will be inserted here -->
                     </div>
                     <div class="chat-input-container">
-                        <input type="text" class="chat-input" id="chatInput" placeholder="Escribe un mensaje..." maxlength="500">
+                        <textarea class="chat-input" id="chatInput" placeholder="Escribe un mensaje... (Enter = enviar, Shift+Enter = nueva línea)" maxlength="2000" rows="2" style="resize:none;line-height:1.5;padding-top:12px;"></textarea>
                         <button class="chat-send-btn" onclick="sendMessage()">Enviar</button>
                     </div>
                 </div>
@@ -2356,7 +2356,7 @@
                 <div class="message-avatar">${avatar}</div>
                 <div class="message-content">
                     ${!isOwn ? `<div class="message-username">${msg.usuario}</div>` : ''}
-                    <div class="message-text">${escapeHtml(msg.texto)}</div>
+                    <div class="message-text" style="white-space:pre-wrap;">${escapeHtml(msg.texto)}</div>
                     <div class="message-time">${formatTime(time)}</div>
                 </div>
             `;
@@ -2719,7 +2719,7 @@
             const chatInput = document.getElementById('chatInput');
             if (chatInput) {
                 chatInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') sendMessage();
+                    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
                 });
             }
 
