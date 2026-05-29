@@ -3644,7 +3644,7 @@ Genera SOLO el mensaje.`;
                 const data = await res.json();
                 const msg = data.content?.[0]?.text || '';
                 if (msg) {
-                    const { data: saved, error } = await sbClient.from('briefings').insert({
+                    const { data: saved, error } = await window.sbClient.from('briefings').insert({
                         content: msg, created_by: user.usuario,
                         created_at: new Date().toISOString()
                     }).select().single();
@@ -3668,7 +3668,7 @@ Genera SOLO el mensaje.`;
 
         async function loadReactions(briefingId) {
             try {
-                const { data } = await sbClient.from('briefing_reactions').select('emoji').eq('briefing_id', briefingId);
+                const { data } = await window.sbClient.from('briefing_reactions').select('emoji').eq('briefing_id', briefingId);
                 const counts = { fire:0, bull:0, eyes:0, rocket:0, bear:0 };
                 if (data) data.forEach(r => { if(counts[r.emoji]!==undefined) counts[r.emoji]++; });
                 Object.keys(counts).forEach(k => {
@@ -3677,7 +3677,7 @@ Genera SOLO el mensaje.`;
                 });
                 const user = getCurrentUser();
                 if (user) {
-                    const { data: mine } = await sbClient.from('briefing_reactions').select('emoji')
+                    const { data: mine } = await window.sbClient.from('briefing_reactions').select('emoji')
                         .eq('briefing_id', briefingId).eq('user_id', user.id || user.usuario);
                     if (mine) mine.forEach(r => {
                         const btn = document.getElementById('react-'+r.emoji);
@@ -3695,11 +3695,11 @@ Genera SOLO el mensaje.`;
             const isReacted = btn.classList.contains('reacted');
             try {
                 if (isReacted) {
-                    await sbClient.from('briefing_reactions').delete()
+                    await window.sbClient.from('briefing_reactions').delete()
                         .eq('briefing_id', currentBriefingId).eq('user_id', user.id || user.usuario).eq('emoji', emoji);
                     btn.classList.remove('reacted');
                 } else {
-                    await sbClient.from('briefing_reactions').insert({
+                    await window.sbClient.from('briefing_reactions').insert({
                         briefing_id: currentBriefingId, user_id: user.id || user.usuario,
                         emoji: emoji, created_at: new Date().toISOString()
                     });
@@ -3716,7 +3716,7 @@ Genera SOLO el mensaje.`;
         async function loadBriefingComments(briefingId) {
             if (!briefingId) return;
             try {
-                const { data } = await sbClient.from('briefing_comments').select('*')
+                const { data } = await window.sbClient.from('briefing_comments').select('*')
                     .eq('briefing_id', briefingId).order('created_at', { ascending: true });
                 renderBriefingComments(data || []);
             } catch(e) {}
@@ -3769,7 +3769,8 @@ Genera SOLO el mensaje.`;
             if (tab === 'briefing') {
                 loadBriefing();
                 const user = getCurrentUser();
-                const isAdmin = user && (user.rol === 'admin' || user.usuario === 'admin');
+                const isAdmin = user && (user.rol === 'admin' || user.usuario === 'admin' || user.usuario === 'AD');
+                console.log('Admin check:', user.usuario, user.rol, isAdmin);
                 document.getElementById('briefingAdminPanel').style.display = isAdmin ? 'block' : 'none';
                 const d = new Date();
                 document.getElementById('briefingDate').textContent =
