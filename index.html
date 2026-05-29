@@ -3637,13 +3637,13 @@ El mensaje debe: saludo de apertura con emoji, contexto macro si aplica, por cad
 Genera SOLO el mensaje.`;
 
             try {
-                const res = await fetch('https://api.anthropic.com/v1/messages', {
+                const res = await fetch('https://dlcnqcyjdspltiwzvnoj.supabase.co/functions/v1/briefing-ai', {
                     method:'POST',
-                    headers:{'Content-Type':'application/json'},
-                    body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user',content:prompt}] })
+                    headers:{'Content-Type':'application/json','Authorization':'Bearer sb_publishable_dBkVMHISRQcgYlwxrXJy6g_lhrf6pu0'},
+                    body:JSON.stringify({ prompt: prompt })
                 });
                 const data = await res.json();
-                const msg = data.content?.[0]?.text || '';
+                const msg = data.text || '';
                 if (msg) {
                     const { data: saved, error } = await window.sbClient.from('briefings').insert({
                         content: msg, created_by: user.usuario,
