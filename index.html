@@ -3590,16 +3590,16 @@
                     .from('briefings')
                     .select('*')
                     .order('created_at', { ascending: false })
-                    .limit(1)
-                    .single();
-                if (data) {
-                    currentBriefingId = data.id;
-                    document.getElementById('briefingContent').textContent = data.content;
-                    const d = new Date(data.created_at);
+                    .limit(1);
+                if (data && data.length > 0) {
+                    const row = data[0];
+                    currentBriefingId = row.id;
+                    document.getElementById('briefingContent').textContent = row.content;
+                    const d = new Date(row.created_at);
                     document.getElementById('briefingDate').textContent =
                         d.toLocaleDateString('es-CO', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-                    loadReactions(data.id);
-                    loadBriefingComments(data.id);
+                    loadReactions(row.id);
+                    loadBriefingComments(row.id);
                 } else {
                     document.getElementById('briefingContent').innerHTML =
                         '<span style="color:var(--text-secondary);font-style:italic;">No hay briefing publicado hoy. El admin lo generará antes de la apertura del mercado.</span>';
