@@ -2123,6 +2123,7 @@
         const SUPABASE_URL = 'https://dlcnqcyjdspltiwzvnoj.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_dBkVMHISRQcgYlwxrXJy6g_lhrf6pu0';
         const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        window.sbClient = sbClient;
 
         const ADMIN_USERNAME = 'admin';
         const ADMIN_PASSWORD = 'admin123';
@@ -3586,7 +3587,7 @@
 
         async function loadBriefing() {
             try {
-                const { data, error } = await sbClient
+                const { data, error } = await window.sbClient
                     .from('briefings')
                     .select('*')
                     .order('created_at', { ascending: false })
