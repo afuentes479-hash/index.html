@@ -3762,8 +3762,8 @@ Genera SOLO el mensaje.`;
             }
         }
 
-        const _origSwitchTab = switchTab;
-        switchTab = function(tab) {
+        const _origSwitchTab = window.switchTab || switchTab;
+        window.switchTab = function(tab) {
             _origSwitchTab(tab);
             if (tab === 'briefing') {
                 loadBriefing();
