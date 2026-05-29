@@ -2124,6 +2124,7 @@
         const SUPABASE_KEY = 'sb_publishable_dBkVMHISRQcgYlwxrXJy6g_lhrf6pu0';
         const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         window.sbClient = sbClient;
+        window.getCurrentUser = getCurrentUser;
 
         const ADMIN_USERNAME = 'admin';
         const ADMIN_PASSWORD = 'admin123';
