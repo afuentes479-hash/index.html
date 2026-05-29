@@ -3639,7 +3639,7 @@ Genera SOLO el mensaje.`;
             try {
                 const res = await fetch('https://dlcnqcyjdspltiwzvnoj.supabase.co/functions/v1/briefing-ai', {
                     method:'POST',
-                    headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsY25xY3lqZHNwbHRpd3p2bm9qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4NjQwMjQsImV4cCI6MjA5NTQ0MDAyNH0.nXHwooHdPWuAYdC63G1kPiwdF1m2ogzVRk-ARL9Vx4A'},
+                    headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsY25xY3lqZHNwbHRpd3p2bm9qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4NjQwMjQsImV4cCI6MjA5NTQ0MDAyNH0.nXHwooHdPWuAYdC63G1kPiwdF1m2ogzVRk-ARL9Vx4A','apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsY25xY3lqZHNwbHRpd3p2bm9qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4NjQwMjQsImV4cCI6MjA5NTQ0MDAyNH0.nXHwooHdPWuAYdC63G1kPiwdF1m2ogzVRk-ARL9Vx4A'},
                     body:JSON.stringify({ prompt: prompt })
                 });
                 const data = await res.json();
