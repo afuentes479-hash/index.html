@@ -1323,6 +1323,25 @@
             letter-spacing: 1px;
         }
 
+
+        .b-chip {
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            border-radius: 20px; padding: 4px 12px; font-size: 11px; cursor: pointer;
+            color: var(--text-secondary); transition: all .15s; user-select: none;
+        }
+        .b-chip.active { background: rgba(0,255,136,0.12); border-color: var(--accent-green); color: var(--accent-green); font-weight: 600; }
+        .reaction-btn {
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            border-radius: 20px; padding: 6px 14px; font-size: 13px; cursor: pointer;
+            color: var(--text-primary); transition: all .15s;
+        }
+        .reaction-btn:hover { border-color: var(--accent-green); background: rgba(0,255,136,0.08); }
+        .reaction-btn.reacted { border-color: var(--accent-green); background: rgba(0,255,136,0.15); }
+        .briefing-comment { background: var(--bg-secondary); border-radius: 10px; padding: 12px 14px; }
+        .briefing-comment .c-user { font-size: 12px; font-weight: 600; color: var(--accent-green); margin-bottom: 4px; }
+        .briefing-comment .c-text { font-size: 13px; color: var(--text-primary); line-height: 1.5; }
+        .briefing-comment .c-time { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
         .users-table {
             width: 100%;
             border-collapse: collapse;
@@ -1607,6 +1626,7 @@
                 <button class="nav-tab" onclick="switchTab('copytrading')">👥 Copy Trading</button>
                 <button class="nav-tab" onclick="switchTab('calendar')">📅 Calendario</button>
                 <button class="nav-tab" onclick="switchTab('community')">💬 Comunidad</button>
+                <button class="nav-tab" onclick="switchTab('briefing')">📰 Briefing</button>
                 <button class="nav-tab" onclick="switchTab('ranking')">🏆 Ranking</button>
                 <button class="nav-tab" id="adminTab" onclick="switchTab('admin')" style="display: none;">⚙️ Admin</button>
             </div>
@@ -1911,6 +1931,94 @@
             </div>
 
             <!-- Community Tab -->
+            
+            <div id="briefingTab" class="tab-content">
+                <h2 class="section-title">📰 Briefing del Mercado</h2>
+
+                <!-- ADMIN: Generar briefing -->
+                <div id="briefingAdminPanel" style="display:none; background:var(--bg-card); border:1px solid var(--border-color); border-radius:16px; padding:20px; margin-bottom:20px;">
+                    <h3 style="color:var(--accent-gold); font-size:14px; letter-spacing:1px; text-transform:uppercase; margin-bottom:16px;">⚡ Generar Briefing de Hoy (Admin)</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:6px;">ACTIVOS</label>
+                            <div id="briefingAssets" style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <span class="b-chip active" data-v="Oro (XAU/USD)">🥇 Oro</span>
+                                <span class="b-chip active" data-v="Nasdaq US100">📊 Nasdaq</span>
+                                <span class="b-chip active" data-v="Bitcoin (BTC/USD)">₿ BTC</span>
+                                <span class="b-chip" data-v="EUR/USD">EUR/USD</span>
+                                <span class="b-chip" data-v="Petróleo WTI">🛢️ WTI</span>
+                                <span class="b-chip" data-v="S&P 500">S&P 500</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:6px;">EVENTO MACRO</label>
+                            <input id="briefingMacro" type="text" placeholder="Ej: IPC USA 8:30 AM" style="width:100%; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:8px; color:var(--text-primary); padding:8px 12px; font-size:13px; outline:none;">
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+                        <div>
+                            <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:6px;">SESGO</label>
+                            <select id="briefingBias" style="width:100%; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:8px; color:var(--text-primary); padding:8px 12px; font-size:13px; outline:none;">
+                                <option value="neutral con potencial de movimiento en ambas direcciones">⚖️ Neutral</option>
+                                <option value="alcista con momentum positivo">🟢 Alcista</option>
+                                <option value="bajista con presión vendedora">🔴 Bajista</option>
+                                <option value="volátil por noticias, esperar confirmación">⚡ Volátil</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:11px; color:var(--text-secondary); display:block; margin-bottom:6px;">SESIÓN</label>
+                            <select id="briefingSession" style="width:100%; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:8px; color:var(--text-primary); padding:8px 12px; font-size:13px; outline:none;">
+                                <option value="apertura NY (8:30–11:00 AM COL)">🇺🇸 Apertura NY</option>
+                                <option value="overlap Londres-NY (8:30–12:00 PM COL)">🔀 Overlap</option>
+                                <option value="sesión europea (3:00–8:00 AM COL)">🇪🇺 Europea</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="generateBriefing()" id="genBriefingBtn" style="width:100%; padding:12px; background:var(--accent-green); color:#000; font-weight:700; font-size:14px; border:none; border-radius:10px; cursor:pointer;">⚡ Generar y Publicar Briefing</button>
+                    <div id="briefingGenStatus" style="margin-top:10px; font-size:12px; color:var(--text-secondary); text-align:center; display:none;"></div>
+                </div>
+
+                <!-- BRIEFING DEL DÍA -->
+                <div id="briefingCard" style="background:linear-gradient(135deg, #0d2b1f 0%, #0a1628 100%); border:1px solid rgba(0,255,136,0.3); border-radius:16px; padding:24px; margin-bottom:20px; position:relative; overflow:hidden;">
+                    <div style="position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, var(--accent-green), var(--accent-blue));"></div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <div style="width:10px; height:10px; background:var(--accent-green); border-radius:50%; animation:pulse 2s infinite;"></div>
+                            <span style="font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent-green);">Briefing del Día</span>
+                        </div>
+                        <span id="briefingDate" style="font-size:11px; color:var(--text-secondary);"></span>
+                    </div>
+                    <div id="briefingContent" style="font-size:14px; line-height:1.8; color:var(--text-primary); white-space:pre-wrap; min-height:80px;">
+                        <span style="color:var(--text-secondary); font-style:italic;">Cargando briefing del día...</span>
+                    </div>
+                    <!-- Reacciones -->
+                    <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.08);">
+                        <div style="font-size:11px; color:var(--text-secondary); margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;">Reacciones</div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="reaction-btn" onclick="reactBriefing('fire')" id="react-fire">🔥 <span id="count-fire">0</span></button>
+                            <button class="reaction-btn" onclick="reactBriefing('bull')" id="react-bull">📈 <span id="count-bull">0</span></button>
+                            <button class="reaction-btn" onclick="reactBriefing('eyes')" id="react-eyes">👀 <span id="count-eyes">0</span></button>
+                            <button class="reaction-btn" onclick="reactBriefing('rocket')" id="react-rocket">🚀 <span id="count-rocket">0</span></button>
+                            <button class="reaction-btn" onclick="reactBriefing('bear')" id="react-bear">🐻 <span id="count-bear">0</span></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMENTARIOS -->
+                <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:16px; padding:20px;">
+                    <h3 style="font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:16px;">💬 Comentarios del briefing</h3>
+                    <div id="briefingComments" style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px; max-height:400px; overflow-y:auto;">
+                        <div style="text-align:center; color:var(--text-secondary); font-size:13px; padding:20px;">Sé el primero en comentar el briefing de hoy</div>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <input id="briefingCommentInput" type="text" placeholder="Comenta el setup que ves hoy..." maxlength="300"
+                            style="flex:1; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:10px; color:var(--text-primary); padding:10px 14px; font-size:13px; outline:none;"
+                            onkeydown="if(event.key==='Enter') postBriefingComment()">
+                        <button onclick="postBriefingComment()" style="padding:10px 18px; background:var(--accent-green); color:#000; font-weight:700; border:none; border-radius:10px; cursor:pointer; font-size:13px; white-space:nowrap;">Enviar</button>
+                    </div>
+                </div>
+            </div>
+
             <div id="communityTab" class="tab-content">
                 <h2 class="section-title">💬 Comunidad de Traders</h2>
                 <div class="chat-container">
@@ -3468,6 +3576,207 @@
     window.loadMT5Status = loadMT5Status;
     window.renderCopyTradingTraders = renderCopyTradingTraders;
     })();
-    </script>
+    
+        // ── BRIEFING TAB ──────────────────────────────────────────
+        let currentBriefingId = null;
+
+        document.querySelectorAll('.b-chip').forEach(c => {
+            c.addEventListener('click', () => c.classList.toggle('active'));
+        });
+
+        async function loadBriefing() {
+            try {
+                const { data, error } = await sbClient
+                    .from('briefings')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .single();
+                if (data) {
+                    currentBriefingId = data.id;
+                    document.getElementById('briefingContent').textContent = data.content;
+                    const d = new Date(data.created_at);
+                    document.getElementById('briefingDate').textContent =
+                        d.toLocaleDateString('es-CO', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+                    loadReactions(data.id);
+                    loadBriefingComments(data.id);
+                } else {
+                    document.getElementById('briefingContent').innerHTML =
+                        '<span style="color:var(--text-secondary);font-style:italic;">No hay briefing publicado hoy. El admin lo generará antes de la apertura del mercado.</span>';
+                }
+            } catch(e) {
+                // tabla puede no existir aún
+                document.getElementById('briefingContent').innerHTML =
+                    '<span style="color:var(--text-secondary);font-style:italic;">Configura la tabla briefings en Supabase para activar esta función.</span>';
+            }
+        }
+
+        async function generateBriefing() {
+            const user = getCurrentUser();
+            if (!user) return;
+            const assets = [...document.querySelectorAll('.b-chip.active')].map(c => c.dataset.v);
+            if (!assets.length) { alert('Selecciona al menos un activo'); return; }
+            const macro = document.getElementById('briefingMacro').value.trim();
+            const bias = document.getElementById('briefingBias').value;
+            const session = document.getElementById('briefingSession').value;
+            const today = new Date().toLocaleDateString('es-CO', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+            const btn = document.getElementById('genBriefingBtn');
+            const status = document.getElementById('briefingGenStatus');
+            btn.disabled = true; btn.textContent = 'Generando con IA...';
+            status.style.display = 'block'; status.textContent = '⏳ Analizando mercado...';
+
+            const prompt = `Eres el analista de AFTradeRoom, comunidad de traders de Colombia.
+Genera el briefing diario de apertura para hoy ${today}.
+Activos: ${assets.join(', ')}
+Sesión: ${session}
+Sesgo: ${bias}
+${macro ? 'Evento macro: ' + macro : 'Sin eventos macro mayores'}
+El mensaje debe: saludo de apertura con emoji, contexto macro si aplica, por cada activo 1-2 líneas de qué esperar y por qué, ventana horaria óptima, 1 estrategia clave, pregunta de enganche a la comunidad. Máximo 280 palabras. Sin markdown. Con emojis. No menciones que eres IA.
+Genera SOLO el mensaje.`;
+
+            try {
+                const res = await fetch('https://api.anthropic.com/v1/messages', {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user',content:prompt}] })
+                });
+                const data = await res.json();
+                const msg = data.content?.[0]?.text || '';
+                if (msg) {
+                    const { data: saved, error } = await sbClient.from('briefings').insert({
+                        content: msg, created_by: user.usuario,
+                        created_at: new Date().toISOString()
+                    }).select().single();
+                    if (saved) {
+                        currentBriefingId = saved.id;
+                        document.getElementById('briefingContent').textContent = msg;
+                        document.getElementById('briefingDate').textContent = new Date().toLocaleDateString('es-CO',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+                        status.style.color = 'var(--accent-green)'; status.textContent = '✅ Briefing publicado exitosamente';
+                        loadBriefingComments(saved.id);
+                    } else {
+                        // fallback sin Supabase
+                        document.getElementById('briefingContent').textContent = msg;
+                        status.style.color = 'var(--accent-green)'; status.textContent = '✅ Generado (sin guardar en BD)';
+                    }
+                }
+            } catch(e) {
+                status.style.color = 'var(--accent-red)'; status.textContent = '❌ Error al generar. Verifica conexión.';
+            }
+            btn.disabled = false; btn.textContent = '⚡ Generar y Publicar Briefing';
+        }
+
+        async function loadReactions(briefingId) {
+            try {
+                const { data } = await sbClient.from('briefing_reactions').select('emoji').eq('briefing_id', briefingId);
+                const counts = { fire:0, bull:0, eyes:0, rocket:0, bear:0 };
+                if (data) data.forEach(r => { if(counts[r.emoji]!==undefined) counts[r.emoji]++; });
+                Object.keys(counts).forEach(k => {
+                    const el = document.getElementById('count-'+k);
+                    if(el) el.textContent = counts[k];
+                });
+                const user = getCurrentUser();
+                if (user) {
+                    const { data: mine } = await sbClient.from('briefing_reactions').select('emoji')
+                        .eq('briefing_id', briefingId).eq('user_id', user.id || user.usuario);
+                    if (mine) mine.forEach(r => {
+                        const btn = document.getElementById('react-'+r.emoji);
+                        if(btn) btn.classList.add('reacted');
+                    });
+                }
+            } catch(e) {}
+        }
+
+        async function reactBriefing(emoji) {
+            const user = getCurrentUser();
+            if (!user) { alert('Inicia sesión para reaccionar'); return; }
+            if (!currentBriefingId) return;
+            const btn = document.getElementById('react-'+emoji);
+            const isReacted = btn.classList.contains('reacted');
+            try {
+                if (isReacted) {
+                    await sbClient.from('briefing_reactions').delete()
+                        .eq('briefing_id', currentBriefingId).eq('user_id', user.id || user.usuario).eq('emoji', emoji);
+                    btn.classList.remove('reacted');
+                } else {
+                    await sbClient.from('briefing_reactions').insert({
+                        briefing_id: currentBriefingId, user_id: user.id || user.usuario,
+                        emoji: emoji, created_at: new Date().toISOString()
+                    });
+                    btn.classList.add('reacted');
+                }
+                loadReactions(currentBriefingId);
+            } catch(e) {
+                const cnt = document.getElementById('count-'+emoji);
+                if(cnt) cnt.textContent = parseInt(cnt.textContent) + (isReacted ? -1 : 1);
+                btn.classList.toggle('reacted');
+            }
+        }
+
+        async function loadBriefingComments(briefingId) {
+            if (!briefingId) return;
+            try {
+                const { data } = await sbClient.from('briefing_comments').select('*')
+                    .eq('briefing_id', briefingId).order('created_at', { ascending: true });
+                renderBriefingComments(data || []);
+            } catch(e) {}
+        }
+
+        function renderBriefingComments(comments) {
+            const container = document.getElementById('briefingComments');
+            if (!comments.length) {
+                container.innerHTML = '<div style="text-align:center;color:var(--text-secondary);font-size:13px;padding:20px;">Sé el primero en comentar el briefing de hoy</div>';
+                return;
+            }
+            container.innerHTML = comments.map(c => {
+                const t = new Date(c.created_at);
+                const timeStr = t.toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit' });
+                return `<div class="briefing-comment">
+                    <div class="c-user">${c.username || 'Trader'}</div>
+                    <div class="c-text">${c.content}</div>
+                    <div class="c-time">${timeStr}</div>
+                </div>`;
+            }).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function postBriefingComment() {
+            const user = getCurrentUser();
+            if (!user) { alert('Inicia sesión para comentar'); return; }
+            const input = document.getElementById('briefingCommentInput');
+            const text = input.value.trim();
+            if (!text || !currentBriefingId) return;
+            input.value = '';
+            try {
+                await sbClient.from('briefing_comments').insert({
+                    briefing_id: currentBriefingId, username: user.usuario,
+                    content: text, created_at: new Date().toISOString()
+                });
+                loadBriefingComments(currentBriefingId);
+            } catch(e) {
+                const container = document.getElementById('briefingComments');
+                const div = document.createElement('div');
+                div.className = 'briefing-comment';
+                div.innerHTML = `<div class="c-user">${user.usuario}</div><div class="c-text">${text}</div><div class="c-time">ahora</div>`;
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        const _origSwitchTab = switchTab;
+        switchTab = function(tab) {
+            _origSwitchTab(tab);
+            if (tab === 'briefing') {
+                loadBriefing();
+                const user = getCurrentUser();
+                const isAdmin = user && (user.rol === 'admin' || user.usuario === 'admin');
+                document.getElementById('briefingAdminPanel').style.display = isAdmin ? 'block' : 'none';
+                const d = new Date();
+                document.getElementById('briefingDate').textContent =
+                    d.toLocaleDateString('es-CO',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+            }
+        };
+        // ── FIN BRIEFING ──────────────────────────────────────────
+
+        </script>
 </body>
 </html>
